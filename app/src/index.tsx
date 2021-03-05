@@ -1,27 +1,16 @@
 import {css, Global} from '@emotion/react'
-import MyBoardGame from '@gamepark/board-game-template'
-import {createGameStore} from '@gamepark/react-client'
+import Croa from '@gamepark/croa'
+import {createGameStore, setupTranslation} from '@gamepark/react-client'
 import normalize from 'emotion-normalize'
-import i18next from 'i18next'
-import ICU from 'i18next-icu'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {initReactI18next} from 'react-i18next'
 import {Provider} from 'react-redux'
+import { CroaAnimation } from './Animations'
 import App from './App'
+import { Images } from './material/Resources'
 import translations from './translations.json'
 
-const query = new URLSearchParams(window.location.search)
-const locale = query.get('locale') || 'en'
-i18next.use(initReactI18next).use(ICU)
-i18next.init({
-  lng: locale,
-  debug: process.env.NODE_ENV === 'development',
-  fallbackLng: 'en',
-  keySeparator: false,
-  nsSeparator: false,
-  resources: translations
-})
+setupTranslation(translations);
 
 const style = css`
   html {
@@ -38,7 +27,7 @@ const style = css`
 
   body {
     margin: 0;
-    font-family: 'Oswald', "Roboto Light", serif;
+    font-family: "Ranchers", cursive;
     font-size: 1vh;
     @media (max-aspect-ratio: 16/9) {
       font-size: calc(9vw / 16);
@@ -64,14 +53,18 @@ const style = css`
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+      //background-color: rgba(173, 216, 230, 0.4);
     }
+    
+    background-image: url(${Images.BoardBackground});
   }
 `
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={createGameStore('board-game-template', MyBoardGame)}>
+    <Provider store={createGameStore('croa', Croa, {
+      animations: CroaAnimation
+    })}>
       <App/>
     </Provider>
     <Global styles={[normalize, style]}/>

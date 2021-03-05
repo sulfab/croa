@@ -1,0 +1,67 @@
+import { GameState, GameStateView } from "../GameState";
+import { MoveFrog } from "../moves";
+import { isKnownSlab } from "../pond";
+import { SlabFrontType } from "../pond/SlabFrontType";
+
+class MoveFrogAction {
+
+    /**
+     * Perform action when moving the frog in order:
+     *  - Mark frog on the targeted pond as eliminated
+     *  - Change the frog position
+     * 
+     * The effect on slab is handled by an automatic action
+     * @param state THe game state
+     * @param move The actual movement
+     */
+    static apply(state: GameState | GameStateView, move: MoveFrog): void {
+        const player = state.players.find(player => player.color === move.playerId)
+        if (!player) {
+            return;
+        }
+
+        const frog = player.femaleFrogs.find(frog => frog.color === player.color);
+        const slab = state.pond[move.slabPosition.x][move.slabPosition.y];
+
+        if (frog && isKnownSlab(slab) && SlabFrontType.LOG === slab.front) {
+            const frogsOnSlab = state.players
+                    .flatMap(frog => frog.femaleFrogs)
+                    .filter(frog => !!frog.position && frog.position.x === move.slabPosition.x && frog.position.y === move.slabPosition.y);
+
+            if (!frog.isQueen && frogsOnSlab.length > 1) {
+                // In case its a servant, we let the choice if the max size is overpassed
+                player.eliminationChoice = [...frogsOnSlab ];
+            } else if (frog.isQueen && !frogsOnSlab.some(frog => frog.color === player.color)) {
+
+                // Direct elimination of frogs when the queen arrives
+                frogsOnSlab.forEach(frog => frog.eliminated = true)
+            }
+        } else {
+            // Mark frogs on new slab as eliminated
+            state.players
+                .filter(player => player.color !== move.playerId)
+                .flatMap(player => player.femaleFrogs)
+                .filter(frog => frog.position && frog.position.x === move.slabPosition.x && frog.position.y === move.slabPosition.y)
+                .forEach(frog => frog.eliminated = true);
+
+        }
+
+        state.players
+            .filter(player => player.color === move.playerId)
+            .flatMap(player => player.femaleFrogs)
+            .filter(frog => frog.id === move.frogId)
+            .forEach(frog => {
+                frog.previousPosition = frog.position;
+                frog.position = move.slabPosition;
+                frog.hasMoved = true;
+                // After move, the frog is not considered as boucing anymore
+                frog.bouncing = false;
+                player!.femaleFrogs.filter(f => f.stung).forEach(f => f.stung = false);
+            });
+
+    }
+}
+
+export {
+    MoveFrogAction
+}

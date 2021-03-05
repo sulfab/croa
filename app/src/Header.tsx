@@ -1,5 +1,5 @@
 import {css} from '@emotion/react'
-import GameState from '@gamepark/board-game-template/GameState'
+import { GameState } from '@gamepark/croa/GameState'
 import {useTranslation} from 'react-i18next'
 
 type Props = {
@@ -38,4 +38,5 @@ const titleStyle = css`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-weight: normal;
 `

@@ -1,5 +1,7 @@
-import DoStuff from './DoStuff'
+import { EliminateFrog, MoveFrog, SkipTurn, FrogBirth, PlaySlabEffect } from './';
+import { RevealSlab, RevealSlabView } from './RevealSlab';
 
-type Move = DoStuff // | DoOtherStuff | ChooseCard | MovePawn...
+export type Move = MoveFrog | EliminateFrog | PlaySlabEffect | RevealSlab | FrogBirth | SkipTurn;
+export default Move;
 
-export default Move
+export type MoveView = Move | RevealSlabView;

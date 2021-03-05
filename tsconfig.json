@@ -18,6 +18,6 @@
     "isolatedModules": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
   }
 }

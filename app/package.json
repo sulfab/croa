@@ -1,9 +1,9 @@
 {
-  "name": "@gamepark/board-game-template-app",
+  "name": "@gamepark/croa-app",
   "version": "0.0.0",
   "private": true,
-  "description": "React application",
-  "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
+  "description": "Croa",
+  "author": "Patrick Beaumé <pbeaume@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@emotion/babel-preset-css-prop": "^11.2.0",
@@ -19,6 +19,7 @@
     "@types/react-dnd-multi-backend": "^6.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-redux": "^7.1.16",
+    "avataaars": "^1.2.2",
     "customize-cra": "^1.0.0",
     "emotion-normalize": "^11.0.1",
     "i18next": "^19.9.1",
