@@ -64,10 +64,10 @@ export const frogOffset = (frog: FemaleFrog, otherFrogs?: Array<FemaleFrog>) => 
         switch(otherFrogs.length) {
             case 1:
                 const otherFrog = otherFrogs[0];
-                return otherFrog.id > frog.id? { top: -1, left: 0 }: { top: 6, left: 7 };
+                return otherFrog.id > frog.id? { top: -1, left: 0 }: { top: 4.5, left: 5.5 };
             case 2:
                 const otherServant = otherFrogs.filter(f => !f.isQueen)[0];
-                return otherServant.id > frog.id? { top: 5.5, left: 7.5 } :  { top: 6.5, left: 6.5 }
+                return otherServant.id > frog.id? { top: 3.5, left: 5.5 } :  { top: 4.5, left: 4 }
 
         }
         
@@ -123,7 +123,7 @@ const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
 
 export const frogMiniImage = (frog: FemaleFrog, activeAnimationId?: string, animationId?: string) => css`
     position: absolute;
-    bottom: ${animationId === 'blinking'? '0': '-10'}%;
+    bottom: 0%;
     left: ${computeAnimationLeft(frog, animationId)}%;
     height: ${activeAnimationId === animationId? computeAnimationHeight(frog, animationId): 0}%;
     width: ${activeAnimationId === animationId? computeAnimationWidth(frog, animationId): 0}%;
