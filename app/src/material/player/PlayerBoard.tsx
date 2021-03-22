@@ -38,7 +38,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
                 <Avatar style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar}/> :
                 <img alt={'Player board'} src={playerDefaultImages.get(player.color)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>
             }
-            <h3 css={titleStyle}>
+            <h3 css={titleStyle(player.color)}>
                 <span css={[nameStyle]}>{ playerInfo?.name || player.color }</span>
                 {typeof gamePoints === 'number' &&
                     <span css={css`flex-shrink: 0`}>
@@ -86,26 +86,24 @@ const playerBoard = (playerColor: PlayerColor) => css`
     position: absolute;
     width: 100%;
     height: ${ playerBoardHeight }%;
-    background-color: hsla(${playerColors.get(playerColor)!.hsl.h} ,${playerColors.get(playerColor)!.hsl.s}%, 90%, 0.6);
-    color: black;
-    box-shadow: 0 0.5em 0.7em black;
+    background-color: hsla(${playerColors.get(playerColor)!.hsl.h} ,${playerColors.get(playerColor)!.hsl.s}%, 90%, 0.7);
 `;
 
 const eliminatedPlayer = css`
     filter: grayscale(1)
 `;
 
-const titleStyle = css`
-  color: #333333;
-  position: absolute;
-  top: 2%;
-  left: 10%;
-  right: 3%;
-  margin: 0;
-  font-size: 2.9em;
-  font-weight: normal;
-  display: flex;
-  justify-content: space-between;
+const titleStyle = (playerColor: PlayerColor) => css`
+    color: rgb(${playerColors.get(playerColor)!.rgb.r}, ${playerColors.get(playerColor)!.rgb.g}, ${playerColors.get(playerColor)!.rgb.b});
+    position: absolute;
+    top: 2%;
+    left: 10%;
+    right: 3%;
+    margin: 0;
+    font-size: 2.9em;
+    font-weight: normal;
+    display: flex;
+    justify-content: space-between;
 `;
 
 const avatarStyle = css`
