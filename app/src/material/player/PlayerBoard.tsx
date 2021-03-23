@@ -1,25 +1,25 @@
-import { css, keyframes } from "@emotion/react";
+import { css } from "@emotion/react";
 import { Player, PlayerColor } from "@gamepark/croa/player";
-import { useAnimation } from "@gamepark/react-client";
 import Avatar from 'avataaars'
 import { FC, useState } from "react"
 import { Images } from "../Resources";
 import gamePointIcon from './visuals/game-point.svg'
-import { FemaleFrog, MaleFrog } from "@gamepark/croa/frog";
-import { isFrogBirth } from "@gamepark/croa/moves";
 import { useSelector } from "react-redux";
 import { 
     playerBoardHeight, 
-    playerBoardRatio,
-    playerBoardServantHeight, 
-    playerBoardMaleTokensWidth, 
     playerColors, 
     playerBoardMaleTokensHeight, 
-    playerBoardQueenHeight, 
-    getFrogLeft, 
-    frogMiniImage
+    playerBoardQueenWidth,
+    playerBoardServantsAreaHeight,
+    playerBoardServantsAreaWidth,
+    queenWidth,
+    queenHeight,
+    playerBoardWidth
 } from "../../utils/Styles";
-import { fromMiniImages } from "../frog/FrogMiniImages";
+import { MaleTokens } from "./MaleTokens";
+import { FrogAnimation } from "../frog/FrogAnimation";
+import { ServantFrogs } from "./ServantFrogs";
+
 type PlayerBoardProps = {
     player: Player
     index: number
@@ -28,17 +28,16 @@ type PlayerBoardProps = {
 
 const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...props }) => {
     const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player.color));
-    const animation = useAnimation(animation => isFrogBirth(animation.move) && animation.move.playerId === player.color);
     const [gamePoints,] = useState(playerInfo?.gamePointsDelta)
+    const displayedColor = player.eliminated? PlayerColor.Green: player.color;
 
-    const playerMaleTokens = maleToken.get(player.color);   
     return (
-        <div { ...props } css={[playerBoard(player.color), player.eliminated && eliminatedPlayer, activePlayer === player.color && playerBoardActive ]}>
+        <div { ...props } css={[playerBoard(displayedColor), player.eliminated && eliminatedPlayer, activePlayer === player.color && playerBoardActive ]}>
             {playerInfo?.avatar ?
                 <Avatar style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar}/> :
-                <img alt={'Player board'} src={playerDefaultImages.get(player.color)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>
+                <img alt={'Player board'} src={playerDefaultImages.get(displayedColor)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>
             }
-            <h3 css={titleStyle(player.color)}>
+            <h3 css={titleStyle(displayedColor)}>
                 <span css={[nameStyle]}>{ playerInfo?.name || player.color }</span>
                 {typeof gamePoints === 'number' &&
                     <span css={css`flex-shrink: 0`}>
@@ -47,30 +46,18 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
                     </span>
                 }
             </h3>
-            <div css={ servantFrogsStyle }>
-                { 
-                    player.femaleFrogs.filter(frog => !frog.position).map(frog => 
-                        <div key={ frog.id } css={ servantFrog(frog)}>
-                            <img css={ [frogMiniImage(frog)] } alt={`${ frog.color } ${ frog.isQueen? 'queen': 'servant' }`} src={ frog.isQueen? fromMiniImages.get(frog.color)?.queen: fromMiniImages.get(frog.color)?.servant } />
-                        </div>
-                    )
-                }
+            <div css={ queenFrogContainer }>
+                { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } isActive={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ css`position: relative;` }  />) }
             </div>
-            <div css={ maleTokensStyle }>
-                {
-                    Object.keys(MaleFrog).map((male, index) => { 
-                        return (
-                            <div key={ `${male}` }  css={ maleTokenContainer(index) }>
-                                <div css={ [maleTokenInner(!player.maleFrogs.includes(MaleFrog[male])), (animation && animation.move.male === MaleFrog[male]) && maleFrogAnimation(animation.duration)] }>
-                                    <img css={[ maleTokenStyle ]} alt={`enabled ${male.toLowerCase()} male token`} src={playerMaleTokens!.get(MaleFrog[male])} />
-                                    <img css={[ maleTokenStyle, disabledMaleTokenStyle ]} alt={`disabled ${male.toLowerCase()} male token`} src={playerMaleTokens!.get(MaleFrog[male])} />
-                                </div>
-                            </div>
-                            )
-                        
-                    })
-                }
-            </div>
+            <ServantFrogs css={ servantFrogContainer } frogs={ player.femaleFrogs.filter(frog => !frog.isQueen && !frog.position) } color={ displayedColor } />
+            { /*
+                player.femaleFrogs.filter(frog => !frog.position).map(frog => 
+                    <div key={ frog.id } css={ servantFrog(frog)}>
+                        <img css={ [frogMiniImage(frog)] } alt={`${ frog.color } ${ frog.isQueen? 'queen': 'servant' }`} src={ frog.isQueen? fromMiniImages.get(frog.color)?.queen: fromMiniImages.get(frog.color)?.servant } />
+                    </div>
+                ) */
+            }
+            <MaleTokens player={ player } color={ displayedColor } css={ css`bottom: 5%;`} />
         </div>
     );
 }
@@ -133,130 +120,24 @@ const gamePointIconStyle = css`
   height: 1em;
 `;
 
-
-const servantFrogsStyle = css`
+const queenFrogHeight = queenHeight * 100 / playerBoardHeight;
+const queenFrogWidth = queenWidth * 100 / playerBoardWidth;
+const queenFrogContainer = css`
+    bottom: ${ 15 + playerBoardMaleTokensHeight }%;  
+    left: 5%;
+    height: ${ queenFrogHeight }%;
+    width: ${ queenFrogWidth }%;
     position: absolute;
-    height: ${ playerBoardQueenHeight }%;
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    bottom: ${15 + playerBoardMaleTokensHeight }%;
-    width: 100%;
+    z-index: 1;
 `;
 
-const relativeFrogHeight = (frog: FemaleFrog) => (frog.isQueen? playerBoardQueenHeight: playerBoardServantHeight) * 100 / playerBoardQueenHeight
-const servantFrog = (frog: FemaleFrog) => css`
+const servantFrogContainer = css`
+    height: ${ playerBoardServantsAreaHeight }%;
+    width: ${ playerBoardServantsAreaWidth }%;
+    bottom: ${ 20 + playerBoardMaleTokensHeight }%;  
+    left: ${ 7 + playerBoardQueenWidth }%;
     position: absolute;
-    color: white;
-    bottom: 0%;
-    left: ${ getFrogLeft(frog) }%;
-    height: ${ relativeFrogHeight(frog) }%;
-    width: ${ (frog.isQueen? playerBoardQueenHeight: playerBoardServantHeight) / playerBoardRatio }%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5em;
 `;
-
-const maleTokensStyle = css`
-    position: absolute;
-    height: ${ playerBoardMaleTokensHeight }%;
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    bottom: 5%;
-    width: 100%;
-`;
-
-
-const maleTokenContainer = (index: number) => css`
-    position: absolute;
-    height: 100%;
-    left: ${ playerBoardMaleTokensWidth * index + ((100 - playerBoardMaleTokensWidth * 6) / 7 * (index + 1)) }%;
-    width: ${ playerBoardMaleTokensWidth }%;
-`;
-
-const maleTokenInner = (flipped: boolean) => css`
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    ${flipped? 'transform: rotateY(180deg);': ''}
-    transition: transform 0.8s; 
-    transform-style: preserve-3d;
-    
-`;
-
-const maleTokenStyle = css`
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    filter: drop-shadow(0.1em 0.1em 0.3em black);
-    backface-visibility: hidden;
-    image-rendering: -webkit-optimize-contrast;
-    background-size: contain;
-`;
-
-const disabledMaleTokenStyle = css`
-    transform: rotateY(180deg);
-    filter: drop-shadow(0.1em 0.1em 0.3em black) grayscale(100%);
-`;
-
-const maleFrogScale = keyframes`
-  30% {        
-    z-index: 2;
-    transform: scale(2.0);
-  }
-  50% {        
-    z-index: 2;
-    transform: rotateY(180deg) scale(2.0);
-  }
-  100% {           
-    z-index: 0;
-    transform: rotateY(180deg) scale(1.0);
-  }
-`
-
-const maleFrogAnimation = (duration: number) => css`
-    animation: ${maleFrogScale} ${duration}s ease-in-out;
-`
-
-const maleToken = new Map<PlayerColor, Map<MaleFrog, any>>();
-maleToken.set(PlayerColor.Blue, new Map([
-    [MaleFrog.Blue, Images.BlueMaleTokenBlue],
-    [MaleFrog.Red, Images.RedMaleTokenBlue],
-    [MaleFrog.Pink, Images.PinkMaleTokenBlue],
-    [MaleFrog.Green, Images.GreenMaleTokenBlue],
-    [MaleFrog.Yellow, Images.YellowMaleTokenBlue],
-    [MaleFrog.Purple, Images.PurpleMaleTokenBlue]
-]));
-
-maleToken.set(PlayerColor.Green, new Map([
-    [MaleFrog.Blue, Images.BlueMaleTokenGreen],
-    [MaleFrog.Red, Images.RedMaleTokenGreen],
-    [MaleFrog.Pink, Images.PinkMaleTokenGreen],
-    [MaleFrog.Green, Images.GreenMaleTokenGreen],
-    [MaleFrog.Yellow, Images.YellowMaleTokenGreen],
-    [MaleFrog.Purple, Images.PurpleMaleTokenGreen]
-]));
-
-
-maleToken.set(PlayerColor.Pink, new Map([
-    [MaleFrog.Blue, Images.BlueMaleTokenPink],
-    [MaleFrog.Red, Images.RedMaleTokenPink],
-    [MaleFrog.Pink, Images.PinkMaleTokenPink],
-    [MaleFrog.Green, Images.GreenMaleTokenPink],
-    [MaleFrog.Yellow, Images.YellowMaleTokenPink],
-    [MaleFrog.Purple, Images.PurpleMaleTokenPink]
-]));
-
-maleToken.set(PlayerColor.Red, new Map([
-    [MaleFrog.Blue, Images.BlueMaleTokenRed],
-    [MaleFrog.Red, Images.RedMaleTokenRed],
-    [MaleFrog.Pink, Images.PinkMaleTokenRed],
-    [MaleFrog.Green, Images.GreenMaleTokenRed],
-    [MaleFrog.Yellow, Images.YellowMaleTokenRed],
-    [MaleFrog.Purple, Images.PurpleMaleTokenRed]
-]));
 
 const playerDefaultImages = new Map<PlayerColor, any>();
 playerDefaultImages.set(PlayerColor.Blue, Images.DefaultBlueAvatar);

@@ -20,7 +20,7 @@ export const allowFrogMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, del
 
     const slab = pond[frogX][frogY];
     if (moves && isAllowedMove(allFrogs, frog, delta, slab, boardSize)) {
-      moves.push(moveFrog(frog, { x: frogX, y: frogY }));
+      moves.push(moveFrog(frog.id, frog.color, { x: frogX, y: frogY }));
     }
 }
     

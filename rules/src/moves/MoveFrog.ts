@@ -1,5 +1,4 @@
 import { Position } from '../common/Position'
-import { FemaleFrog } from '../frog'
 import { MoveType } from '.'
 import { PlayerColor } from '../player'
 import Move from './Move'
@@ -11,12 +10,12 @@ export type MoveFrog = {
     frogId: number
 }
 
-function moveFrog(frog: FemaleFrog, position: Position): MoveFrog {
+function moveFrog(frogId: number, playerId: PlayerColor, position: Position): MoveFrog {
     return {
         type: MoveType.MoveFrog,
         slabPosition: position,
-        playerId: frog.color,
-        frogId: frog.id
+        playerId,
+        frogId
     }
 }
 

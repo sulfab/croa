@@ -1,6 +1,6 @@
 import { Slab } from "@gamepark/croa/pond";
 import { moveFrog } from "@gamepark/croa/moves/MoveFrog"
-import { useAnimation, useDisplayState, usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from "@gamepark/react-client";
 import { FunctionComponent } from "react";
 import './SlabTile.css';
 import { FrogFromBoard, DragObjectType } from "../../drag-objects";
@@ -24,20 +24,16 @@ type SlabTileProps = {
 }
 
 const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosition, frogs, boardSize }) => {
-    const [selectedFrog, setSelectedFrog] = useDisplayState<FemaleFrog | undefined>(undefined);
+    const [selectedFrogId,] = useDisplayState<number | undefined>(undefined);
     const play = usePlay();
     const playerId = usePlayerId<PlayerColor>();
-    const animation = useAnimation<RevealSlabView>(animation => 
-        isRevealSlab(animation.move) && animation.move.slabPosition.x === position.x && animation.move.slabPosition.y === position.y
-    )
+    const animation = useAnimation<RevealSlabView>(animation => isRevealSlab(animation.move) && animation.move.slabPosition.x === position.x && animation.move.slabPosition.y === position.y)
+    const animating = useAnimations().length > 0
 
-    const isValidSlab = () => {
-        return selectedFrog && canBeDropped(selectedFrog, frogs);
-    }
+    const selectedFrog = selectedFrogId && frogs.find(frog => frog.id === selectedFrogId && frog.color === playerId);
 
-    const isInvalidSlab = () => {
-        return selectedFrog && isAdjcentSlab(selectedFrog) && !canBeDropped(selectedFrog, frogs);
-    }
+    const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs)
+    const isInvalidSlab = () => !animating && selectedFrog && isAdjcentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs);
 
     /**
      * Does the current tile the previous tile if the from is a boucing frog
@@ -63,12 +59,13 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
      * Frog can be dropped only if the slab is not empty or a log is on the slab
      * @param slab The target slab
      */
-    const canBeDropped = (frog: FemaleFrog, frogs: Array<FemaleFrog>): boolean => {
-        if (!playerId || !frog.position) {
+    const canBeDropped = (frogId: number, frogs: Array<FemaleFrog>): boolean => {
+        const frog = frogs.find(frog => frog.id === frogId && frog.color === playerId);
+        if (!playerId || !frog || !frog.position) {
             return false;
         }
             
-        let allowedMove = isAdjcentSlab(frog);;
+        let allowedMove = isAdjcentSlab(frog);
         if (frog.bouncing) {
             allowedMove = allowedMove && !isBouncingFrogPreviousTile(frog)
         }
@@ -78,14 +75,13 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
     const [, ref] = useDrop({
         accept: DragObjectType.FROG_FROM_BOARD,
-        canDrop: (item: FrogFromBoard) => canBeDropped(selectedFrog || item.frog, frogs),
-        drop: (item: FrogFromBoard) => moveFrog(item.frog, position)
+        canDrop: (item: FrogFromBoard) => canBeDropped(selectedFrogId || item.frog.id, frogs),
+        drop: (item: FrogFromBoard) => moveFrog(item.frog.id, item.frog.color, position)
     });
 
     const onTileClick = () => {
-        if (selectedFrog && canBeDropped(selectedFrog, frogs)) {
-            setSelectedFrog(undefined)
-            return play(moveFrog(selectedFrog, position));
+        if (selectedFrogId && canBeDropped(selectedFrogId, frogs)) {
+            return play(moveFrog(selectedFrogId, playerId!, position));
         }
     }
     

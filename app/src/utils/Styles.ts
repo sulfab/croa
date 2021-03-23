@@ -40,6 +40,11 @@ export const playerBoardQueenWidth = playerBoardQueenHeight / playerBoardRatio;
 export const playerBoardServantHeight = servantHeight * 100 / playerBoardHeight;
 export const playerBoardServantWidth = playerBoardServantHeight / playerBoardRatio;
 
+export const playerBoardServantsAreaHeight = 40;
+export const playerBoardServantsAreaWidth = 60;
+
+
+
 export const getFrogLeft = (frog: FemaleFrog) => {
     const baseLeft = 4;
 
@@ -51,6 +56,7 @@ export const getFrogLeft = (frog: FemaleFrog) => {
 } 
 
 export const frogOffset = (frog: FemaleFrog, otherFrogs?: Array<FemaleFrog>) => {
+    
 
     if (frog.isQueen) {
         return { top: -5, left: 0 };
@@ -67,7 +73,9 @@ export const frogOffset = (frog: FemaleFrog, otherFrogs?: Array<FemaleFrog>) => 
                 return otherFrog.id > frog.id? { top: -2, left: 0 }: { top: 4.5, left: 5.5 };
             case 2:
                 const otherServant = otherFrogs.filter(f => !f.isQueen)[0];
-                return otherServant.id > frog.id? { top: 3.5, left: 5.5 } :  { top: 4.5, left: 4 }
+                if (otherServant) {
+                    return otherServant.id > frog.id? { top: 4.5, left: 5.5 } :  { top: 4.5, left: 3.5 }
+                }
 
         }
         
@@ -121,18 +129,20 @@ const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
     return 0;
 }
 
-export const frogMiniImage = (frog: FemaleFrog, activeAnimationId?: string, animationId?: string) => css`
+export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking", isActive?: boolean) => css`
     position: absolute;
     bottom:  0%;
     left: ${computeAnimationLeft(frog, animationId)}%;
-    height: ${activeAnimationId === animationId? computeAnimationHeight(frog, animationId): 0}%;
-    width: ${activeAnimationId === animationId? computeAnimationWidth(frog, animationId): 0}%;
+    height: ${isActive? computeAnimationHeight(frog, animationId): 0}%;
+    width: ${isActive? computeAnimationWidth(frog, animationId): 0}%;
     background-size: 1600% 100%;
     transition-property: transform;
     margin: 0 auto;    
     image-rendering: -webkit-optimize-contrast;
     filter: drop-shadow(0em 0.2em 0.2em black);
 `;
+
+export const getAnimationBackground = (isQueen: boolean, color: PlayerColor, animationId: string) => (isQueen? queenFrogAnimations: servantFrogAnimations).get(color)!.get(animationId);
 
 export const frogMiniAnimation = (animationId?: string, animationDuration?: number) => css`
     animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(16) ${animationId === 'blinking'? 'infinite': 1};

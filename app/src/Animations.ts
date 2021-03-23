@@ -9,7 +9,7 @@ const CroaAnimation: Animations<GameState, MoveView, PlayerColor, PlayerColor> =
             case MoveType.MoveFrog:
                 return 0.7;
             case MoveType.EliminateFrog:
-                return 0.5;
+                return 1.5;
             case MoveType.PlaySlabEffect:
                 return 0.5;
             case MoveType.RevealSlab:

@@ -176,6 +176,7 @@ export default class Croa extends SequentialGame<GameState | GameStateView, Move
   }
 
   play(move: Move): void {
+    console.log(move.type);
     switch(move.type) {
       case MoveType.MoveFrog:
         MoveFrogAction.apply(this.state, move);

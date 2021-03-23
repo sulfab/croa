@@ -20,7 +20,7 @@ class MoveFrogAction {
             return;
         }
 
-        const frog = player.femaleFrogs.find(frog => frog.color === player.color);
+        const frog = player.femaleFrogs.find(frog => frog.color === player.color && frog.id === move.frogId);
         const slab = state.pond[move.slabPosition.x][move.slabPosition.y];
 
         if (frog && isKnownSlab(slab) && SlabFrontType.LOG === slab.front) {
@@ -32,11 +32,12 @@ class MoveFrogAction {
                 // In case its a servant, we let the choice if the max size is overpassed
                 player.eliminationChoice = [...frogsOnSlab ];
             } else if (frog.isQueen && !frogsOnSlab.some(frog => frog.color === player.color)) {
-
                 // Direct elimination of frogs when the queen arrives
                 frogsOnSlab.forEach(frog => frog.eliminated = true)
+                
             }
         } else {
+            
             // Mark frogs on new slab as eliminated
             state.players
                 .filter(player => player.color !== move.playerId)
