@@ -7,7 +7,7 @@ import { PlayerColor, FrogPlacement } from "@gamepark/croa/player";
 import { css } from "@emotion/react";
 import { boardGap, getFrogXPositionOnBoard, getFrogYPositionOnBoard, frogOffset, servantHeight, servantWidth, queenHeight, queenWidth, boardWidth } from '../../utils/Styles';
 import { Position } from "@gamepark/croa/common/Position";
-import { FrogBirth, isFrogBirth, MoveFrog, isMoveFrog } from "@gamepark/croa/moves";
+import { FrogBirth, isFrogBirth, MoveFrog, isMoveFrog, RevealSlab, isRevealSlab } from "@gamepark/croa/moves";
 import { useAnimation } from "@gamepark/react-client";
 
 type BoardProps = {
@@ -40,7 +40,7 @@ const rotate = (matrix: Position[][], times: number): Position[][]   => {
 const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, frogs, activePlayer }) => { 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const orientedSlabPositions = useMemo(() => rotate(toPositions(pond), FrogPlacement[playerCount][playerIndex].currentPlayerRotation), [playerCount, playerIndex]); 
-    const animation = useAnimation<MoveFrog | FrogBirth>(animation => isMoveFrog(animation.move) || isFrogBirth(animation.move));
+    const animation = useAnimation<MoveFrog | FrogBirth | RevealSlab>(animation => isMoveFrog(animation.move) || isFrogBirth(animation.move) || isRevealSlab(animation.move));
     const otherFrogsOnSlab = (position: Position, frogId?: number) => frogs.filter(f => f.position && f.position.x === position?.x && f.position.y === position?.y && (!frogId || frogId !== f.id))
 
     
@@ -58,6 +58,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
     }
 
     const isFrogAnimation = (frog: FemaleFrog) => animation && isMoveFrog(animation.move) && animation.move.playerId === frog.color && animation.move.frogId === frog.id;
+    const isSlabUnderFrog = (frog: FemaleFrog) => animation && isRevealSlab(animation.move) && animation.move.slabPosition.x === frog.position!.x && animation.move.slabPosition.y === frog.position!.y
     const getFrogTranslation = (frog: FemaleFrog) => {
         if (isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
             return translateFrog(frog, animation!.move.slabPosition!);
@@ -88,7 +89,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
                          frog={ frog }
                          otherFrogs={ frogs.filter(f => f.color === activePlayer && f.id !== frog.id && !!f.position) }
                          visualPosition={ visualPosition }
-                         css={ animation && isFrogAnimation(frog) && css`transition-duration: ${animation.duration * 0.4}s; transition-delay: ${animation.duration * 0.2}s`}
+                         css={[isFrogAnimation(frog) && translateFrogAnimation(animation!), isSlabUnderFrog(frog) && firstPlan]}
                          preTransform={ getFrogTranslation(frog) } />
     }
 
@@ -101,6 +102,15 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
     );
 }
 
+const firstPlan = css`
+    z-index: 3;
+`;
+
+const translateFrogAnimation = (animation: any) => css`
+    z-index: 3;
+    transition-duration: ${animation!.duration}s;
+`;
+
 const boardStyle = (columns: number) => css`
     z-index: 1;
     transform: rotateX(10deg);
@@ -112,7 +122,8 @@ const boardStyle = (columns: number) => css`
     grid-template-rows: repeat(${ columns }, 1fr);
     grid-auto-flow: column;
     gap: ${ boardGap }%;
-`
+`;
+
 export {
     Board
 };

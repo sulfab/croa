@@ -12,7 +12,7 @@ import { useDrop } from "react-dnd";
 import { Images } from "../Resources";
 import { css, keyframes } from "@emotion/react";
 import { SlabBackType } from "@gamepark/croa/pond/SlabBackType";
-import { isRevealSlabView, RevealSlabView } from "@gamepark/croa/moves/RevealSlab";
+import { isRevealSlab, RevealSlabView } from "@gamepark/croa/moves/RevealSlab";
 import { isAllowedMove } from "@gamepark/croa/utils/FrogUtils";
 
 type SlabTileProps = {
@@ -28,7 +28,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     const play = usePlay();
     const playerId = usePlayerId<PlayerColor>();
     const animation = useAnimation<RevealSlabView>(animation => 
-        isRevealSlabView(animation.move) && animation.move.slabPosition.x === position.x && animation.move.slabPosition.y === position.y
+        isRevealSlab(animation.move) && animation.move.slabPosition.x === position.x && animation.move.slabPosition.y === position.y
     )
 
     const isValidSlab = () => {
@@ -103,15 +103,12 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
 const scale = (translate?: string) => keyframes`
   30% {
-    z-index: 2;
     transform: ${translate} scale(2.0);
   }
-  65% {           
-    z-index: 2;
+  65% {         
     transform: ${translate} rotateY(180deg) scale(2.0);
   }
-  100% {           
-    z-index: 0;
+  100% {          
     transform: rotateY(180deg) scale(1.0);
   }
 `

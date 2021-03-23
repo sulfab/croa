@@ -12,6 +12,10 @@ export type RevealSlabView = RevealSlab & {
     front: SlabFrontType;
 }
 
+export function isRevealSlab(move: Move): move is RevealSlab {
+    return MoveType.RevealSlab === move.type;
+}
+
 export function isRevealSlabView(move: Move): move is RevealSlabView {
   return (move as RevealSlabView).front !== undefined;
 }

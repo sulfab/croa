@@ -25,14 +25,16 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
     const [selectedFrog, setSelectedFrog] = useDisplayState<FemaleFrog | undefined>(undefined);
     const playerId = usePlayerId();
     const play = usePlay();
-    const animation = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color);
+    const animation = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color
+    )
 
     
-    const isPlayerFrog = playerId && playerId === frog.color && playerId === activePlayer;
+    const isCurrentPlayerFrog = playerId && playerId === frog.color && playerId === activePlayer;
+    const isSelected = selectedFrog && selectedFrog.id === frog.id && selectedFrog.color === frog.color;
     const isOtherFrogDragging = useDragLayer(useCallback((monitor: DragLayerMonitor) => monitor.isDragging() && monitor.getItem().type === DragObjectType.FROG_FROM_BOARD 
         && (monitor.getItem().frog.id !== frog.id || monitor.getItem().frog.color !== frog.color), [frog.id, frog.color]));
     
-    const canBeDragged = isPlayerFrog
+    const canBeDragged = isCurrentPlayerFrog
         // If there is a queen and a servant on the same tile, only allow moving both
         && !otherFrogs.some(first => first.isQueen 
                 && otherFrogs.some(second => first.id !== second.id && first.position!.x === second.position!.x  && first.position!.y === second.position!.y)
@@ -53,7 +55,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
     };
 
     const onSelectFrog = () => {
-        if (!isPlayerFrog || !canBeDragged) {
+        if (!isCurrentPlayerFrog || !canBeDragged || animation) {
             return;
         }
 
@@ -65,8 +67,10 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
         return setSelectedFrog(undefined);
     }
 
+    const isMoveFrogAnimation = () => animation && isMoveFrog(animation.move)
+    const isSelectable = canBeDragged && !isSelected && !isMoveFrogAnimation();
     const getAnimation = () => {
-        if (animation) {
+        if (isMoveFrogAnimation()) {
             return 'jumping_front';
         }
 
@@ -76,10 +80,10 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
     const getAnimationBackground = (animationId: string) => (frog.isQueen? queenFrogAnimations: servantFrogAnimations).get(frog.color)!.get(animationId);
     
     return (
-        <Draggable { ...props } preTransform={ preTransform } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeDragged } css={[frogMiniContainer(frog), canBeDragged && selectableFrog, (isOtherFrogDragging || activePlayer !== playerId) && pointEvents, frog.mudded && muddedFrog(preTransform), ]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ () => setSelectedFrog(undefined) }>
+        <Draggable { ...props } preTransform={ preTransform } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeDragged } css={[frogMiniContainer(frog), isSelectable && selectableFrog, (isOtherFrogDragging || activePlayer !== playerId) && pointEvents, frog.mudded && muddedFrog(preTransform)]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ () => setSelectedFrog(undefined) }>
             <div css={[frogMiniImage(frog, getAnimation(), "blinking", ), frogMiniAnimation("blinking", 1)]} style={{ backgroundImage: `url(${getAnimationBackground('blinking')})`}} />
-            <div css={[frogMiniImage(frog, getAnimation(), "jumping_front"), animation && frogMiniAnimation("jumping_front", 1)]} style={{ backgroundImage: `url(${getAnimationBackground('jumping_front')})`}}  />
-            <div css={[frogMiniImage(frog, getAnimation(), "jumping_back"), animation && frogMiniAnimation("jumping_back", 1)]} style={{ backgroundImage: `url(${getAnimationBackground('jumping_back')})`}}  />
+            <div css={[frogMiniImage(frog, getAnimation(), "jumping_front"), isMoveFrogAnimation() && frogMiniAnimation("jumping_front", 1)]} style={{ backgroundImage: `url(${getAnimationBackground('jumping_front')})`}}  />
+            <div css={[frogMiniImage(frog, getAnimation(), "jumping_back"), isMoveFrogAnimation() && frogMiniAnimation("jumping_back", 1)]} style={{ backgroundImage: `url(${getAnimationBackground('jumping_back')})`}}  />
         </Draggable>
     );
 }
@@ -94,10 +98,10 @@ const muddedFrog = (preTransform?: string) => css`
 
 const selectableFrogAnimation = keyframes`
     from {
-        filter: drop-shadow(0em 0.2em 0.2em black) drop-shadow(0 0 0.1em gold)
+        filter: drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) 
     }
     to {
-        filter: drop-shadow(0em 0.2em 0.2em black) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold)
+        filter: drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold)
     }
 `
 

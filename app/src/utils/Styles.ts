@@ -15,18 +15,18 @@ export const playerWidth = (100 - 90 / screenRatio) / 2 - 5.5;
 export const playerBoardWidth = playerWidth * 100 / boardWidth;
 export const playerBoardHeight = 22 * 100 / boardHeight;
 
-export const servantMiniRatio = 110 / 118;
+export const servantMiniRatio = 85 / 88;
 export const servantHeight = 7;
 export const servantWidth = servantHeight * servantMiniRatio / boardWidthReduction; 
-export const servantJumpBlinkHeightRatio = 383 / 83;
-export const servantJumpBlinkWidthRatio = 145 / 85;
+export const servantJumpBlinkHeightRatio = 375 / 88;
+export const servantJumpBlinkWidthRatio = 115 / 85;
 
 
-export const queenMiniRatio = 138 / 146;
+export const queenMiniRatio = 140 / 150;
 export const queenHeight = 10;
 export const queenWidth = queenHeight * queenMiniRatio / boardWidthReduction;
-export const queenJumpBlinkHeightRatio = 435 / 146;
-export const queenJumpBlinkWidthRatio = 203 / 138;
+export const queenJumpBlinkHeightRatio = 432 / 150;
+export const queenJumpBlinkWidthRatio = 183 / 140;
 
 
 export const playerBoardRatio = playerBoardWidth / playerBoardHeight;
@@ -64,7 +64,7 @@ export const frogOffset = (frog: FemaleFrog, otherFrogs?: Array<FemaleFrog>) => 
         switch(otherFrogs.length) {
             case 1:
                 const otherFrog = otherFrogs[0];
-                return otherFrog.id > frog.id? { top: -1, left: 0 }: { top: 4.5, left: 5.5 };
+                return otherFrog.id > frog.id? { top: -2, left: 0 }: { top: 4.5, left: 5.5 };
             case 2:
                 const otherServant = otherFrogs.filter(f => !f.isQueen)[0];
                 return otherServant.id > frog.id? { top: 3.5, left: 5.5 } :  { top: 4.5, left: 4 }
@@ -75,15 +75,15 @@ export const frogOffset = (frog: FemaleFrog, otherFrogs?: Array<FemaleFrog>) => 
 
     return { top: 0, left: 0 };    
 };
-const frogBlinkingKeyframe = keyframes('frog-blinking', `
+const frogBlinkingKeyframe = keyframes`
     from { background-position: 0%; }
-    to { background-position: -1400%; }  /* <-- width of spritesheet*/
-`);
+    to { background-position: -1600%; }  /* <-- width of spritesheet*/
+`;
 
-const frogJumpingKeyframe = keyframes('frog-jumping', `
+const frogJumpingKeyframe = keyframes`
     from { background-position: 0%; }
-    to { background-position: -1400%; }  /* <-- width of spritesheet*/
-`);
+    to { background-position: -1600%; }  /* <-- width of spritesheet*/
+`;
 
 export const frogMiniContainer = (frog: FemaleFrog) => css`
     height: ${(frog.isQueen? queenHeight : servantHeight)}%;
@@ -115,7 +115,7 @@ const computeAnimationWidth = (frog: FemaleFrog, animationId?: string) => {
 
 const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
     if (animationId && animationId !== 'blinking') {
-        return -((computeAnimationWidth(frog, animationId) - 100) / 2);
+        return -((computeAnimationWidth(frog, animationId) - 100) / 2 + 1);
     }
 
     return 0;
@@ -123,11 +123,11 @@ const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
 
 export const frogMiniImage = (frog: FemaleFrog, activeAnimationId?: string, animationId?: string) => css`
     position: absolute;
-    bottom: 0%;
+    bottom:  0%;
     left: ${computeAnimationLeft(frog, animationId)}%;
     height: ${activeAnimationId === animationId? computeAnimationHeight(frog, animationId): 0}%;
     width: ${activeAnimationId === animationId? computeAnimationWidth(frog, animationId): 0}%;
-    background-size: 2000% 100%;
+    background-size: 1600% 100%;
     transition-property: transform;
     margin: 0 auto;    
     image-rendering: -webkit-optimize-contrast;
@@ -135,7 +135,7 @@ export const frogMiniImage = (frog: FemaleFrog, activeAnimationId?: string, anim
 `;
 
 export const frogMiniAnimation = (animationId?: string, animationDuration?: number) => css`
-    animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(14) ${animationId === 'blinking'? 'infinite': 1};
+    animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(16) ${animationId === 'blinking'? 'infinite': 1};
 `
 
 export const queenFrogAnimations = new Map([
