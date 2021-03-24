@@ -1,5 +1,5 @@
-import PlayerColor from "@gamepark/croa/dist/PlayerColor";
 import { FemaleFrog } from "@gamepark/croa/frog";
+import { PlayerColor } from "@gamepark/croa/player";
 import { FC } from "react";
 import { frogMiniImage, getAnimationBackground } from "../../utils/Styles";
 

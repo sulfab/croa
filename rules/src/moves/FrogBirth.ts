@@ -5,7 +5,7 @@ import { MoveType } from "./MoveType";
 
 export type FrogBirth = {
     type: MoveType.FrogBirth,
-    male: MaleFrog,
+    male?: MaleFrog,
     playerId: PlayerColor
 }
 
@@ -19,7 +19,7 @@ export function isFrogBirth(move: Move): move is FrogBirth {
 /**
  * Move to generate a new frog
  */
-export function frogBirth(male: MaleFrog, playerId: PlayerColor): FrogBirth {
+export function frogBirth(playerId: PlayerColor, male?: MaleFrog): FrogBirth {
     return {
         type: MoveType.FrogBirth,
         playerId,

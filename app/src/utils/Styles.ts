@@ -144,8 +144,8 @@ export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking"
 
 export const getAnimationBackground = (isQueen: boolean, color: PlayerColor, animationId: string) => (isQueen? queenFrogAnimations: servantFrogAnimations).get(color)!.get(animationId);
 
-export const frogMiniAnimation = (animationId?: string, animationDuration?: number) => css`
-    animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(16) ${animationId === 'blinking'? 'infinite': 1};
+export const frogMiniAnimation = (animationId?: string, animationDuration?: number, animationDelay?: number) => css`
+    animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(16) ${animationDelay || 0}s ${animationId === 'blinking'? 'infinite': 1};
 `
 
 export const queenFrogAnimations = new Map([

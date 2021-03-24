@@ -13,7 +13,7 @@ import { Images } from "../Resources";
 import { css, keyframes } from "@emotion/react";
 import { SlabBackType } from "@gamepark/croa/pond/SlabBackType";
 import { isRevealSlab, RevealSlabView } from "@gamepark/croa/moves/RevealSlab";
-import { isAllowedMove } from "@gamepark/croa/utils/FrogUtils";
+import { isAllowedMove } from "@gamepark/croa/utils/frogUtils";
 
 type SlabTileProps = {
     slab: Slab;

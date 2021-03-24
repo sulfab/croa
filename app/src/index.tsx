@@ -1,11 +1,12 @@
 import {css, Global} from '@emotion/react'
-import Croa from '@gamepark/croa'
-import {createGameStore, setupTranslation} from '@gamepark/react-client'
+import Croa from '@gamepark/croa';
+import { CroaOptionsDescription } from '@gamepark/croa/CroaOptions';
+import { CroaAnimation } from './Animations';
+import CroaView from '@gamepark/croa/CroaView';
+import { GameProvider, setupTranslation} from '@gamepark/react-client'
 import normalize from 'emotion-normalize'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
-import { CroaAnimation } from './Animations'
 import App from './App'
 import { Images } from './material/Resources'
 import translations from './translations.json'
@@ -62,11 +63,9 @@ const style = css`
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={createGameStore('croa', Croa, {
-      animations: CroaAnimation
-    })}>
+    <GameProvider game="croa" Rules={ Croa } RulesView={ CroaView } animations={ CroaAnimation } optionsDescription={ CroaOptionsDescription }>
       <App/>
-    </Provider>
+    </GameProvider>
     <Global styles={[normalize, style]}/>
   </React.StrictMode>,
   document.getElementById('root')

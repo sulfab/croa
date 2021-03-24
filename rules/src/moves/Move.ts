@@ -4,4 +4,4 @@ import { RevealSlab, RevealSlabView } from './RevealSlab';
 export type Move = MoveFrog | EliminateFrog | PlaySlabEffect | RevealSlab | FrogBirth | SkipTurn;
 export default Move;
 
-export type MoveView = Move | RevealSlabView;
+export type MoveView = Exclude<Move, RevealSlab> | RevealSlabView;

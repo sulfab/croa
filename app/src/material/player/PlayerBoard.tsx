@@ -34,10 +34,10 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
     return (
         <div { ...props } css={[playerBoard(displayedColor), player.eliminated && eliminatedPlayer, activePlayer === player.color && playerBoardActive ]}>
             {playerInfo?.avatar ?
-                <Avatar style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar}/> :
-                <img alt={'Player board'} src={playerDefaultImages.get(displayedColor)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>
+                <Avatar  className="always-enabled" style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar}/> :
+                <img  className="always-enabled" alt={'Player board'} src={playerDefaultImages.get(displayedColor)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>
             }
-            <h3 css={titleStyle(displayedColor)}>
+            <h3 className="always-enabled" css={titleStyle(displayedColor)}>
                 <span css={[nameStyle]}>{ playerInfo?.name || player.color }</span>
                 {typeof gamePoints === 'number' &&
                     <span css={css`flex-shrink: 0`}>
@@ -50,13 +50,6 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
                 { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } isActive={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ css`position: relative;` }  />) }
             </div>
             <ServantFrogs css={ servantFrogContainer } frogs={ player.femaleFrogs.filter(frog => !frog.isQueen && !frog.position) } color={ displayedColor } />
-            { /*
-                player.femaleFrogs.filter(frog => !frog.position).map(frog => 
-                    <div key={ frog.id } css={ servantFrog(frog)}>
-                        <img css={ [frogMiniImage(frog)] } alt={`${ frog.color } ${ frog.isQueen? 'queen': 'servant' }`} src={ frog.isQueen? fromMiniImages.get(frog.color)?.queen: fromMiniImages.get(frog.color)?.servant } />
-                    </div>
-                ) */
-            }
             <MaleTokens player={ player } color={ displayedColor } css={ css`bottom: 5%;`} />
         </div>
     );
@@ -77,7 +70,10 @@ const playerBoard = (playerColor: PlayerColor) => css`
 `;
 
 const eliminatedPlayer = css`
-    filter: grayscale(1)
+    filter: grayscale(1);
+    > :not(.always-enabled) {
+        filter: grayscale(1)
+    }
 `;
 
 const titleStyle = (playerColor: PlayerColor) => css`

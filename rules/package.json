@@ -16,6 +16,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@gamepark/rules-api": "^3.1.0"
+    "@gamepark/rules-api": "^4.1.1"
   }
 }

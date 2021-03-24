@@ -20,7 +20,7 @@ export function isRevealSlabView(move: Move): move is RevealSlabView {
   return (move as RevealSlabView).front !== undefined;
 }
 
-export function revealSlab(position: Position): RevealSlab {
+export function revealSlabMove(position: Position): RevealSlab {
     return {
         type: MoveType.RevealSlab,
         slabPosition: position

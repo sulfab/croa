@@ -7,6 +7,7 @@ export type Player = {
   maleFrogs: Array<MaleFrog>,
   femaleFrogs: Array<FemaleFrog>,
   eliminationChoice: Array<FemaleFrogId>,
-  frogBirth?: MaleFrog,
+  birth?: boolean,
+  birthMale?: MaleFrog
   eliminated: boolean
 }

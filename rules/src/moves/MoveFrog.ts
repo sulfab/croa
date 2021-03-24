@@ -10,7 +10,7 @@ export type MoveFrog = {
     frogId: number
 }
 
-function moveFrog(frogId: number, playerId: PlayerColor, position: Position): MoveFrog {
+export const moveFrog = (frogId: number, playerId: PlayerColor, position: Position): MoveFrog => {
     return {
         type: MoveType.MoveFrog,
         slabPosition: position,
@@ -19,10 +19,6 @@ function moveFrog(frogId: number, playerId: PlayerColor, position: Position): Mo
     }
 }
 
-export function isMoveFrog(move: Move): move is MoveFrog {
+export const isMoveFrog = (move: Move): move is MoveFrog => {
     return MoveType.MoveFrog === move.type;
-}
-
-export {
-    moveFrog
 }

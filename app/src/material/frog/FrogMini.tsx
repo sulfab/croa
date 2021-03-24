@@ -58,7 +58,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
     };
 
     const onSelectFrog = () => {
-        if (!isSelectable || !isCurrentPlayerFrog || !canBeMoved || animating) {
+        if (!isCurrentPlayerFrog || !canBeMoved || animating) {
             return;
         }
 
@@ -83,8 +83,8 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
     const getAnimationImage = (animationId: string) => getAnimationBackground(frog.isQueen, frog.color, animationId);
     
     return (
-        <Draggable { ...props } preTransform={ preTransform } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeMoved } css={[frogMiniContainer(frog), isSelectable && selectableFrog, (activePlayer !== playerId) && pointEvents, frog.mudded && muddedFrog(preTransform), animatingElimination && frogDisparition(animatingElimination.duration)]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ onSelectFrog }>
-            <FrogAnimation frog={ frog } animation="blinking" isActive={ getAnimation() === "blinking" } css={ frogMiniAnimation("blinking", 1)} style={{ backgroundImage: `url(${getAnimationImage('blinking')})`}} />
+        <Draggable { ...props } preTransform={ preTransform } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeMoved } css={[frogMiniContainer(frog), isSelectable && selectableFrog, frog.color !== playerId && pointEvents, frog.mudded && muddedFrog(preTransform), animatingElimination && frogDisparition(animatingElimination.duration)]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ onSelectFrog }>
+            <FrogAnimation frog={ frog } animation="blinking" isActive={ getAnimation() === "blinking" } css={ frogMiniAnimation("blinking", 1, Math.abs(Math.tan(Object.keys(PlayerColor).indexOf(frog.color) + frog.id)))} style={{ backgroundImage: `url(${getAnimationImage('blinking')})`}} />
             <FrogAnimation frog={ frog } animation="jumping_front" isActive={ getAnimation() === "jumping_front" } css={ isMoveFrogAnimation() && frogMiniAnimation("jumping_front", 1) } style={{ backgroundImage: `url(${getAnimationImage('blinking')})`}} />
             { /* <div css={[frogMiniImage(frog, getAnimation() === "jumping_back", "jumping_back"), isMoveFrogAnimation() && frogMiniAnimation("jumping_back", 1)]} style={{ backgroundImage: `url(${getAnimationImage('jumping_back')})`}}  /> */}
         </Draggable>
