@@ -29,8 +29,6 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientatio
     const animatingMove = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color)
     const animatingElimination = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color)
     const animating = useAnimations().length > 0;
-
-    
     const isCurrentPlayerFrog = playerId && playerId === frog.color && playerId === activePlayer;
     const isSelected = selectedFrog && selectedFrog === frog.id && playerId === frog.color;    
     const canBeMoved = isCurrentPlayerFrog
@@ -38,8 +36,8 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientatio
         && !otherFrogs.some(first => first.isQueen 
                 && otherFrogs.some(second => first.id !== second.id && first.position!.x === second.position!.x  && first.position!.y === second.position!.y)
                 && (frog.position!.x !== first.position!.x || frog.position!.y !== first.position!.y))       
-        && FrogStatus.MUDDED !== frog.status && FrogStatus.STUNG !== frog.status 
-        && !otherFrogs.some(f => FrogStatus.BOUNCING === f.status || FrogStatus.MOVED === f.status);
+        && FrogStatus.MUDDED !== frog.status && FrogStatus.STUNG !== frog.status
+        && !otherFrogs.some(f => [FrogStatus.BOUNCING, FrogStatus.MOVED, FrogStatus.ELIMINATED].includes(f.status));
 
     // Detect change of frog between state and current frog
     // Unset the frog if it can't be moved
@@ -85,10 +83,9 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientatio
     
     return (
         <Draggable { ...props } preTransform={ `${preTransform}` } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeMoved } css={[frogMiniContainer(frog), isSelectable && selectableFrog, frog.color !== playerId && pointEvents, FrogStatus.MUDDED === frog.status && muddedFrog(preTransform), animatingElimination && frogDisparition(animatingElimination.duration),  css`z-index: ${frogZIndex}; `]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ onSelectFrog }>
-            <FrogAnimation frog={ frog } animation="blinking" isActive={ getAnimation() === "blinking" } css={ frogMiniAnimation("blinking", undefined, Math.abs(Math.tan(Object.keys(PlayerColor).indexOf(frog.color) + frog.id * 2)))} />
-            <FrogAnimation frog={ frog } animation="jumping_front" isActive={ getAnimation() === "jumping_front" } css={ [isMoveFrogAnimation() && frogMiniAnimation("jumping_front", animatingMove && animatingMove.duration), css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />
-            <FrogAnimation frog={ frog } animation="jumping_back" isActive={ getAnimation() === "jumping_back" } css={ [isMoveFrogAnimation() && frogMiniAnimation("jumping_back", animatingMove && animatingMove.duration), css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />
-            { /* <div css={[frogMiniImage(frog, getAnimation() === "jumping_back", "jumping_back"), isMoveFrogAnimation() && frogMiniAnimation("jumping_back", 1)]} style={{ backgroundImage: `url(${getAnimationImage('jumping_back')})`}}  /> */}
+            <FrogAnimation frog={ frog } animation="blinking" visible={ getAnimation() === "blinking" } css={ frogMiniAnimation("blinking", undefined, Math.abs(Math.tan(Object.keys(PlayerColor).indexOf(frog.color) + frog.id * 2)))} />
+            <FrogAnimation frog={ frog } animation="jumping_front" visible={ getAnimation() === "jumping_front" } duration={ animatingMove && animatingMove.duration } css={ [css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />
+            <FrogAnimation frog={ frog } animation="jumping_back" visible={ getAnimation() === "jumping_back" } duration={ animatingMove && animatingMove.duration } css={ [css`transform: rotateY(${horizontalOrientation  === 'left' ? 180: 0}deg)`] } />
         </Draggable>
     );
 }

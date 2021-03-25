@@ -35,7 +35,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
             <div css={[playerBoardContent(displayedColor), player.eliminated && eliminatedPlayer, activePlayer === player.color && playerBoardActive ]}>
                 <PlayerInfos player={ player } playerInfo={ playerInfo }/>
                 <div css={ queenFrogContainer }>
-                    { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } isActive={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ css`position: relative;` }  />) }
+                    { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } visible={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ css`position: relative;` }  />) }
                 </div>
                 <ServantFrogs css={ servantFrogContainer } frogs={ player.femaleFrogs.filter(frog => !frog.isQueen && !frog.position) } color={ displayedColor } />
                 <MaleTokens css={ [maleTokensStyle, css`bottom: 5%;`]}  player={ player } color={ displayedColor } />

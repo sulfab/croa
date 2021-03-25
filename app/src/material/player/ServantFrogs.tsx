@@ -13,7 +13,7 @@ type ServantFrogsProps = {
 const ServantFrogs: FC<ServantFrogsProps> = ({ frogs, color, ...props }) => {
     return (
         <div { ...props }>
-            { frogs.map(frog => <FrogAnimation key={ frog.id } isActive={ true } frog={ frog } color={ color || frog.color } animation="blinking" css={ frogPosition(frog.id) }  />) }
+            { frogs.map(frog => <FrogAnimation key={ frog.id } visible={ true } frog={ frog } color={ color || frog.color } animation="blinking" css={ frogPosition(frog.id) }  />) }
         </div>
     )
 }
