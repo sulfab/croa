@@ -31,10 +31,17 @@ const moveFrogAction = (state: GameState | GameStateView, move: MoveFrog): void 
                 .flatMap(frog => frog.femaleFrogs)
                 .filter(frog => !!frog.position && frog.position.x === move.slabPosition.x && frog.position.y === move.slabPosition.y);
 
-        if (!frog.isQueen && frogsOnSlab.length > 1) {
-            // In case its a servant, we let the choice if the max size is overpassed
-            player.eliminationChoice = [...frogsOnSlab ];
-        } else if (frog.isQueen && !frogsOnSlab.some(frog => frog.color === player.color)) {
+        // Frog is not a queen
+        if (!frog.isQueen) {
+
+            // On slab there is a queen of other color : chase her
+            if (frogsOnSlab.length === 1 && frogsOnSlab[0].color !== frog.color && frogsOnSlab[0].isQueen) {
+                frogsOnSlab[0].status = FrogStatus.ELIMINATED;
+            } else if (frogsOnSlab.length > 1) {
+                // In case its a servant, we let the choice if the max size is overpassed
+                player.eliminationChoice = [...frogsOnSlab ];
+            }
+        } else if (!frogsOnSlab.some(frog => frog.color === player.color)) {
             // Direct elimination of frogs when the queen arrives
             frogsOnSlab.forEach(frog => frog.status = FrogStatus.ELIMINATED)
         }
