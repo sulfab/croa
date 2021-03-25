@@ -4,7 +4,7 @@ import { isFrogBirth } from "@gamepark/croa/moves";
 import { Player, PlayerColor } from "@gamepark/croa/player";
 import { useAnimation } from "@gamepark/react-client";
 import { FC } from "react";
-import { playerBoardMaleTokensHeight, playerBoardMaleTokensWidth } from "../../utils/Styles";
+import { playerBoardMaleTokensWidth } from "../../utils/Styles";
 import { Images } from "../Resources";
 
 type MaleTokensProps = {
@@ -18,7 +18,7 @@ export const MaleTokens: FC<MaleTokensProps> = ({ player, color, ...props }) => 
     const playerMaleTokens = maleToken.get(displayedColor);   
 
     return (
-        <div { ...props } css={ maleTokensStyle }>
+        <div { ...props }>
             {
                 Object.keys(MaleFrog).map((male, index) => { 
                     return (
@@ -35,15 +35,6 @@ export const MaleTokens: FC<MaleTokensProps> = ({ player, color, ...props }) => 
         </div>
     )
 };
-
-const maleTokensStyle = css`
-    position: absolute;
-    height: ${ playerBoardMaleTokensHeight }%;
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    width: 100%;
-`;
 
 
 const maleTokenContainer = (index: number) => css`
@@ -94,7 +85,7 @@ const maleFrogScale = keyframes`
 `
 
 const maleFrogAnimation = (duration: number) => css`
-    animation: ${maleFrogScale} ${duration}s ease-in-out;
+    animation: ${maleFrogScale} ${duration}s ease-in-out forwards;
 `
 
 const maleToken = new Map<PlayerColor, Map<MaleFrog, any>>();

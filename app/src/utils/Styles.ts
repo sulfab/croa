@@ -15,18 +15,18 @@ export const playerWidth = (100 - 90 / screenRatio) / 2 - 5.5;
 export const playerBoardWidth = playerWidth * 100 / boardWidth;
 export const playerBoardHeight = 22 * 100 / boardHeight;
 
-export const servantMiniRatio = 85 / 88;
+export const servantMiniRatio = 90 / 100;
 export const servantHeight = 7;
 export const servantWidth = servantHeight * servantMiniRatio / boardWidthReduction; 
-export const servantJumpBlinkHeightRatio = 375 / 88;
-export const servantJumpBlinkWidthRatio = 115 / 85;
+export const servantJumpBlinkHeightRatio = 390 / 100;
+export const servantJumpBlinkWidthRatio = 120 / 90;
 
 
-export const queenMiniRatio = 140 / 150;
+export const queenMiniRatio = 150 / 175;
 export const queenHeight = 10;
 export const queenWidth = queenHeight * queenMiniRatio / boardWidthReduction;
-export const queenJumpBlinkHeightRatio = 432 / 150;
-export const queenJumpBlinkWidthRatio = 183 / 140;
+export const queenJumpBlinkHeightRatio = 450 / 175;
+export const queenJumpBlinkWidthRatio = 190 / 150;
 
 
 export const playerBoardRatio = playerBoardWidth / playerBoardHeight;
@@ -55,33 +55,18 @@ export const getFrogLeft = (frog: FemaleFrog) => {
     return baseLeft + 4 + (playerBoardQueenWidth / playerBoardRatio) + (playerBoardServantWidth / playerBoardRatio + baseLeft - 6) * (frog.id - 1);
 } 
 
-export const frogOffset = (frog: FemaleFrog, otherFrogs?: Array<FemaleFrog>) => {
+export const frogOffset = (frogIndex: number, frog: FemaleFrog) => {
     
-
-    if (frog.isQueen) {
-        return { top: -5, left: 0 };
-    }
-
-    if (!otherFrogs || !otherFrogs.length) {
-        return { top: -2, left: 0 };
-    }
-
-    if (otherFrogs && otherFrogs.length) {
-        switch(otherFrogs.length) {
-            case 1:
-                const otherFrog = otherFrogs[0];
-                return otherFrog.id > frog.id? { top: -2, left: 0 }: { top: 4.5, left: 5.5 };
-            case 2:
-                const otherServant = otherFrogs.filter(f => !f.isQueen)[0];
-                if (otherServant) {
-                    return otherServant.id > frog.id? { top: 4.5, left: 5.5 } :  { top: 4.5, left: 3.5 }
-                }
-
-        }
-        
-    }
-
-    return { top: 0, left: 0 };    
+    switch(frogIndex) {
+        case 0:
+            return frog.isQueen? { top: -5, left: -0.5}: { top: -2.5, left: 0 };
+        case 1:
+            return frog.isQueen? { top: 2.5, left: 4.5 } : { top: 5, left: 6 };
+        case 2:
+            return { top: 4.5, left: 3.5 };
+        default:
+            return;
+    }  
 };
 const frogBlinkingKeyframe = keyframes`
     from { background-position: 0%; }
@@ -90,14 +75,13 @@ const frogBlinkingKeyframe = keyframes`
 
 const frogJumpingKeyframe = keyframes`
     from { background-position: 0%; }
-    to { background-position: -1600%; }  /* <-- width of spritesheet*/
+    to { background-position: -2400%; }  /* <-- width of spritesheet*/
 `;
 
 export const frogMiniContainer = (frog: FemaleFrog) => css`
     height: ${(frog.isQueen? queenHeight : servantHeight)}%;
     width: ${frog.isQueen? queenWidth: servantWidth}%;
     position: absolute;
-    z-index: 1;
 `
 
 export const getAnimationKeyFrame = (animationId?: string) => {
@@ -135,7 +119,7 @@ export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking"
     left: ${computeAnimationLeft(frog, animationId)}%;
     height: ${isActive? computeAnimationHeight(frog, animationId): 0}%;
     width: ${isActive? computeAnimationWidth(frog, animationId): 0}%;
-    background-size: 1600% 100%;
+    background-size: ${animationId !== 'blinking'? 2400: 1600}% 100%;
     transition-property: transform;
     margin: 0 auto;    
     image-rendering: -webkit-optimize-contrast;
@@ -145,7 +129,7 @@ export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking"
 export const getAnimationBackground = (isQueen: boolean, color: PlayerColor, animationId: string) => (isQueen? queenFrogAnimations: servantFrogAnimations).get(color)!.get(animationId);
 
 export const frogMiniAnimation = (animationId?: string, animationDuration?: number, animationDelay?: number) => css`
-    animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(16) ${animationDelay || 0}s ${animationId === 'blinking'? 'infinite': 1};
+    animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(${animationId !== 'blinking'? 24: 16}) ${animationDelay || 0}s ${animationId === 'blinking'? 'infinite': 1};
 `
 
 export const queenFrogAnimations = new Map([

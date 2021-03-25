@@ -7,9 +7,9 @@ const CroaAnimation: Animations<GameState, MoveView, PlayerColor, PlayerColor> =
     getAnimationDuration(move: MoveView) {
         switch(move.type) {
             case MoveType.MoveFrog:
-                return 0.7;
+                return 0.6;
             case MoveType.EliminateFrog:
-                return 1.5;
+                return 1;
             case MoveType.PlaySlabEffect:
                 return 0.5;
             case MoveType.RevealSlab:

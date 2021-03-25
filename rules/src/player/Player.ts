@@ -9,5 +9,7 @@ export type Player = {
   eliminationChoice: Array<FemaleFrogId>,
   birth?: boolean,
   birthMale?: MaleFrog
-  eliminated: boolean
+  eliminated?: number
+  done: boolean
+  lastPlayedFrogId?: number
 }

@@ -39,7 +39,7 @@ export const isAllowedMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, del
         
         // The servant can always be moved on a log slab
         // The player queen cannot be moved on a slab with one of its queens
-        if (!frog.isQueen && isKnownSlab(targetSlab) && !!targetSlab.front && SlabFrontType.LOG === targetSlab.front) {
+        if (!frog.isQueen && isKnownSlab(targetSlab) && SlabFrontType.LOG === targetSlab.front) {
             return true;
         }
       } else {

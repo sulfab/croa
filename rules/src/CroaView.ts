@@ -13,7 +13,14 @@ export default class CroaView implements Game<GameStateView, MoveView> {
     }
 
     getAutomaticMove() {
-        return getPredictableAutomaticMoves(this.state)
+        // If the tile is not known, reveal the tile, instead play the tile
+        const activePlayer = this.state.players.find(player => player.color === this.state.activePlayer);
+    
+        if (!activePlayer) {
+          return;
+        }
+        
+        return getPredictableAutomaticMoves(this.state, activePlayer)
     }
 
     play(move: MoveView): void {
@@ -34,7 +41,7 @@ export default class CroaView implements Game<GameStateView, MoveView> {
                 frogBirthAction(this.state, move);
                 break;
             case MoveType.SkipTurn:
-                skipTurnAction(this.state, move);
+                skipTurnAction(this.state);
                 break;
         }
     }

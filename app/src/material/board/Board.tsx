@@ -1,7 +1,7 @@
 import { Slab } from "@gamepark/croa/pond";
 import { SlabTile } from '../tile/SlabTile';
-import { FunctionComponent, useMemo } from "react"
-import { FemaleFrog } from "@gamepark/croa/frog";
+import { FunctionComponent, useEffect, useMemo, useState } from "react"
+import { FemaleFrog, FrogStatus } from "@gamepark/croa/frog";
 import { FrogMini } from "../frog/FrogMini";
 import { PlayerColor, FrogPlacement } from "@gamepark/croa/player";
 import { css } from "@emotion/react";
@@ -41,8 +41,38 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const orientedSlabPositions = useMemo(() => rotate(toPositions(pond), FrogPlacement[playerCount][playerIndex].currentPlayerRotation), [playerCount, playerIndex]); 
     const animation = useAnimation<MoveFrog | FrogBirth | RevealSlab>(animation => isMoveFrog(animation.move) || isFrogBirth(animation.move) || isRevealSlab(animation.move));
-    const otherFrogsOnSlab = (position: Position, frogId?: number) => frogs.filter(f => f.position && f.position.x === position?.x && f.position.y === position?.y && (!frogId || frogId !== f.id))
+    const [frogPositions, setFrogPositions] = useState<{ [key in PlayerColor]?: { [key: number]: { index: number, position: Position, eliminated?: boolean} }}>({});
 
+    useEffect(() => {
+        const newFrogPositions: { [key in PlayerColor]?: { [key: number]: { index: number, position: Position, eliminated?: boolean } }} = {};
+        const frogToPlace: Array<FemaleFrog> = [];
+        frogs.forEach(frog => {
+            if (!newFrogPositions[frog.color]) {
+                newFrogPositions[frog.color] = {};
+            }
+
+            const frogPosition = frogPositions && frogPositions[frog.color] && frogPositions[frog.color]![frog.id];
+            const newFrogPosition = animation && isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color? animation.move.slabPosition: frog.position;
+            if (newFrogPosition && frogPosition && newFrogPosition!.x === frogPosition.position.x && newFrogPosition!.y === frogPosition.position.y) {
+                newFrogPositions[frog.color]![frog.id] = { index: frogPosition.index, position: newFrogPosition, eliminated: FrogStatus.ELIMINATED === frog.status };
+            } else {
+                frogToPlace.push(frog)
+            }
+        })
+
+        frogToPlace.forEach(frog => {
+            const newFrogPosition = animation && isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color? animation.move.slabPosition: frog.position;
+            const positions = Object.values(newFrogPositions || {})
+                    .flatMap(player => Object.values(player || []))
+                    .filter(o => o.position.x === newFrogPosition!.x && o.position.y === newFrogPosition!.y && FrogStatus.ELIMINATED !== frog.status)
+                    .map(o => o.index);
+            
+            newFrogPositions[frog.color]![frog.id] = { position: newFrogPosition!, index: [0, 1, 2].filter(i => !positions.includes(i))[0], eliminated: FrogStatus.ELIMINATED === frog.status };
+        })
+
+        setFrogPositions(newFrogPositions)
+    // eslint-disable-next-line
+    }, [frogs, animation && animation.move])
     
     const getVisualPosition = (position: Position): Position | undefined => {
         let visualPosition;
@@ -57,8 +87,31 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
         return visualPosition;
     }
 
+    const frogVerticalOrientation = (frog: FemaleFrog) => {
+        if (animation && isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
+            const visualPosition = getVisualPosition(frog.position!);
+            const newVisualPosition = getVisualPosition(animation.move.slabPosition!);
+            const actualY = visualPosition?.y!;
+            const newY = newVisualPosition?.y!;
+            return newY < actualY ? 'top': 'bottom';
+        }
+
+        return 'bottom';
+    }
+
+    const frogHorizontalOrientation = (frog: FemaleFrog) => {
+        if (animation && isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
+            const visualPosition = getVisualPosition(frog.position!);
+            const newVisualPosition = getVisualPosition(animation.move.slabPosition!);
+            const actualX = visualPosition?.x!;
+            const newX = newVisualPosition?.x!;
+            return newX < actualX ? 'left': 'right';
+        }
+
+        return 'right';
+    }
+
     const isFrogAnimation = (frog: FemaleFrog) => animation && isMoveFrog(animation.move) && animation.move.playerId === frog.color && animation.move.frogId === frog.id;
-    const isSlabUnderFrog = (frog: FemaleFrog) => animation && isRevealSlab(animation.move) && animation.move.slabPosition.x === frog.position!.x && animation.move.slabPosition.y === frog.position!.y
     const getFrogTranslation = (frog: FemaleFrog) => {
         if (isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
             return translateFrog(frog, animation!.move.slabPosition!);
@@ -70,9 +123,8 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
     const translateFrog = (frog: FemaleFrog, position: Position) => {
         if (position) {
             const visualPosition = getVisualPosition(position);
-            const otherFrogOnTarget =  otherFrogsOnSlab(position, frog.id);
-            const offset = frogOffset(frog, otherFrogOnTarget);
-            return `translate(${ getFrogXPositionOnBoard(visualPosition?.x!, pond.length, offset.left) * 100 / (frog.isQueen? queenWidth: servantWidth) }%, ${ getFrogYPositionOnBoard(visualPosition?.y!, pond.length, offset.top) * 100 / (frog.isQueen? queenHeight: servantHeight)}%)`
+            const offset = frogOffset(frogPositions[frog.color]![frog.id].index, frog);
+            return `translate(${ getFrogXPositionOnBoard(visualPosition?.x!, pond.length, offset!.left) * 100 / (frog.isQueen? queenWidth: servantWidth) }%, ${ getFrogYPositionOnBoard(visualPosition?.y!, pond.length, offset!.top) * 100 / (frog.isQueen? queenHeight: servantHeight)}%)`
         }
 
         return undefined;
@@ -80,7 +132,8 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
 
     const renderFrog = (frog: FemaleFrog) => {
         const visualPosition = getVisualPosition(frog.position!);
-        if (!visualPosition) {
+        const frogIndex = frogPositions[frog.color] && frogPositions[frog.color]![frog.id];
+        if (!visualPosition || frogIndex === undefined) {
             return null;
         }
 
@@ -89,7 +142,9 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
                          frog={ frog }
                          otherFrogs={ frogs.filter(f => f.color === activePlayer && f.id !== frog.id && !!f.position) }
                          visualPosition={ visualPosition }
-                         css={[isFrogAnimation(frog) && translateFrogAnimation(animation!), isSlabUnderFrog(frog) && firstPlan]}
+                         horizontalOrientation={ frogHorizontalOrientation(frog) }
+                         verticalOrientation={ frogVerticalOrientation(frog) }
+                         css={[isFrogAnimation(frog) && translateFrogAnimation(animation!)]}
                          preTransform={ getFrogTranslation(frog) } />
     }
 
@@ -97,17 +152,17 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
         <div css={boardStyle(pond.length)}>
             { frogs.filter(frog => !!frog.position).map(renderFrog) }
             { orientedSlabPositions.map((pondRow, x) => pondRow.map((slab, y) => 
-                <SlabTile key={ `slab-${x}-${y}` } slab={ pond[slab.x][slab.y] } frogs={ frogs } position={{x: slab.x, y: slab.y}} visualPosition={{x, y}} boardSize={ pond.length } /> ))}
+                <SlabTile   key={ `slab-${x}-${y}` } 
+                            slab={ pond[slab.x][slab.y] } 
+                            frogs={ frogs } position={{x: slab.x, y: slab.y}} 
+                            visualPosition={{x, y}} 
+                            boardSize={ pond.length }
+                            activePlayer={ activePlayer } /> ))}
         </div>
     );
 }
 
-const firstPlan = css`
-    z-index: 3;
-`;
-
 const translateFrogAnimation = (animation: any) => css`
-    z-index: 3;
     transition-duration: ${animation!.duration}s;
 `;
 

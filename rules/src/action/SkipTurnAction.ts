@@ -1,25 +1,28 @@
+import { FrogStatus } from "../frog";
 import { GameState, GameStateView } from "../GameState";
-import { SkipTurn } from "../moves";
 
 /**
  * Skip the player turn and change the active player to the next one
  * @param state THe game state
  * @param move The actual movement
  */
-const skipTurnAction = (state: GameState | GameStateView, move: SkipTurn): void => {
-    const player = state.players.find(player => player.color === move.playerColor);
+const skipTurnAction = (state: GameState | GameStateView): void => {
+    const player = state.players.find(player => player.color === state.activePlayer && player.done);
     if (!player) {
         return;
     }
 
     // On turn skipping, frog mud is removed, frog are not boucing anymore and deleting previous position
+    const lastPlayedFrog = player.femaleFrogs.find(frog => frog.id === player.lastPlayedFrogId);
     player.femaleFrogs
+        .filter(f => !lastPlayedFrog || lastPlayedFrog.color !== f.color || lastPlayedFrog.id !== f.id || ![FrogStatus.MUDDED, FrogStatus.STUNG, FrogStatus.BOUNCING].includes(f.status))
         .forEach(f => {
-            f.mudded = false;
-            f.bouncing = false;
-            f.stung = false;
-            delete f.previousPosition
+            f.status = FrogStatus.READY;
+            f.previousPosition = undefined;
         });
+
+    player.done = false;
+    player.lastPlayedFrogId = undefined;
     
     const playerNotEliminated = state.players.filter(player => !player.eliminated)
     const activePlayerIndex = playerNotEliminated.findIndex(player => player.color === state.activePlayer)

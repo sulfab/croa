@@ -2,7 +2,7 @@ import { GameState, GameStateView } from "../GameState";
 import { PlaySlabEffect } from "../moves/PlaySlabEffect";
 import { SlabFrontType } from "../pond/SlabFrontType";
 import { isKnownSlab } from "../pond";
-import { FemaleFrog, MaleFrog } from "../frog";
+import { FemaleFrog, FrogStatus, MaleFrog } from "../frog";
 import { Player } from "../player";
 /**
  * Execute the slab by:
@@ -19,33 +19,33 @@ const playSlabEffectAction = (state: GameState | GameStateView, move: PlaySlabEf
     
     if (slab && isKnownSlab(slab)) {
         const frog = state.players
-            .flatMap(player => player.femaleFrogs)
-            .find(frog => !!frog.position && frog.hasMoved 
-                            && frog.position?.x === move.slabPosition.x 
-                            && frog.position?.y === move.slabPosition.y);
+            .flatMap(player => player.femaleFrogs.filter(frog => !!frog.position && player.lastPlayedFrogId === frog.id))
+            .find(frog => frog.position?.x === move.slabPosition.x && frog.position?.y === move.slabPosition.y);
         
         if (frog) {
             const player = state.players.find(player => player.color === frog.color);
-
             switch (slab.front) {
                 case SlabFrontType.PIKE:
-                    frog.eliminated = true;
+                    frog.status = FrogStatus.ELIMINATED;
+                    player!.done = true;
                     break;
                 // Nothing to do
                 case SlabFrontType.REED:
                 case SlabFrontType.LOG:
+                    player!.done = true;
                     break;
                 // Can move another frog
                 case SlabFrontType.MOSKITO:
-                    frog.stung = true;
+                    frog.status = FrogStatus.STUNG;
                     break;
                 // Must move on another slab
                 case SlabFrontType.NENUPHAR:
-                    frog.bouncing = true;
+                    frog.status = FrogStatus.BOUNCING;
                     break;
                 // Locked for one turn
                 case SlabFrontType.MUD:
-                    frog.mudded = true;
+                    frog.status = FrogStatus.MUDDED;
+                    player!.done = true;
                     break;
                 // Will create a new frog on the tile if its a queen
                 case SlabFrontType.RED_MALE:
@@ -67,22 +67,6 @@ const playSlabEffectAction = (state: GameState | GameStateView, move: PlaySlabEf
                     mayProduceFrogBirth(player!, MaleFrog.Pink, frog)
                     break;
             }
-
-            frog.hasMoved = false;
-
-            // Boucing again act as non-end of the turn
-            if (!frog.bouncing && !frog.stung) {
-
-                // Remove mud on all frogs of the player except the current because it means that it was just mudded
-                player!.femaleFrogs
-                    .filter(f => f.id !== frog.id)
-                    .forEach(f => f.mudded = false )
-
-                const playerNotEliminated = state.players.filter(player => !player.eliminated)
-                const activePlayerIndex = playerNotEliminated.findIndex(player => player.color === state.activePlayer)
-                const nextPlayerIndex = (activePlayerIndex + 1) % playerNotEliminated.length
-                state.activePlayer = playerNotEliminated.length > 1? playerNotEliminated[nextPlayerIndex].color: undefined
-            }
         }
     }
 }
@@ -95,6 +79,7 @@ const playSlabEffectAction = (state: GameState | GameStateView, move: PlaySlabEf
  */
 const mayProduceFrogBirth = (player: Player, male: MaleFrog, frog: FemaleFrog) => {
     
+    player!.done = true;
     if (!frog.isQueen) {
         return;
     }

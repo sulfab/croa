@@ -4,7 +4,7 @@ import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } fr
 import { FunctionComponent } from "react";
 import './SlabTile.css';
 import { FrogFromBoard, DragObjectType } from "../../drag-objects";
-import { FemaleFrog } from "@gamepark/croa/frog";
+import { FemaleFrog, FrogStatus } from "@gamepark/croa/frog";
 import { PlayerColor } from "@gamepark/croa/player";
 import { SlabFrontType } from "@gamepark/croa/pond/SlabFrontType";
 import { Position } from "@gamepark/croa/common/Position";
@@ -13,7 +13,7 @@ import { Images } from "../Resources";
 import { css, keyframes } from "@emotion/react";
 import { SlabBackType } from "@gamepark/croa/pond/SlabBackType";
 import { isRevealSlab, RevealSlabView } from "@gamepark/croa/moves/RevealSlab";
-import { isAllowedMove } from "@gamepark/croa/utils/frogUtils";
+import { isAllowedMove } from "@gamepark/croa/utils";
 
 type SlabTileProps = {
     slab: Slab;
@@ -21,9 +21,10 @@ type SlabTileProps = {
     visualPosition: Position;
     frogs: Array<FemaleFrog>;
     boardSize: number;
+    activePlayer?: PlayerColor;
 }
 
-const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosition, frogs, boardSize }) => {
+const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosition, frogs, boardSize, activePlayer }) => {
     const [selectedFrogId,] = useDisplayState<number | undefined>(undefined);
     const play = usePlay();
     const playerId = usePlayerId<PlayerColor>();
@@ -32,15 +33,15 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
     const selectedFrog = selectedFrogId && frogs.find(frog => frog.id === selectedFrogId && frog.color === playerId);
 
-    const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs)
-    const isInvalidSlab = () => !animating && selectedFrog && isAdjcentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs);
+    const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.STUNG !== selectedFrog.status
+    const isInvalidSlab = () => !animating && selectedFrog && isAdjcentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.STUNG !== selectedFrog.status;
 
     /**
      * Does the current tile the previous tile if the from is a boucing frog
      * @param frog Selected frog
      */
     const isBouncingFrogPreviousTile = (frog: FemaleFrog) => {
-        return frog.bouncing && frog.previousPosition && frog.previousPosition.x === position.x && frog.previousPosition.y === position.y
+        return FrogStatus.BOUNCING === frog.status && frog.previousPosition && frog.previousPosition.x === position.x && frog.previousPosition.y === position.y
     }
 
     /**
@@ -66,7 +67,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
         }
             
         let allowedMove = isAdjcentSlab(frog);
-        if (frog.bouncing) {
+        if (FrogStatus.BOUNCING === frog.status) {
             allowedMove = allowedMove && !isBouncingFrogPreviousTile(frog)
         }
 
@@ -87,9 +88,9 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     
     return (
         <div ref={ ref } onClick={ onTileClick } className="slab" css={[animation && css`z-index: 2`]}>
-            <div className={`slab-inner ${!animation && slab.displayed && 'slab-flipped' }`} css={animation && slabAnimation(animation.duration, getAdditionnalTranslate())} >
+            <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, getAdditionnalTranslate())]} >
                 <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{backgroundImage: `url(${backImages.get(slab.back)})`}}></div>
-                { (slab.displayed || animation?.move.front) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{ backgroundImage: `url(${frontImages.get(slab.front || animation?.move.front)})` }} className={`slab-front`}>
+                { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{ backgroundImage: `url(${frontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>
                     
                 </div> }
             </div>
@@ -110,7 +111,7 @@ const scale = (translate?: string) => keyframes`
 `
 
 const slabAnimation = (duration: number, translate: string) => css`
-    animation: ${scale(translate)} ${duration}s ease-in-out;
+    animation: ${scale(translate)} ${duration}s ease-in-out forwards;
 `
 
 const backAndFrontSlab = css`

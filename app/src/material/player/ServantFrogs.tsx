@@ -27,7 +27,6 @@ const frogPosition = (frogId: number) => css`
     height: ${ height }%;
     width: ${ width }%;
     z-index: ${ frogId % 2 };
-
 `;
 
 export {

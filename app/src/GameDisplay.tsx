@@ -19,7 +19,7 @@ export default function GameDisplay({game}: Props) {
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <div css={ slabBoard }>
-        <Board pond={ game.pond } frogs={ game.players.flatMap(p => p.femaleFrogs) } activePlayer={ game.activePlayer } playerIndex={ playerIndex } playerCount={ game.players.length }/>
+        <Board pond={ game.pond } frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.activePlayer } playerIndex={ playerIndex } playerCount={ game.players.length }/>
         <div css={[ playerBoards, leftPlayerBoards ]}>
           { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0%`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
           { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0%`}  player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }

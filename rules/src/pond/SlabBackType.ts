@@ -1,6 +1,6 @@
 enum SlabBackType {
-    SHALLOW = 'SHALLOW',
-    DEEP = 'DEEP'
+    SHALLOW,
+    DEEP
 }
 
 export {

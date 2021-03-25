@@ -1,10 +1,10 @@
 import { css, keyframes } from "@emotion/react";
-import { FemaleFrog } from "@gamepark/croa/frog";
+import { FemaleFrog, FrogStatus } from "@gamepark/croa/frog";
 import { PlayerColor } from "@gamepark/croa/player";
 import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from "@gamepark/react-client";
 import { Draggable } from "@gamepark/react-components";
 import { FunctionComponent, useEffect } from "react";
-import { frogMiniAnimation, frogMiniContainer, getAnimationBackground } from "../../utils/Styles";
+import { frogMiniAnimation, frogMiniContainer } from "../../utils/Styles";
 import { frogFromBoard } from "../../drag-objects";
 import { Position } from "@gamepark/croa/common/Position";
 import { DraggableProps } from "@gamepark/react-components/dist/Draggable/Draggable";
@@ -18,9 +18,11 @@ type FrogMiniProps = {
     activePlayer?: PlayerColor;
     visualPosition?: Position;
     preTransform?: string;
+    horizontalOrientation: 'left'|'right'
+    verticalOrientation: 'top' | 'bottom'
 } & Omit<DraggableProps<any, any, any>, 'item'>
 
-const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
+const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientation, verticalOrientation, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
     const [selectedFrog, setSelectedFrog] = useDisplayState<number | undefined>(undefined);
     const playerId = usePlayerId();
     const play = usePlay();
@@ -36,8 +38,8 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
         && !otherFrogs.some(first => first.isQueen 
                 && otherFrogs.some(second => first.id !== second.id && first.position!.x === second.position!.x  && first.position!.y === second.position!.y)
                 && (frog.position!.x !== first.position!.x || frog.position!.y !== first.position!.y))       
-        && !frog.mudded && !frog.stung && !otherFrogs.some(f => f.bouncing)
-        && !otherFrogs.some(frog => frog.hasMoved);
+        && FrogStatus.MUDDED !== frog.status && FrogStatus.STUNG !== frog.status 
+        && !otherFrogs.some(f => FrogStatus.BOUNCING === f.status || FrogStatus.MOVED === f.status);
 
     // Detect change of frog between state and current frog
     // Unset the frog if it can't be moved
@@ -72,20 +74,20 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, otherFrogs, activePl
 
     const isMoveFrogAnimation = () => animatingMove && isMoveFrog(animatingMove.move)
     const isSelectable = canBeMoved && !isSelected && !isMoveFrogAnimation();
+    const frogZIndex = ((visualPosition!.y + 1) * 10) + (visualPosition!.x + 1)
     const getAnimation = () => {
         if (isMoveFrogAnimation()) {
-            return 'jumping_front';
+            return verticalOrientation === 'top' ? 'jumping_back': 'jumping_front';
         }
 
         return 'blinking';
     }
-
-    const getAnimationImage = (animationId: string) => getAnimationBackground(frog.isQueen, frog.color, animationId);
     
     return (
-        <Draggable { ...props } preTransform={ preTransform } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeMoved } css={[frogMiniContainer(frog), isSelectable && selectableFrog, frog.color !== playerId && pointEvents, frog.mudded && muddedFrog(preTransform), animatingElimination && frogDisparition(animatingElimination.duration)]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ onSelectFrog }>
-            <FrogAnimation frog={ frog } animation="blinking" isActive={ getAnimation() === "blinking" } css={ frogMiniAnimation("blinking", 1, Math.abs(Math.tan(Object.keys(PlayerColor).indexOf(frog.color) + frog.id)))} style={{ backgroundImage: `url(${getAnimationImage('blinking')})`}} />
-            <FrogAnimation frog={ frog } animation="jumping_front" isActive={ getAnimation() === "jumping_front" } css={ isMoveFrogAnimation() && frogMiniAnimation("jumping_front", 1) } style={{ backgroundImage: `url(${getAnimationImage('blinking')})`}} />
+        <Draggable { ...props } preTransform={ `${preTransform}` } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeMoved } css={[frogMiniContainer(frog), isSelectable && selectableFrog, frog.color !== playerId && pointEvents, FrogStatus.MUDDED === frog.status && muddedFrog(preTransform), animatingElimination && frogDisparition(animatingElimination.duration),  css`z-index: ${frogZIndex}; `]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ onSelectFrog }>
+            <FrogAnimation frog={ frog } animation="blinking" isActive={ getAnimation() === "blinking" } css={ frogMiniAnimation("blinking", undefined, Math.abs(Math.tan(Object.keys(PlayerColor).indexOf(frog.color) + frog.id * 2)))} />
+            <FrogAnimation frog={ frog } animation="jumping_front" isActive={ getAnimation() === "jumping_front" } css={ [isMoveFrogAnimation() && frogMiniAnimation("jumping_front", animatingMove && animatingMove.duration), css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />
+            <FrogAnimation frog={ frog } animation="jumping_back" isActive={ getAnimation() === "jumping_back" } css={ [isMoveFrogAnimation() && frogMiniAnimation("jumping_back", animatingMove && animatingMove.duration), css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />
             { /* <div css={[frogMiniImage(frog, getAnimation() === "jumping_back", "jumping_back"), isMoveFrogAnimation() && frogMiniAnimation("jumping_back", 1)]} style={{ backgroundImage: `url(${getAnimationImage('jumping_back')})`}}  /> */}
         </Draggable>
     );

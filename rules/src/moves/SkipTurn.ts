@@ -1,14 +1,11 @@
-import { PlayerColor } from "../player";
 import { MoveType } from "./MoveType";
 
 export type SkipTurn = {
-    type: MoveType.SkipTurn,
-    playerColor: PlayerColor
+    type: MoveType.SkipTurn
 }
 
-export function skipTurn(playerColor: PlayerColor): SkipTurn {
+export function skipTurn(): SkipTurn {
     return {
-        type: MoveType.SkipTurn,
-        playerColor
+        type: MoveType.SkipTurn
     }
 }

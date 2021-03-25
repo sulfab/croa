@@ -1,5 +1,5 @@
 import { Position } from "../common/Position";
-import { FemaleFrog, MaleFrog } from "../frog";
+import { FemaleFrog, FrogStatus, MaleFrog } from "../frog";
 import { Player } from "./Player";
 import { PlayerColor } from "./PlayerColor";
 
@@ -101,18 +101,18 @@ export const FrogPlacement: { [key: number]: { [key: number]: { currentPlayerRot
     return { 
       color: color, 
       maleFrogs: [MaleFrog.Blue, MaleFrog.Pink, MaleFrog.Purple, MaleFrog.Red, MaleFrog.Yellow, MaleFrog.Green], 
-      femaleFrogs: getFrogPositions(playerCount, playerIndex, color).map(frog => ({ ...frog })).concat(
+      femaleFrogs: getFrogPositions(playerCount, playerIndex, color).concat(
         { id: 4, isQueen: false, color }, 
         { id: 5, isQueen: false, color }, 
         { id: 6, isQueen: false, color }, 
         { id: 7, isQueen: false, color }
-      ),
+      ).map(frog => ({ ...frog, status: FrogStatus.READY})),
       eliminationChoice: [],
-      eliminated: false
+      done: false
     }
   }
 
-  export function getFrogPositions (playerCount: number, playerIndex: number, color: PlayerColor): Array<FemaleFrog> {
+  export function getFrogPositions (playerCount: number, playerIndex: number, color: PlayerColor): Array<Omit<FemaleFrog, 'status'>> {
     return FrogPlacement[playerCount][playerIndex].frogs.map(f => ({
         ...f,
         color

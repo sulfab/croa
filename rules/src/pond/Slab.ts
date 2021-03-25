@@ -8,5 +8,5 @@ export type Slab = {
 }
 
 export function isKnownSlab(slab: Slab | Pick<Slab, 'back'>): slab is Slab {
-    return !!(slab as Slab).front;
+    return (slab as Slab).front !== undefined;
 }

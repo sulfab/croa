@@ -1,3 +1,4 @@
+import { FrogStatus } from "../frog";
 import { GameState, GameStateView } from "../GameState";
 import { EliminateFrog } from "../moves";
 
@@ -16,15 +17,16 @@ const eliminateFrogAction = (state: GameState | GameStateView, move: EliminateFr
     const eliminatedFrog = player.femaleFrogs.find(frog => frog.id === move.frogId)
     if (eliminatedFrog) {
         delete eliminatedFrog.position;
-        eliminatedFrog.eliminated = false;
+        eliminatedFrog.status = FrogStatus.READY;
 
         // TODO: Generate a move for player elimintion
         if (!player.eliminated && player.femaleFrogs.every(frog => !frog.position)) {
-            player.eliminated = true;
+            const eliminatedCount: number[] = state.players.filter(p => !!p.eliminated).flatMap(player => player.eliminated!);
+            player.eliminated = eliminatedCount.length === 0? 1: Math.max(...eliminatedCount) + 1;
         }
 
         // The eliminator win a servant birth if ther is one available
-        const eliminator = state.players.find(p => p.femaleFrogs.some(frog => frog.hasMoved));
+        const eliminator = state.players.find(p => p.femaleFrogs.some(frog => FrogStatus.MOVED === frog.status));
         if (eliminator && eliminatedFrog.isQueen) {
             eliminator.birth = true;
         }
