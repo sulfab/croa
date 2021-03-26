@@ -1,27 +1,30 @@
 import { Position } from "../common/Position";
-import { FemaleFrog } from "../frog";
-import { Move, moveFrog } from "../moves";
+import { FemaleFrog, FrogStatus } from "../frog";
 import { isKnownSlab, Slab, SlabFrontType } from "../pond";
 
+export const getAllowedPositions = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, pond: (Slab | Pick<Slab, 'back'>)[][]): Position[] => {
+  const positions = [];
+  for (let i = -1; i <= 1; i++) {
+    for (let j = -1; j <= 1; j++) {
+      if (i !== 0 || j !== 0) {
 
-  /**
-   * Allow moving the frog only if there is no other frog on the target slab
-   * @param frogs The player frogs
-   * @param frog The current played frog
-   * @param position The targeted slab
-   * @param moves THe liste of allowed moves
-   */
-export const allowFrogMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, delta: Position, pond: (Slab | Pick<Slab, 'back'>)[][],  moves?: Array<Move>, boardSize?: number) => {
-    const frogX = frog.position!.x + delta.x;
-    const frogY = frog.position!.y + delta.y;
-    if (!boardSize || !(frogX >= 0 && frogY >= 0 && frogX < boardSize && frogY < boardSize)) {
-        return;
+        const frogX = frog.position!.x + i;
+        const frogY = frog.position!.y + j;
+        const isOutSideBoard = !(frogX >= 0 && frogY >= 0 && frogX < pond.length && frogY < pond.length);
+        const isBouncingFrogPreviousTile = FrogStatus.BOUNCING === frog.status && frog.previousPosition && frog.previousPosition.x === frog.position!.x + i && frog.previousPosition.y === frog.position!.y + j;
+        if (!isOutSideBoard && !isBouncingFrogPreviousTile) {
+          
+          const slab = pond[frogX][frogY];
+          const delta = {x: i, y: j};
+          if (isAllowedMove(allFrogs, frog, delta, slab, pond.length)) {
+            positions.push({ x: frogX, y: frogY})
+          }
+        }
+      }
     }
+  }
 
-    const slab = pond[frogX][frogY];
-    if (moves && isAllowedMove(allFrogs, frog, delta, slab, boardSize)) {
-      moves.push(moveFrog(frog.id, frog.color, { x: frogX, y: frogY }));
-    }
+  return positions;
 }
     
 export const isAllowedMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, delta: Position, slab: (Slab | Pick<Slab, 'back'>), boardSize: number): boolean => {

@@ -1,12 +1,12 @@
 import { IncompleteInformation, SequentialGame} from '@gamepark/rules-api';
 import { FemaleFrog, FrogStatus } from './frog';
 import { GameState, GameStateView } from './GameState';
-import { Move, MoveType, eliminateFrog, playSlab, MoveView, skipTurn, frogBirth, revealSlabMove } from './moves';
+import { Move, MoveType, eliminateFrog, playSlab, MoveView, skipTurn, frogBirth, revealSlabMove, moveFrog } from './moves';
 import { eliminateFrogAction, moveFrogAction, frogBirthAction, playSlabEffectAction, skipTurnAction, revealSlab } from './action';
 import { Player, PlayerColor } from './player';
 import { initializePlayerBoard } from './player/FrogPlacement';
 import { pond, Slab, isKnownSlab } from './pond';
-import { allowFrogMove, shuffleSlabs } from './utils';
+import { getAllowedPositions, shuffleSlabs } from './utils';
 import { CroaOptions, isGameOptions } from './CroaOptions';
 
 const defaultBoardSize = 8;
@@ -73,18 +73,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
     const allFrogs = this.state.players.flatMap(player => player.femaleFrogs.filter(frog => !!frog.position));
     movableFrogs
       .filter(frog => !!frog.position)  
-      .forEach(frog => {
-        for (let i = -1; i <= 1; i++) {
-          for (let j = -1; j <= 1; j++) {
-            if (i !== 0 || j !== 0) {
-              if (FrogStatus.BOUNCING !== frog.status || (frog.previousPosition && (frog.previousPosition.x !== frog.position!.x + i || frog.previousPosition.y !== frog.position!.y + j))) {
-                
-                allowFrogMove(allFrogs, frog, { x: i, y: j }, this.state.pond, moves, defaultBoardSize);
-              }
-            }
-          }
-        }
-      })
+      .forEach(frog => getAllowedPositions(allFrogs, frog, this.state.pond).forEach(position => moves.push(moveFrog(frog.id, frog.color, position))))
 
     return moves; // return all the moves that active player is allowed to play depending on current this.state
   }
@@ -92,7 +81,6 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
   getAutomaticMove(): Move | void {
     // If the tile is not known, reveal the tile, instead play the tile
     const activePlayer = this.state.players.find(player => player.color === this.state.activePlayer);
-
     if (!activePlayer) {
       return;
     }
@@ -156,6 +144,15 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
 }
 export function getPredictableAutomaticMoves(state: GameState | GameStateView, activePlayer: Player): Move & MoveView | void {
 
+  // In the case the current player has a boucing frog and no destination is possible, automatically move it to its previous slab
+  const bouncingFrog = activePlayer.femaleFrogs.find(frog => FrogStatus.BOUNCING === frog.status);
+  if (bouncingFrog) {
+    const allFrogs = state.players.flatMap(player => player.femaleFrogs).filter(frog => !!frog.position);
+    if (getAllowedPositions(allFrogs, bouncingFrog, state.pond).length === 0 && bouncingFrog.previousPosition) {
+      return moveFrog(bouncingFrog.id, bouncingFrog.color, bouncingFrog.previousPosition);
+    }
+  }
+
   // Pass turn in some cases : only one frog and stun or jump on moskito
   // No elimination or elimination choice
 
@@ -188,7 +185,6 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
       .flatMap(player => player.femaleFrogs)
       .find(frog => !frog.isQueen && !!frog.position);
   if (aloneFrogs) {
-    console.log("Elimination")
     return eliminateFrog(aloneFrogs);
   }
 
@@ -207,5 +203,4 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
       }
     }    
   }
-
 }
