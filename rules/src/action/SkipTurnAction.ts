@@ -7,7 +7,7 @@ import { GameState, GameStateView } from "../GameState";
  * @param move The actual movement
  */
 const skipTurnAction = (state: GameState | GameStateView): void => {
-    const player = state.players.find(player => player.color === state.activePlayer && player.done);
+    const player = state.players.find(player => player.color === state.activePlayer);
     if (!player) {
         return;
     }

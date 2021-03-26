@@ -31,12 +31,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
    * The player id is directly set in the state in order to simplify the management
    */
   getActivePlayer(): PlayerColor | undefined {
-    // The game ends when there is only one player that has its queen frog in game.
-    if (this.state.players.filter(p => !p.eliminated).length > 1) {
-      return this.state.activePlayer;
-    }
-    
-    return undefined;// Undefined = end of the game. Return the id of current active player depending on this.state otherwise
+    return this.state.activePlayer;
   }
 
   /**
@@ -193,6 +188,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
       .flatMap(player => player.femaleFrogs)
       .find(frog => !frog.isQueen && !!frog.position);
   if (aloneFrogs) {
+    console.log("Elimination")
     return eliminateFrog(aloneFrogs);
   }
 
