@@ -18,11 +18,11 @@ const skipTurnAction = (state: GameState | GameStateView): void => {
         .filter(f => !lastPlayedFrog || lastPlayedFrog.color !== f.color || lastPlayedFrog.id !== f.id || ![FrogStatus.MUDDED, FrogStatus.STUNG, FrogStatus.BOUNCING].includes(f.status))
         .forEach(f => {
             f.status = FrogStatus.READY;
-            f.previousPosition = undefined;
+            delete f.previousPosition;
         });
 
     player.done = false;
-    player.lastPlayedFrogId = undefined;
+    delete player.lastPlayedFrogId;
     
     const playerNotEliminated = state.players.filter(player => !player.eliminated)
     const activePlayerIndex = playerNotEliminated.findIndex(player => player.color === state.activePlayer)

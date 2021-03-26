@@ -27,7 +27,7 @@ const frogBirthAction = (state: GameState | GameStateView, move: FrogBirth) => {
     }
 
     player.birth = false;
-    player.birthMale = undefined;
+    delete player.birthMale;
 }
 
 const popNewServant = (player: Player): boolean => {
