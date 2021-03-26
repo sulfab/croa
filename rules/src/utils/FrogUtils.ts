@@ -29,13 +29,15 @@ export const isAllowedMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, del
     const frogY = frog.position!.y + delta.y;
     if (!boardSize || !(frogX >= 0 && frogY >= 0 && frogX < boardSize && frogY < boardSize)) {
         return false;
-    }    
+    }       
 
     // Player can move frog only when position is on the board and that there is no frog on the target slab
-    const frogsOnTargetSlab = allFrogs.filter(f => (f.id !== frog.id || f.color !== frog.color) && f.position && f.position!.x === frogX && f.position!.y === frogY);
-        if (frogsOnTargetSlab.length > 0) {
+    const frogsOnTargetSlab = allFrogs.filter(f => !!f.position && (f.id !== frog.id || f.color !== frog.color) && f.position!.x === frogX && f.position!.y === frogY);
+    if (frogsOnTargetSlab.length > 0) {
       const targetSlab = slab;
+      
       if (frogsOnTargetSlab.some(otherFrog => otherFrog.color === frog.color)) {
+
         
         // The servant can always be moved on a log slab
         // The player queen cannot be moved on a slab with one of its queens

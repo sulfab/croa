@@ -54,7 +54,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
         return (deltaY <= 1 && deltaX <= 1 && (deltaX !== 0 || deltaY !== 0))
     };
 
-    const getAdditionnalTranslate = () => visualPosition.y === boardSize - 1? 'translateY(-60%)': visualPosition.y === 0? 'translateY(50%)': '';
+    const additionalTranslate = visualPosition.y === boardSize - 1? 'translateY(-60%)': visualPosition.y === 0? 'translateY(50%)': '';
     
     /**
      * Frog can be dropped only if the slab is not empty or a log is on the slab
@@ -88,7 +88,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     
     return (
         <div ref={ ref } onClick={ onTileClick } className="slab" css={[animation && css`z-index: 2`]}>
-            <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, getAdditionnalTranslate())]} >
+            <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
                 <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{backgroundImage: `url(${backImages.get(slab.back)})`}}></div>
                 { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{ backgroundImage: `url(${frontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>
                     

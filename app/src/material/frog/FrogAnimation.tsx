@@ -23,13 +23,21 @@ const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, animation, visible, durati
 };
 
 const frogBlinkingKeyframe = keyframes`
-    from { background-position: 0%; }
-    to { background-position: -1600%; }  /* <-- width of spritesheet*/
+    from { 
+        background-position: 0%; 
+    }
+    to { 
+        background-position: -1600%;
+    }
 `;
 
 const frogJumpingKeyframe = keyframes`
-    from { background-position: 0%; }
-    to { background-position: -2400%; }  /* <-- width of spritesheet*/
+    from {
+        background-position: 0%;
+    }
+    to { 
+        background-position: -2400%; 
+    }
 `;
 
 export const getAnimationKeyFrame = (animationId?: string) => {
@@ -58,7 +66,7 @@ const computeAnimationWidth = (frog: FemaleFrog, animationId?: string) => {
 
 const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
     if (animationId && animationId !== 'blinking') {
-        return -((computeAnimationWidth(frog, animationId) - 100) / 2 + 1);
+        return -((computeAnimationWidth(frog, animationId) - 100) / 2 - 2);
     }
 
     return 0;
