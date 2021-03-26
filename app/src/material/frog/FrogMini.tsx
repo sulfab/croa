@@ -83,7 +83,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientatio
     
     return (
         <Draggable { ...props } preTransform={ `${preTransform}` } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeMoved } css={[frogMiniContainer(frog), isSelectable && selectableFrog, frog.color !== playerId && pointEvents, FrogStatus.MUDDED === frog.status && muddedFrog(preTransform), animatingElimination && frogDisparition(animatingElimination.duration),  css`z-index: ${frogZIndex}; `]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ onSelectFrog }>
-            <FrogAnimation frog={ frog } animation="blinking" visible={ getAnimation() === "blinking" } duration={ 1 } delay={ Math.abs(Math.tan(Object.keys(PlayerColor).indexOf(frog.color) + frog.id * 2)) } />
+            <FrogAnimation frog={ frog } animation="blinking" visible={ getAnimation() === "blinking" } duration={ 1 } delay={ Math.min(Math.abs(Math.tan(Object.keys(PlayerColor).indexOf(frog.color) + frog.id * 2)), 3) } />
             <FrogAnimation frog={ frog } animation="jumping_front" visible={ getAnimation() === "jumping_front" } duration={ animatingMove && animatingMove.duration } css={ [css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />
             <FrogAnimation frog={ frog } animation="jumping_back" visible={ getAnimation() === "jumping_back" } duration={ animatingMove && animatingMove.duration } css={ [css`transform: rotateY(${horizontalOrientation  === 'left' ? 180: 0}deg)`] } />
         </Draggable>
