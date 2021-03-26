@@ -1,5 +1,5 @@
 import { SlabBackType, SlabFrontType } from "@gamepark/croa/pond";
-import { Images } from "src/material/Resources";
+import { Images } from "../material/Resources";
 
 
 const slabFrontImages = new Map<SlabFrontType, any>();
