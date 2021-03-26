@@ -71,20 +71,18 @@ const disabledMaleTokenStyle = css`
 
 const maleFrogScale = keyframes`
   30% {        
-    z-index: 2;
     transform: scale(2.0);
   }
   50% {        
-    z-index: 2;
     transform: rotateY(180deg) scale(2.0);
   }
   100% {           
-    z-index: 0;
     transform: rotateY(180deg) scale(1.0);
   }
 `
 
 const maleFrogAnimation = (duration: number) => css`
+    z-index: 2;
     animation: ${maleFrogScale} ${duration}s ease-in-out forwards;
 `
 
