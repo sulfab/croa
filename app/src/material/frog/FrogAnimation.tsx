@@ -66,7 +66,7 @@ const computeAnimationWidth = (frog: FemaleFrog, animationId?: string) => {
 
 const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
     if (animationId && animationId !== 'blinking') {
-        return -((computeAnimationWidth(frog, animationId) - 100) / 2 - 2);
+        return -((computeAnimationWidth(frog, animationId) - 100) / 2);
     }
 
     return 0;

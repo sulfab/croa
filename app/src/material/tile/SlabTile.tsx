@@ -1,19 +1,16 @@
 import { Slab } from "@gamepark/croa/pond";
-import { moveFrog } from "@gamepark/croa/moves/MoveFrog"
+import { moveFrog, isRevealSlab, RevealSlabView } from "@gamepark/croa/moves"
 import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from "@gamepark/react-client";
 import { FunctionComponent } from "react";
 import './SlabTile.css';
 import { FrogFromBoard, DragObjectType } from "../../drag-objects";
 import { FemaleFrog, FrogStatus } from "@gamepark/croa/frog";
 import { PlayerColor } from "@gamepark/croa/player";
-import { SlabFrontType } from "@gamepark/croa/pond/SlabFrontType";
 import { Position } from "@gamepark/croa/common/Position";
 import { useDrop } from "react-dnd";
-import { Images } from "../Resources";
 import { css, keyframes } from "@emotion/react";
-import { SlabBackType } from "@gamepark/croa/pond/SlabBackType";
-import { isRevealSlab, RevealSlabView } from "@gamepark/croa/moves/RevealSlab";
 import { isAllowedMove } from "@gamepark/croa/utils";
+import { slabBackImages, slabFrontImages } from "../../utils/SlabImages";
 
 type SlabTileProps = {
     slab: Slab;
@@ -89,8 +86,8 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     return (
         <div ref={ ref } onClick={ onTileClick } className="slab" css={[animation && css`z-index: 2`]}>
             <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
-                <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{backgroundImage: `url(${backImages.get(slab.back)})`}}></div>
-                { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{ backgroundImage: `url(${frontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>
+                <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}></div>
+                { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)) ]} style={{ backgroundImage: `url(${slabFrontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>
                     
                 </div> }
             </div>
@@ -132,25 +129,6 @@ const selectableSlab = css`
 const unselectableSlab = css`
     box-shadow: 0 0.5em 0.7em black, 0px 0px 0.3em 0.4em red inset;
 `
-
-const frontImages = new Map<SlabFrontType, any>();
-
-frontImages.set(SlabFrontType.BLUE_MALE, Images.BlueMale);
-frontImages.set(SlabFrontType.RED_MALE, Images.RedMale);
-frontImages.set(SlabFrontType.YELLOW_MALE, Images.YellowMale);
-frontImages.set(SlabFrontType.PINK_MALE, Images.PinkMale);
-frontImages.set(SlabFrontType.PURPLE_MALE, Images.PurlpleMale);
-frontImages.set(SlabFrontType.GREEN_MALE, Images.GreenMale);
-frontImages.set(SlabFrontType.NENUPHAR, Images.Nenuphar);
-frontImages.set(SlabFrontType.MOSKITO, Images.Moskito);
-frontImages.set(SlabFrontType.MUD, Images.Mud);
-frontImages.set(SlabFrontType.REED, Images.Reed);
-frontImages.set(SlabFrontType.PIKE, Images.Pike);
-frontImages.set(SlabFrontType.LOG, Images.Log);
-
-const backImages = new Map<SlabBackType, any>();
-backImages.set(SlabBackType.SHALLOW, Images.Shallow);
-backImages.set(SlabBackType.DEEP, Images.Deep);
 
 export {
     SlabTile
