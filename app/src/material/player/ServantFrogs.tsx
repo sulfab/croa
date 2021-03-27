@@ -8,7 +8,7 @@ import { FrogAnimation } from '../frog/FrogAnimation';
 type ServantFrogsProps = {
     frogs: Array<FemaleFrog>,
     color?: PlayerColor
-} & HTMLAttributes<HTMLDivElement>
+} & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
 const ServantFrogs: FC<ServantFrogsProps> = ({ frogs, color, ...props }) => {
     return (

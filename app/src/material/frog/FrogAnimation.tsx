@@ -12,7 +12,7 @@ type AnimatedFrogProps = {
     delay?: number;
     visible?: boolean;
     color?: PlayerColor;
-}  & HTMLAttributes<HTMLDivElement>
+}  & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
 
 const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, animation, visible, duration, delay, color, ...props }) => {

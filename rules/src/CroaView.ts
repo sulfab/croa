@@ -1,8 +1,7 @@
 import { Game } from '@gamepark/rules-api';
-import { eliminateFrogAction, frogBirthAction, moveFrogAction, playSlabEffectAction, revealSlabInView, skipTurnAction } from './action';
 import { getPredictableAutomaticMoves } from './Croa';
 import { GameStateView } from './GameState';
-import { MoveType, MoveView } from './moves';
+import { eliminateFrog, acquireServant, moveFrog, MoveType, MoveView, playSlabEffect, revealSlabInView, skipTurn } from './moves';
 
 export default class CroaView implements Game<GameStateView, MoveView> {
 
@@ -26,22 +25,22 @@ export default class CroaView implements Game<GameStateView, MoveView> {
     play(move: MoveView): void {
         switch(move.type) {
             case MoveType.MoveFrog:
-                moveFrogAction(this.state, move);
+                moveFrog(this.state, move);
                 break;
             case MoveType.EliminateFrog:
-                eliminateFrogAction(this.state, move);
+                eliminateFrog(this.state, move);
                 break;
             case MoveType.PlaySlabEffect:
-                playSlabEffectAction(this.state, move);
+                playSlabEffect(this.state, move);
                 break;
             case MoveType.RevealSlab:
                 revealSlabInView(this.state, move)
                 break;
-            case MoveType.FrogBirth:
-                frogBirthAction(this.state, move);
+            case MoveType.AcquireServant:
+                acquireServant(this.state, move);
                 break;
             case MoveType.SkipTurn:
-                skipTurnAction(this.state);
+                skipTurn(this.state);
                 break;
         }
     }

@@ -3,6 +3,8 @@ import { Player, PlayerColor } from '@gamepark/croa/player';
 import { FC, useState } from 'react';
 import { playerColors } from '../../utils/Styles';
 import gamePointIcon from './visuals/game-point.svg'
+import { getPlayerName } from '@gamepark/croa/CroaOptions';
+import { useTranslation } from 'react-i18next';
 
 type PlayerInfosProps = {
     player: Player
@@ -11,11 +13,12 @@ type PlayerInfosProps = {
 }
 
 const PlayerInfos: FC<PlayerInfosProps> = ({ player, playerInfo, color }) => {
+    const {t} = useTranslation()
     const [gamePoints,] = useState(playerInfo?.gamePointsDelta)
     
     return (
         <h3 css={titleStyle(color || player.color)}>
-            <span css={[nameStyle]}>{ playerInfo?.name || player.color }</span>
+            <span css={[nameStyle]}>{ playerInfo?.name || getPlayerName(player.color, t) }</span>
             {typeof gamePoints === 'number' &&
                 <span css={css`flex-shrink: 0`}>
                     <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>

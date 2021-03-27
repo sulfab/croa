@@ -6,6 +6,7 @@ import { Player as PlayerInfo, usePlayerId, usePlayers } from '@gamepark/react-c
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { FrogStatus } from '@gamepark/croa/frog'
+import { getPlayerName } from '@gamepark/croa/CroaOptions';
 
 type Props = {
   loading: boolean
@@ -25,7 +26,7 @@ export default function Header({loading, game}: Props) {
 }
 
 const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersInfos: Array<PlayerInfo<PlayerColor>>) => {
-  const getName = (color: PlayerColor) => playersInfos.find(p => p.id === color)?.name || t(color);
+  const getName = (color: PlayerColor) => playersInfos.find(p => p.id === color)?.name || getPlayerName(color, t);
   if (isGameOver(game.players)) {
     const lastPlayer = game.players.find(player => !player.eliminated)!;
     return playerId === lastPlayer?.color? t('Victory! You win the game'): t('{player} wins the game', { player: getName(lastPlayer.color)});

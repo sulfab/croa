@@ -7,7 +7,7 @@ import { FrogPlacement, PlayerColor } from '@gamepark/croa/player';
 import { css } from '@emotion/react';
 import { boardGap, boardWidth, frogOffset, getFrogXPositionOnBoard, getFrogYPositionOnBoard, queenHeight, queenWidth, servantHeight, servantWidth } from '../../utils/Styles';
 import { Position } from '@gamepark/croa/common/Position';
-import { FrogBirth, isFrogBirth, isMoveFrog, isRevealSlab, MoveFrog, RevealSlab } from '@gamepark/croa/moves';
+import { AcquireServant, isAcquireServant, isMoveFrog, isRevealSlab, MoveFrog, RevealSlab } from '@gamepark/croa/moves';
 import { useAnimation } from '@gamepark/react-client';
 
 type BoardProps = {
@@ -40,7 +40,7 @@ const rotate = (matrix: Position[][], times: number): Position[][]   => {
 const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, frogs, activePlayer }) => { 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const orientedSlabPositions = useMemo(() => rotate(toPositions(pond), FrogPlacement[playerCount][playerIndex].currentPlayerRotation), [playerCount, playerIndex]); 
-    const animation = useAnimation<MoveFrog | FrogBirth | RevealSlab>(animation => isMoveFrog(animation.move) || isFrogBirth(animation.move) || isRevealSlab(animation.move));
+    const animation = useAnimation<MoveFrog | AcquireServant | RevealSlab>(animation => isMoveFrog(animation.move) || isAcquireServant(animation.move) || isRevealSlab(animation.move));
     const [frogPositions, setFrogPositions] = useState<{ [key in PlayerColor]?: { [key: number]: { index: number, position: Position, eliminated?: boolean} }}>({});
 
     useEffect(() => {

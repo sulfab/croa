@@ -3,7 +3,7 @@ enum MoveType {
   EliminateFrog,
   RevealSlab,
   PlaySlabEffect,
-  FrogBirth,
+  AcquireServant,
   SkipTurn
 }
 

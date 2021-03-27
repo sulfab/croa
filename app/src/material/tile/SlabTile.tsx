@@ -1,5 +1,5 @@
 import { Slab } from '@gamepark/croa/pond';
-import { isRevealSlab, moveFrog, RevealSlabView } from '@gamepark/croa/moves'
+import { isRevealSlab, moveFrogMove, RevealSlabView } from '@gamepark/croa/moves'
 import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from '@gamepark/react-client';
 import { FunctionComponent } from 'react';
 import './SlabTile.css';
@@ -73,12 +73,12 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     const [, ref] = useDrop({
         accept: DragObjectType.FROG_FROM_BOARD,
         canDrop: (item: FrogFromBoard) => canBeDropped(selectedFrogId || item.frog.id, frogs),
-        drop: (item: FrogFromBoard) => moveFrog(item.frog.id, item.frog.color, position)
+        drop: (item: FrogFromBoard) => moveFrogMove(item.frog.id, item.frog.color, position)
     });
 
     const onTileClick = () => {
         if (selectedFrogId && canBeDropped(selectedFrogId, frogs)) {
-            return play(moveFrog(selectedFrogId, playerId!, position));
+            return play(moveFrogMove(selectedFrogId, playerId!, position));
         }
     }
     
