@@ -13,7 +13,7 @@ type Props = {
 
 export default function GameDisplay({game}: Props) {
   const playerId = usePlayerId();
-  const playerIndex = game.players.findIndex(player => player.color === playerId);
+  const playerIndex = game.players.findIndex(player => player.color === playerId) === -1? 0: game.players.findIndex(player => player.color === playerId);
   const getPlayer = (index: number) => game.players.find((_, i) => PlayerBoardPlacement[game.players.length].getPlayerBoard(i, playerIndex) === index);
 
   return (
