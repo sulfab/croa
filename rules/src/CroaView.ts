@@ -1,8 +1,8 @@
-import { Game } from "@gamepark/rules-api";
-import { eliminateFrogAction, frogBirthAction, moveFrogAction, playSlabEffectAction, revealSlabInView, skipTurnAction } from "./action";
-import { getPredictableAutomaticMoves } from "./Croa";
-import { GameStateView } from "./GameState";
-import { MoveType, MoveView } from "./moves";
+import { Game } from '@gamepark/rules-api';
+import { eliminateFrogAction, frogBirthAction, moveFrogAction, playSlabEffectAction, revealSlabInView, skipTurnAction } from './action';
+import { getPredictableAutomaticMoves } from './Croa';
+import { GameStateView } from './GameState';
+import { MoveType, MoveView } from './moves';
 
 export default class CroaView implements Game<GameStateView, MoveView> {
 

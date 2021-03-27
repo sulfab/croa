@@ -1,7 +1,7 @@
-import { Position } from "../common/Position";
-import { SlabFrontType } from "../pond";
-import { Move } from "./Move";
-import { MoveType } from "./MoveType";
+import { Position } from '../common/Position';
+import { SlabFrontType } from '../pond';
+import { Move } from './Move';
+import { MoveType } from './MoveType';
 
 export type RevealSlab = {
     type: MoveType.RevealSlab,
@@ -14,10 +14,6 @@ export type RevealSlabView = RevealSlab & {
 
 export function isRevealSlab(move: Move): move is RevealSlab {
     return MoveType.RevealSlab === move.type;
-}
-
-export function isRevealSlabView(move: Move): move is RevealSlabView {
-  return (move as RevealSlabView).front !== undefined;
 }
 
 export function revealSlabMove(position: Position): RevealSlab {

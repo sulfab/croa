@@ -1,6 +1,6 @@
-import { Position } from "../common/Position";
-import { PlayerColor } from "../player";
-import { FrogStatus } from "./FrogStatus";
+import { Position } from '../common/Position';
+import { PlayerColor } from '../player';
+import { FrogStatus } from './FrogStatus';
 
 export type FemaleFrog = {
     // color act as the player id

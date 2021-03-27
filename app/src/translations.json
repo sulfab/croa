@@ -70,10 +70,10 @@
             "{player} wins the game": "{player} wins the game",
             "You must choose which frog you want to eliminate": "You must choose which frog you want to eliminate",
             "{player} must choose a frog to eliminate": "{player} must choose a frog to eliminate",
-            "Your frog is boucing on a nenuphar, she must jump on another slab": "Your frog is boucing on a nenuphar, she must jump on another slab",
-            "{player}'s frog is boucing on a nenuphar. Waiting for the frog jump...": "{player}'s frog is boucing on a nenuphar. Waiting for the frog jump...",
-            "Your frog got stung by a moskito, you must play another frog or skip your turn": "Your frog got stung by a moskito, you must play another frog or skip your turn",
-            "{player}'s frog was stung by a moskito. Waiting for another frog to jump...": "{player}'s frog was stung by a moskito. Waiting for another frog to jump...",
+            "Your frog is bouncing on a water lily, she must jump on another slab": "Your frog is bouncing on a water lily, she must jump on another slab",
+            "{player}'s frog is bouncing on a water lily. Waiting for the frog jump...": "{player}'s frog is bouncing on a water lily. Waiting for the frog jump...",
+            "Your frog got stung by a mosquito, you must play another frog or skip your turn": "Your frog got stung by a mosquito, you must play another frog or skip your turn",
+            "{player}'s frog was stung by a mosquito. Waiting for another frog to jump...": "{player}'s frog was stung by a mosquito. Waiting for another frog to jump...",
             "It's your turn to play a frog": "It's your turn to play a frog",
             "It's {player}'s turn to play a frog": "It's {player}'s turn to play a frog" 
         }
@@ -149,10 +149,10 @@
             "{player} wins the game": "{player} gagne la game",
             "You must choose which frog you want to eliminate": "Vous devez choisir quelle grenouille vous souhaitez éliminer",
             "{player} must choose a frog to eliminate": "{player} doit choisir une grenouille à éliminer",
-            "Your frog is boucing on a nenuphar, she must jump on another slab": "Votre grenouille rebondit sur un nénuphar, elle doit sauter sur une autre dalle",
-            "{player}'s frog is boucing on a nenuphar. Waiting for the frog jump...": "La grenouille de {player} rebondit sur un nénuphar. En attente du saut de la grenouille...",
-            "Your frog got stung by a moskito, you must play another frog or skip your turn": "La grenouille s'est fait piquer par un moustique, vous devez jouer une autre grenouille ou passer votre tour",
-            "{player}'s frog was stung by a moskito. Waiting for another frog to jump...": "La grenouille de {player} s'est faite piquer par un moustique. En attente du saut d'une autre grenouille...",
+            "Your frog is bouncing on a water lily, she must jump on another slab": "Votre grenouille rebondit sur un nénuphar, elle doit sauter sur une autre dalle",
+            "{player}'s frog is bouncing on a water lily. Waiting for the frog jump...": "La grenouille de {player} rebondit sur un nénuphar. En attente du saut de la grenouille...",
+            "Your frog got stung by a mosquito, you must play another frog or skip your turn": "La grenouille s'est fait piquer par un moustique, vous devez jouer une autre grenouille ou passer votre tour",
+            "{player}'s frog was stung by a mosquito. Waiting for another frog to jump...": "La grenouille de {player} s'est faite piquer par un moustique. En attente du saut d'une autre grenouille...",
             "It's your turn to play a frog": "A votre tour de jouer une grenouille",
             "It's {player}'s turn to play a frog": "C'est au tour de {player} de jouer une grenouille" 
         }
@@ -227,10 +227,10 @@
             "{player} wins the game": "{player} wins the game",
             "You must choose which frog you want to eliminate": "You must choose which frog you want to eliminate",
             "{player} must choose a frog to eliminate": "{player} must choose a frog to eliminate",
-            "Your frog is boucing on a nenuphar, she must jump on another slab": "Your frog is boucing on a nenuphar, she must jump on another slab",
-            "{player}'s frog is boucing on a nenuphar. Waiting for the frog jump...": "{player}'s frog is boucing on a nenuphar. Waiting for the frog jump...",
-            "Your frog got stung by a moskito, you must play another frog or skip your turn": "Your frog got stung by a moskito, you must play another frog or skip your turn",
-            "{player}'s frog was stung by a moskito. Waiting for another frog to jump...": "{player}'s frog was stung by a moskito. Waiting for another frog to jump...",
+            "Your frog is bouncing on a water lily, she must jump on another slab": "Your frog is bouncing on a water lily, she must jump on another slab",
+            "{player}'s frog is bouncing on a water lily. Waiting for the frog jump...": "{player}'s frog is bouncing on a water lily. Waiting for the frog jump...",
+            "Your frog got stung by a mosquito, you must play another frog or skip your turn": "Your frog got stung by a mosquito, you must play another frog or skip your turn",
+            "{player}'s frog was stung by a mosquito. Waiting for another frog to jump...": "{player}'s frog was stung by a mosquito. Waiting for another frog to jump...",
             "It's your turn to play a frog": "It's your turn to play a frog",
             "It's {player}'s turn to play a frog": "It's {player}'s turn to play a frog"  
         }

@@ -1,6 +1,6 @@
-import { GameState, GameStateView } from "../GameState";
-import { FrogBirth } from "../moves";
-import { Player } from "../player";
+import { GameState, GameStateView } from '../GameState';
+import { FrogBirth } from '../moves';
+import { Player } from '../player';
 
 /**
  * Action for new frog birth generation

@@ -1,16 +1,16 @@
-import { css, keyframes } from "@emotion/react";
-import { MaleFrog } from "@gamepark/croa/frog";
-import { isFrogBirth } from "@gamepark/croa/moves";
-import { Player, PlayerColor } from "@gamepark/croa/player";
-import { useAnimation } from "@gamepark/react-client";
-import { FC } from "react";
-import { playerBoardMaleTokensWidth } from "../../utils/Styles";
-import { Images } from "../Resources";
+import { css, keyframes } from '@emotion/react';
+import { MaleFrog } from '@gamepark/croa/frog';
+import { isFrogBirth } from '@gamepark/croa/moves';
+import { Player, PlayerColor } from '@gamepark/croa/player';
+import { useAnimation } from '@gamepark/react-client';
+import { FC, HTMLAttributes } from 'react';
+import { playerBoardMaleTokensWidth } from '../../utils/Styles';
+import { Images } from '../Resources';
 
 type MaleTokensProps = {
     player: Player
     color?: PlayerColor
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
 export const MaleTokens: FC<MaleTokensProps> = ({ player, color, ...props }) => {
     const animation = useAnimation(animation => isFrogBirth(animation.move) && animation.move.playerId === player.color);

@@ -1,5 +1,5 @@
-import { Player, PlayerColor } from "./player";
-import { Slab } from "./pond";
+import { Player, PlayerColor } from './player';
+import { Slab } from './pond';
 
 export interface GameState {
   players: Array<Player>;

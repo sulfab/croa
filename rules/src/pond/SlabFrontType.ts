@@ -1,6 +1,6 @@
 enum SlabFrontType {
-    NENUPHAR,
-    MOSKITO,
+    WATER_LILY,
+    MOSQUITO,
     MUD,
     PIKE,
     REED,

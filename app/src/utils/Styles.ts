@@ -1,6 +1,6 @@
-import { css } from "@emotion/react";
-import { FemaleFrog } from "@gamepark/croa/frog";
-import { PlayerColor } from "@gamepark/croa/player";
+import { css } from '@emotion/react';
+import { FemaleFrog } from '@gamepark/croa/frog';
+import { PlayerColor } from '@gamepark/croa/player';
 
 export const screenRatio = 16 / 9;
 

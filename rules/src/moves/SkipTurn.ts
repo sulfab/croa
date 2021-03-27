@@ -1,4 +1,4 @@
-import { MoveType } from "./MoveType";
+import { MoveType } from './MoveType';
 
 export type SkipTurn = {
     type: MoveType.SkipTurn

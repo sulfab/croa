@@ -2,10 +2,10 @@ import BlueMale from './tile/visuals/blue-male.png';
 import GreenMale from './tile/visuals/green-male.png';
 import PinkMale from './tile/visuals/pink-male.png';
 import YellowMale from './tile/visuals/yellow-male.png';
-import PurlpleMale from './tile/visuals/purple-male.png';
+import PurpleMale from './tile/visuals/purple-male.png';
 import RedMale from './tile/visuals/red-male.png';
-import Nenuphar from './tile/visuals/nenuphar.png';
-import Moskito from './tile/visuals/moskito.png';
+import WaterLily from './tile/visuals/water-lily.png';
+import Mosquito from './tile/visuals/mosquito.png';
 import Mud from './tile/visuals/mud.png';
 import Reed from './tile/visuals/reed.png';
 import Pike from './tile/visuals/pike.png';
@@ -87,8 +87,8 @@ import GreenServantJumpingBack from './frog/animations/jumping/green-servant-bac
 import PinkServantJumpingBack from './frog/animations/jumping/pink-servant-back.png';
 
 const Images = {
-    BlueMale, GreenMale, PinkMale, YellowMale, PurlpleMale, RedMale,
-    Nenuphar, Moskito, Mud, Reed, Pike, Log, Shallow, Deep,
+    BlueMale, GreenMale, PinkMale, YellowMale, PurpleMale, RedMale,
+    WaterLily, Mosquito, Mud, Reed, Pike, Log, Shallow, Deep,
     BlueMaleTokenGreen, RedMaleTokenGreen, PinkMaleTokenGreen, YellowMaleTokenGreen, GreenMaleTokenGreen, PurpleMaleTokenGreen,
     BlueMaleTokenRed, RedMaleTokenRed, PinkMaleTokenRed, YellowMaleTokenRed, GreenMaleTokenRed, PurpleMaleTokenRed,
     BlueMaleTokenBlue, RedMaleTokenBlue, PinkMaleTokenBlue, YellowMaleTokenBlue, GreenMaleTokenBlue, PurpleMaleTokenBlue,

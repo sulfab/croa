@@ -1,7 +1,7 @@
-import { FemaleFrogId } from "../frog";
-import { PlayerColor } from "../player";
-import { MoveType } from "./";
-import Move from "./Move";
+import { FemaleFrogId } from '../frog';
+import { PlayerColor } from '../player';
+import { MoveType } from './';
+import Move from './Move';
 
 
 export type EliminateFrog = {

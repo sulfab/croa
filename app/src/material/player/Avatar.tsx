@@ -1,8 +1,8 @@
-import { css } from "@emotion/react";
-import { Player, PlayerColor } from "@gamepark/croa/player";
-import { Avatar } from "avataaars";
-import { FC } from "react";
-import { Images } from "../Resources";
+import { css } from '@emotion/react';
+import { Player, PlayerColor } from '@gamepark/croa/player';
+import { Avatar } from 'avataaars';
+import { FC } from 'react';
+import { Images } from '../Resources';
 
 type CroaAvatarProps = {
     player: Player

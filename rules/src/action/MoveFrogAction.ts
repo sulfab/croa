@@ -1,8 +1,7 @@
-import { FrogStatus } from "../frog";
-import { GameState, GameStateView } from "../GameState";
-import { MoveFrog } from "../moves";
-import { isKnownSlab } from "../pond";
-import { SlabFrontType } from "../pond/SlabFrontType";
+import { FrogStatus } from '../frog'
+import { GameState, GameStateView } from '../GameState'
+import { MoveFrog } from '../moves'
+import { isKnownSlab, SlabFrontType } from '../pond'
 
 /**
  * Perform action when moving the frog in order:

@@ -1,7 +1,7 @@
-import {css, keyframes} from '@emotion/react'
+import { css, keyframes } from '@emotion/react'
 import { GameState } from '@gamepark/croa/GameState'
 import { usePlayerId } from '@gamepark/react-client'
-import {Letterbox} from '@gamepark/react-components'
+import { Letterbox } from '@gamepark/react-components'
 import { Board } from './material/board/Board'
 import { PlayerBoard } from './material/player/PlayerBoard'
 import { PlayerBoardPlacement } from './material/player/PlayerBoardPlacement'
@@ -21,13 +21,13 @@ export default function GameDisplay({game}: Props) {
       <div css={ slabBoard }>
         <Board pond={ game.pond } frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.activePlayer } playerIndex={ playerIndex } playerCount={ game.players.length }/>
         <div css={[ playerBoards, leftPlayerBoards ]}>
-          { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0%`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
-          { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0%`}  player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }
+          { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
+          { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0`}  player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }
         
         </div>
         <div css={[ playerBoards, rightPlayerBoards ]}>
-          { getPlayer(2) && <PlayerBoard index={2} css={ css`top: 0%`} player={ getPlayer(2)! } activePlayer={ game.activePlayer }  /> }
-          { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0%`} player={ getPlayer(3)! } activePlayer={ game.activePlayer } /> }
+          { getPlayer(2) && <PlayerBoard index={2} css={ css`top: 0`} player={ getPlayer(2)! } activePlayer={ game.activePlayer }  /> }
+          { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0`} player={ getPlayer(3)! } activePlayer={ game.activePlayer } /> }
         </div>
       </div>
     </Letterbox>

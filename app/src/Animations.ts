@@ -1,7 +1,7 @@
-import { GameState } from "@gamepark/croa/GameState";
-import { MoveType, MoveView } from "@gamepark/croa/moves";
-import { PlayerColor } from "@gamepark/croa/player";
-import { Animations } from "@gamepark/react-client";
+import { GameState } from '@gamepark/croa/GameState';
+import { MoveType, MoveView } from '@gamepark/croa/moves';
+import { PlayerColor } from '@gamepark/croa/player';
+import { Animations } from '@gamepark/react-client';
 
 const CroaAnimation: Animations<GameState, MoveView, PlayerColor, PlayerColor> = {
     getAnimationDuration(move: MoveView) {

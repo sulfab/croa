@@ -1,7 +1,7 @@
-import { MaleFrog } from "../frog";
-import { PlayerColor } from "../player";
-import Move from "./Move";
-import { MoveType } from "./MoveType";
+import { MaleFrog } from '../frog';
+import { PlayerColor } from '../player';
+import Move from './Move';
+import { MoveType } from './MoveType';
 
 export type FrogBirth = {
     type: MoveType.FrogBirth,

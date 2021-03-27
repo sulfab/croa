@@ -1,9 +1,9 @@
-import { css, keyframes } from "@emotion/react";
-import { FemaleFrog } from "@gamepark/croa/frog";
-import { PlayerColor } from "@gamepark/croa/player";
-import { FC } from "react";
-import { queenJumpBlinkHeightRatio, servantJumpBlinkHeightRatio, queenJumpBlinkWidthRatio, servantJumpBlinkWidthRatio} from "../../utils/Styles";
-import { Images } from "../Resources";
+import { css, keyframes } from '@emotion/react';
+import { FemaleFrog } from '@gamepark/croa/frog';
+import { PlayerColor } from '@gamepark/croa/player';
+import { FC, HTMLAttributes } from 'react'
+import { queenJumpBlinkHeightRatio, queenJumpBlinkWidthRatio, servantJumpBlinkHeightRatio, servantJumpBlinkWidthRatio } from '../../utils/Styles';
+import { Images } from '../Resources';
 
 type AnimatedFrogProps = {
     frog: FemaleFrog,
@@ -12,7 +12,7 @@ type AnimatedFrogProps = {
     delay?: number;
     visible?: boolean;
     color?: PlayerColor;
-}  & React.HTMLAttributes<HTMLDivElement>
+}  & HTMLAttributes<HTMLDivElement>
 
 
 const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, animation, visible, duration, delay, color, ...props }) => {
@@ -24,7 +24,7 @@ const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, animation, visible, durati
 
 const frogBlinkingKeyframe = keyframes`
     from { 
-        background-position: 0%; 
+        background-position: 0;
     }
     to { 
         background-position: -1600%;
@@ -33,7 +33,7 @@ const frogBlinkingKeyframe = keyframes`
 
 const frogJumpingKeyframe = keyframes`
     from {
-        background-position: 0%;
+        background-position: 0;
     }
     to { 
         background-position: -2400%; 
@@ -74,7 +74,7 @@ const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
 
 export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking", isActive?: boolean) => css`
     position: absolute;
-    bottom:  0%;
+    bottom:  0;
     left: ${computeAnimationLeft(frog, animationId)}%;
     height: ${isActive? computeAnimationHeight(frog, animationId): 0}%;
     width: ${isActive? computeAnimationWidth(frog, animationId): 0}%;

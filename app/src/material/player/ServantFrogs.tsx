@@ -1,14 +1,14 @@
-import { css } from "@emotion/react";
-import { FemaleFrog } from "@gamepark/croa/frog";
-import { PlayerColor } from "@gamepark/croa/player";
-import { FC } from "react";
-import { playerBoardHeight, playerBoardServantsAreaHeight, playerBoardServantsAreaWidth, playerBoardWidth, servantHeight, servantWidth } from "../../utils/Styles";
-import { FrogAnimation } from "../frog/FrogAnimation";
+import { css } from '@emotion/react';
+import { FemaleFrog } from '@gamepark/croa/frog';
+import { PlayerColor } from '@gamepark/croa/player';
+import { FC, HTMLAttributes } from 'react';
+import { playerBoardHeight, playerBoardServantsAreaHeight, playerBoardServantsAreaWidth, playerBoardWidth, servantHeight, servantWidth } from '../../utils/Styles';
+import { FrogAnimation } from '../frog/FrogAnimation';
 
 type ServantFrogsProps = {
     frogs: Array<FemaleFrog>,
     color?: PlayerColor
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
 const ServantFrogs: FC<ServantFrogsProps> = ({ frogs, color, ...props }) => {
     return (

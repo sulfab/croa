@@ -1,13 +1,12 @@
-import { IncompleteInformation, SequentialGame} from '@gamepark/rules-api';
-import { FemaleFrog, FrogStatus } from './frog';
-import { GameState, GameStateView } from './GameState';
-import { Move, MoveType, eliminateFrog, playSlab, MoveView, skipTurn, frogBirth, revealSlabMove, moveFrog } from './moves';
-import { eliminateFrogAction, moveFrogAction, frogBirthAction, playSlabEffectAction, skipTurnAction, revealSlab } from './action';
-import { Player, PlayerColor } from './player';
-import { initializePlayerBoard } from './player/FrogPlacement';
-import { pond, Slab, isKnownSlab } from './pond';
-import { getAllowedPositions, shuffleSlabs } from './utils';
-import { CroaOptions, isGameOptions } from './CroaOptions';
+import { IncompleteInformation, SequentialGame } from '@gamepark/rules-api'
+import { eliminateFrogAction, frogBirthAction, moveFrogAction, playSlabEffectAction, revealSlab, skipTurnAction } from './action'
+import { CroaOptions, isGameOptions } from './CroaOptions'
+import { FemaleFrog, FrogStatus } from './frog'
+import { GameState, GameStateView } from './GameState'
+import { eliminateFrog, frogBirth, Move, moveFrog, MoveType, MoveView, playSlab, revealSlabMove, skipTurn } from './moves'
+import { initializePlayerBoard, Player, PlayerColor } from './player'
+import { isKnownSlab, pond, Slab } from './pond'
+import { getAllowedPositions, shuffleSlabs } from './utils'
 
 const defaultBoardSize = 8;
 
@@ -50,13 +49,13 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
       player.eliminationChoice.forEach(frog => moves.push(eliminateFrog({ color: frog.color, id: frog.id })))
     }
     
-    // By default, mudded or stung frogs can't be moved
-    let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.MUDDED, FrogStatus.STUNG].includes(frog.status));
+    // By default, bogged or stung frogs can't be moved
+    let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.BOGGED, FrogStatus.STUNG].includes(frog.status));
 
-    // If there is a boucing frog, only this can be moved
-    const boucingFrog: FemaleFrog | undefined = player.femaleFrogs.find(frog => FrogStatus.BOUNCING === frog.status);
-    if (boucingFrog) {
-      movableFrogs = [boucingFrog];
+    // If there is a bouncing frog, only this can be moved
+    const bouncingFrog: FemaleFrog | undefined = player.femaleFrogs.find(frog => FrogStatus.BOUNCING === frog.status);
+    if (bouncingFrog) {
+      movableFrogs = [bouncingFrog];
     } else {
       const queenFrog = movableFrogs.find(frog => frog.isQueen)
       if (queenFrog) {
@@ -144,7 +143,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
 }
 export function getPredictableAutomaticMoves(state: GameState | GameStateView, activePlayer: Player): Move & MoveView | void {
 
-  // In the case the current player has a boucing frog and no destination is possible, automatically move it to its previous slab
+  // In the case the current player has a bouncing frog and no destination is possible, automatically move it to its previous slab
   const bouncingFrog = activePlayer.femaleFrogs.find(frog => FrogStatus.BOUNCING === frog.status);
   if (bouncingFrog) {
     const allFrogs = state.players.flatMap(player => player.femaleFrogs).filter(frog => !!frog.position);
@@ -153,13 +152,13 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
     }
   }
 
-  // Pass turn in some cases : only one frog and stun or jump on moskito
+  // Pass turn in some cases : only one frog and stun or jump on mosquito
   // No elimination or elimination choice
 
-  // If player has at least one frog on board and all its frog are mudded or stung, skip turn
+  // If player has at least one frog on board and all its frog are bogged or stung, skip turn
   // Improve by asking the player to pass instead of doing it automatically
   const blockedPlayer: Player | undefined = state.players.find(player => 
-    player.femaleFrogs.some(frog => !!frog.position) && player.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.MUDDED, FrogStatus.STUNG].includes(frog.status)));
+    player.femaleFrogs.some(frog => !!frog.position) && player.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.BOGGED, FrogStatus.STUNG].includes(frog.status)));
   if (blockedPlayer) {
     return skipTurn();
   }

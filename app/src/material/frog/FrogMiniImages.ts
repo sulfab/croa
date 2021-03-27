@@ -1,5 +1,5 @@
-import { PlayerColor } from "@gamepark/croa/player";
-import { Images } from "../Resources";
+import { PlayerColor } from '@gamepark/croa/player';
+import { Images } from '../Resources';
 
 
 export const fromMiniImages = new Map<PlayerColor, { queen: any, servant: any}>([

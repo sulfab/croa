@@ -1,20 +1,20 @@
-import { Slab } from "./Slab";
-import { SlabBackType } from "./SlabBackType";
-import { SlabFrontType } from "./SlabFrontType";
+import { Slab } from './Slab';
+import { SlabBackType } from './SlabBackType';
+import { SlabFrontType } from './SlabFrontType';
 
-const Nenuphars: Array<Slab> = [
-    ...Array(6).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.NENUPHAR }),
-    ...Array(4).fill({ back: SlabBackType.DEEP, front: SlabFrontType.NENUPHAR }),
-    ...Array(4).fill({ back: SlabBackType.DEEP, front: SlabFrontType.NENUPHAR })
+const WaterLilies: Array<Slab> = [
+    ...Array(6).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.WATER_LILY }),
+    ...Array(4).fill({ back: SlabBackType.DEEP, front: SlabFrontType.WATER_LILY }),
+    ...Array(4).fill({ back: SlabBackType.DEEP, front: SlabFrontType.WATER_LILY })
 ];
 
-const Moskitos: Array<Slab> = [
-    ...Array(4).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.MOSKITO }),
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.MOSKITO }),
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.MOSKITO })
+const Mosquitos: Array<Slab> = [
+    ...Array(4).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.MOSQUITO }),
+    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.MOSQUITO }),
+    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.MOSQUITO })
 ];
 
-const Muds: Array<Slab> = [
+const Mud: Array<Slab> = [
     ...Array(4).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.MUD })
 ];
 
@@ -51,9 +51,9 @@ const Logs: Array<Slab> = [
 ];
 
 export {
-    Nenuphars,
-    Moskitos,
-    Muds,
+    WaterLilies,
+    Mosquitos,
+    Mud,
     Pikes,
     Reeds,
     Males,
@@ -61,5 +61,5 @@ export {
 };
 
 export const pond: Array<Slab> = [
-    ...Nenuphars, ...Moskitos, ...Muds, ...Pikes, ...Reeds, ...Males, ...Logs
+    ...WaterLilies, ...Mosquitos, ...Mud, ...Pikes, ...Reeds, ...Males, ...Logs
 ]

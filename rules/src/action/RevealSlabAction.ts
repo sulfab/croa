@@ -1,5 +1,5 @@
-import { GameState, GameStateView } from "../GameState";
-import { RevealSlab, RevealSlabView } from "../moves/RevealSlab";
+import { GameState, GameStateView } from '../GameState'
+import { RevealSlab, RevealSlabView } from '../moves'
 
 /**
  * Perform action when eliminating a frog

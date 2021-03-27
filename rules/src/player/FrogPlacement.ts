@@ -1,7 +1,7 @@
-import { Position } from "../common/Position";
-import { FemaleFrog, FrogStatus, MaleFrog } from "../frog";
-import { Player } from "./Player";
-import { PlayerColor } from "./PlayerColor";
+import { Position } from '../common/Position';
+import { FemaleFrog, FrogStatus, MaleFrog } from '../frog';
+import { Player } from './Player';
+import { PlayerColor } from './PlayerColor';
 
 export type QueenInit = {
     id: number,

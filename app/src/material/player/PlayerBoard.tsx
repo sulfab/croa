@@ -1,29 +1,19 @@
-import { css } from "@emotion/react";
-import { Player, PlayerColor } from "@gamepark/croa/player";
-import { FC } from "react"
-import { 
-    playerBoardHeight, 
-    playerColors, 
-    playerBoardMaleTokensHeight, 
-    playerBoardQueenWidth,
-    playerBoardServantsAreaHeight,
-    playerBoardServantsAreaWidth,
-    queenWidth,
-    queenHeight,
-    playerBoardWidth
-} from "../../utils/Styles";
-import { MaleTokens } from "./MaleTokens";
-import { FrogAnimation } from "../frog/FrogAnimation";
-import { ServantFrogs } from "./ServantFrogs";
-import { CroaAvatar } from "./Avatar";
-import { useSelector } from "react-redux";
-import { PlayerInfos } from "./PlayerInfos";
+import { css } from '@emotion/react';
+import { Player, PlayerColor } from '@gamepark/croa/player';
+import { FC, HTMLAttributes } from 'react'
+import { playerBoardHeight, playerBoardMaleTokensHeight, playerBoardQueenWidth, playerBoardServantsAreaHeight, playerBoardServantsAreaWidth, playerBoardWidth, playerColors, queenHeight, queenWidth } from '../../utils/Styles';
+import { MaleTokens } from './MaleTokens';
+import { FrogAnimation } from '../frog/FrogAnimation';
+import { ServantFrogs } from './ServantFrogs';
+import { CroaAvatar } from './Avatar';
+import { useSelector } from 'react-redux';
+import { PlayerInfos } from './PlayerInfos';
 
 type PlayerBoardProps = {
     player: Player
     index: number
     activePlayer?: PlayerColor
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
 const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...props }) => {
     const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player.color));
@@ -45,7 +35,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
 }
 
 const playerBoardActive = css`
-    box-shadow: 0em 0.1em 0.5em 0.5em gold
+    box-shadow: 0 0.1em 0.5em 0.5em gold
 `;
 
 const playerBoard = css`

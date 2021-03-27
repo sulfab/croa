@@ -1,7 +1,7 @@
 import { GameOptions, OptionsDescription, OptionType } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { GameState } from './GameState'
-import { PlayerColor } from './player/PlayerColor';
+import { PlayerColor } from './player';
 
 export type CroaPlayerOptions = { id: PlayerColor }
 

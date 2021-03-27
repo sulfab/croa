@@ -1,9 +1,9 @@
-import { GameState, GameStateView } from "../GameState";
-import { PlaySlabEffect } from "../moves/PlaySlabEffect";
-import { SlabFrontType } from "../pond/SlabFrontType";
-import { isKnownSlab } from "../pond";
-import { FemaleFrog, FrogStatus, MaleFrog } from "../frog";
-import { Player } from "../player";
+import { FemaleFrog, FrogStatus, MaleFrog } from '../frog'
+import { GameState, GameStateView } from '../GameState'
+import { PlaySlabEffect } from '../moves'
+import { Player } from '../player'
+import { isKnownSlab, SlabFrontType } from '../pond'
+
 /**
  * Execute the slab by:
  *  - displaying it if necessary
@@ -35,16 +35,16 @@ const playSlabEffectAction = (state: GameState | GameStateView, move: PlaySlabEf
                     player!.done = true;
                     break;
                 // Can move another frog
-                case SlabFrontType.MOSKITO:
+                case SlabFrontType.MOSQUITO:
                     frog.status = FrogStatus.STUNG;
                     break;
                 // Must move on another slab
-                case SlabFrontType.NENUPHAR:
+                case SlabFrontType.WATER_LILY:
                     frog.status = FrogStatus.BOUNCING;
                     break;
                 // Locked for one turn
                 case SlabFrontType.MUD:
-                    frog.status = FrogStatus.MUDDED;
+                    frog.status = FrogStatus.BOGGED;
                     player!.done = true;
                     break;
                 // Will create a new frog on the tile if its a queen

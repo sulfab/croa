@@ -1,10 +1,10 @@
-import {css} from '@emotion/react'
+import { css } from '@emotion/react'
 import { GameState } from '@gamepark/croa/GameState'
 import { isGameOver } from '@gamepark/croa/utils'
 import { PlayerColor } from '@gamepark/croa/player'
-import { usePlayerId, usePlayers, Player as PlayerInfo } from '@gamepark/react-client'
+import { Player as PlayerInfo, usePlayerId, usePlayers } from '@gamepark/react-client'
 import { TFunction } from 'i18next'
-import {useTranslation} from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { FrogStatus } from '@gamepark/croa/frog'
 
 type Props = {
@@ -37,17 +37,17 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
         return isActivePlayer? t('You must choose which frog you want to eliminate'): t('{player} must choose a frog to eliminate', { player: getName(activePlayer.color) })
       }
       
-      const boucingFrog = game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)).find(frog => FrogStatus.BOUNCING === frog.status);
-      if (boucingFrog) {
-        return boucingFrog.color === playerId? t('Your frog is boucing on a nenuphar, she must jump on another slab'): t('{player}\'s frog is boucing on a nenuphar. Waiting for the frog jump...', { player: getName(activePlayer.color) })
+      const bouncingFrog = game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)).find(frog => FrogStatus.BOUNCING === frog.status);
+      if (bouncingFrog) {
+        return bouncingFrog.color === playerId? t('Your frog is bouncing on a water lily, she must jump on another slab'): t('{player}’s frog is bouncing on a water lily. Waiting for the frog jump...', { player: getName(activePlayer.color) })
       }
       
       const stungFrog = game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)).find(frog => FrogStatus.STUNG === frog.status);
       if (stungFrog) {
-        return stungFrog.color === playerId? t('Your frog got stung by a moskito, you must move another frog or skip your turn'): t('{player}\'s frog was stung by a moskito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
+        return stungFrog.color === playerId? t('Your frog got stung by a mosquito, you must move another frog or skip your turn'): t('{player}’s frog was stung by a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
       }
 
-      return isActivePlayer? t('It\'s your turn to play a frog'): t('It\'s {player}\'s turn to play a frog', { player: getName(activePlayer.color) } );
+      return isActivePlayer? t('It’s your turn to play a frog'): t('It’s {player}’s turn to play a frog', { player: getName(activePlayer.color) } );
     }
   }
 

@@ -1,4 +1,4 @@
-import { Slab } from "../pond";
+import { Slab } from '../pond';
 
 const shuffleSlabs = (pond: Array<Slab>, dimension: number): Slab[][] => {
     const slabBoard: Slab[][] = [];

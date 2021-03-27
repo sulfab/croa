@@ -1,14 +1,14 @@
-import { Slab } from "@gamepark/croa/pond";
+import { Slab } from '@gamepark/croa/pond';
 import { SlabTile } from '../tile/SlabTile';
-import { FunctionComponent, useEffect, useMemo, useState } from "react"
-import { FemaleFrog, FrogStatus } from "@gamepark/croa/frog";
-import { FrogMini } from "../frog/FrogMini";
-import { PlayerColor, FrogPlacement } from "@gamepark/croa/player";
-import { css } from "@emotion/react";
-import { boardGap, getFrogXPositionOnBoard, getFrogYPositionOnBoard, frogOffset, servantHeight, servantWidth, queenHeight, queenWidth, boardWidth } from '../../utils/Styles';
-import { Position } from "@gamepark/croa/common/Position";
-import { FrogBirth, isFrogBirth, MoveFrog, isMoveFrog, RevealSlab, isRevealSlab } from "@gamepark/croa/moves";
-import { useAnimation } from "@gamepark/react-client";
+import { FunctionComponent, useEffect, useMemo, useState } from 'react'
+import { FemaleFrog, FrogStatus } from '@gamepark/croa/frog';
+import { FrogMini } from '../frog/FrogMini';
+import { FrogPlacement, PlayerColor } from '@gamepark/croa/player';
+import { css } from '@emotion/react';
+import { boardGap, boardWidth, frogOffset, getFrogXPositionOnBoard, getFrogYPositionOnBoard, queenHeight, queenWidth, servantHeight, servantWidth } from '../../utils/Styles';
+import { Position } from '@gamepark/croa/common/Position';
+import { FrogBirth, isFrogBirth, isMoveFrog, isRevealSlab, MoveFrog, RevealSlab } from '@gamepark/croa/moves';
+import { useAnimation } from '@gamepark/react-client';
 
 type BoardProps = {
     pond: Slab[][];
@@ -75,7 +75,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
     }, [frogs, animation && animation.move])
     
     const getVisualPosition = (position: Position): Position | undefined => {
-        let visualPosition;
+        let visualPosition = undefined;
         orientedSlabPositions.forEach((row, rowIndex) => 
             row.forEach((slab, columnIndex) => {
                 if (slab.x === position!.x && slab.y === position!.y) {

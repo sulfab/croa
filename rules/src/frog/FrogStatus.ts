@@ -1,6 +1,6 @@
 export enum FrogStatus {
     READY,
-    MUDDED,
+    BOGGED,
     BOUNCING,
     STUNG,
     MOVED,

@@ -1,5 +1,5 @@
-import { SlabBackType } from "./SlabBackType";
-import { SlabFrontType } from "./SlabFrontType";
+import { SlabBackType } from './SlabBackType';
+import { SlabFrontType } from './SlabFrontType';
 
 export type Slab = {
     back: SlabBackType,

@@ -1,6 +1,6 @@
-import { Position } from "../common/Position";
-import { FemaleFrog, FrogStatus } from "../frog";
-import { isKnownSlab, Slab, SlabFrontType } from "../pond";
+import { Position } from '../common/Position'
+import { FemaleFrog, FrogStatus } from '../frog'
+import { isKnownSlab, Slab, SlabFrontType } from '../pond'
 
 export const getAllowedPositions = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, pond: (Slab | Pick<Slab, 'back'>)[][]): Position[] => {
   const positions = [];
@@ -60,8 +60,9 @@ export const isAllowedMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, del
 /**
  * Does the current tile an adjacent one to the given frog
  * @param frog The frog where tiles needs to be compared
+ * @param slabPosition Position to compare to
  */
-export const isAdjcentSlab = (frog: FemaleFrog, slabPosition: Position) => {
+export const isAdjacentSlab = (frog: FemaleFrog, slabPosition: Position) => {
     const deltaX = Math.abs(slabPosition.x - frog.position!.x);
     const deltaY = Math.abs(slabPosition.y - frog.position!.y);
     return (deltaY <= 1 && deltaX <= 1 && (deltaX !== 0 || deltaY !== 0))

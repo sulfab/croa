@@ -1,7 +1,7 @@
-import { css } from "@emotion/react";
-import { Player, PlayerColor } from "@gamepark/croa/player";
-import { FC, useState } from "react";
-import { playerColors } from "../../utils/Styles";
+import { css } from '@emotion/react';
+import { Player, PlayerColor } from '@gamepark/croa/player';
+import { FC, useState } from 'react';
+import { playerColors } from '../../utils/Styles';
 import gamePointIcon from './visuals/game-point.svg'
 
 type PlayerInfosProps = {
