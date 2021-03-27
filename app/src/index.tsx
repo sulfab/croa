@@ -1,5 +1,5 @@
 import {css, Global} from '@emotion/react'
-import Croa from '@gamepark/croa';
+import Croa from '@gamepark/croa/Croa';
 import { CroaOptionsDescription } from '@gamepark/croa/CroaOptions';
 import { CroaAnimation } from './Animations';
 import CroaView from '@gamepark/croa/CroaView';
