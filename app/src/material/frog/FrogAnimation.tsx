@@ -1,9 +1,10 @@
-import { css, keyframes } from '@emotion/react';
+import { css } from '@emotion/react';
 import { FemaleFrog } from '@gamepark/croa/frog';
 import { PlayerColor } from '@gamepark/croa/player';
 import { FC, HTMLAttributes } from 'react'
 import { queenJumpBlinkHeightRatio, queenJumpBlinkWidthRatio, servantJumpBlinkHeightRatio, servantJumpBlinkWidthRatio } from '../../utils/Styles';
 import { Images } from '../Resources';
+import { Animated } from './Animated';
 
 type AnimatedFrogProps = {
     frog: FemaleFrog,
@@ -12,41 +13,25 @@ type AnimatedFrogProps = {
     delay?: number;
     visible?: boolean;
     color?: PlayerColor;
+    loop?: boolean;
 }  & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
 
-const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, animation, visible, duration, delay, color, ...props }) => {
+const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, animation, visible, duration, delay, loop, color, ...props }) => {
 
     return (
-        <div { ...props } key={ frog.id } css={ [frogMiniImage(frog, animation, !!visible), duration && frogMiniAnimation(animation, duration, delay) ]} style={{ backgroundImage: `url(${getAnimationBackground(frog.isQueen, color || frog.color, animation)})`}} />
+        <Animated { ...props }  
+            animation={ animation } 
+            frame={ animation !== 'blinking'? 24: 16 } 
+            css={ frogMiniImage(frog, animation) }
+            visible={ visible } 
+            image={ getAnimationBackground(frog.isQueen, color || frog.color, animation)! } 
+            loop={ loop || animation  === 'blinking' } 
+            duration={ duration } 
+            delay={ delay || 0 } />
+        /*{ /* <div { ...props } key={ frog.id } css={ [frogMiniImage(frog, animation, !!visible), duration && frogMiniAnimation(animation, duration, delay, loop) ]} style={{ backgroundImage: `url(${})`}} /> }*/
     );
 };
-
-const frogBlinkingKeyframe = keyframes`
-    from { 
-        background-position: 0;
-    }
-    to { 
-        background-position: -1600%;
-    }
-`;
-
-const frogJumpingKeyframe = keyframes`
-    from {
-        background-position: 0;
-    }
-    to { 
-        background-position: -2400%; 
-    }
-`;
-
-export const getAnimationKeyFrame = (animationId?: string) => {
-    return animationId !== 'blinking'? frogJumpingKeyframe: frogBlinkingKeyframe;
-    
-}
-export const frogMiniAnimation = (animationId?: string, animationDuration?: number, animationDelay?: number) => css`
-    animation: ${getAnimationKeyFrame(animationId)} ${(animationDuration && animationDuration) || 1}s steps(${animationId !== 'blinking'? 24: 16}) ${animationDelay || 0}s ${animationId === 'blinking'? 'infinite': 1};
-`
 
 const computeAnimationHeight = (frog: FemaleFrog, animationId?: string) => {
     if (animationId && animationId !== 'blinking') {
@@ -72,13 +57,12 @@ const computeAnimationLeft = (frog: FemaleFrog, animationId?: string) => {
     return 0;
 }
 
-export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking", isActive?: boolean) => css`
+export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking") => css`
     position: absolute;
     bottom:  0;
     left: ${computeAnimationLeft(frog, animationId)}%;
-    height: ${isActive? computeAnimationHeight(frog, animationId): 0}%;
-    width: ${isActive? computeAnimationWidth(frog, animationId): 0}%;
-    background-size: ${animationId !== 'blinking'? 2400: 1600}% 100%;
+    height: ${computeAnimationHeight(frog, animationId)}%;
+    width: ${computeAnimationWidth(frog, animationId)}%;
     transition-property: transform;
     margin: 0 auto;    
     image-rendering: -webkit-optimize-contrast;
