@@ -42,7 +42,7 @@ export const acquireServant = (state: GameState | GameStateView, move: AcquireSe
     const male = move.male;
 
     // Case where player win a servant after killing a queen
-    if (!male) {
+    if (male === undefined) {
         popNewServant(player);
 
         // Case where player win a servant after moving on a male slab
