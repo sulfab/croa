@@ -17,7 +17,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
     if (isGameOptions(arg)) {
       super({
         activePlayer: arg.players[0].id,
-        players: arg.players.map((player, index) => initializePlayerBoard(4, index, player.id)), 
+        players: arg.players.map((player, index) => initializePlayerBoard(arg.players.length, index, player.id)), 
         pond: shuffleSlabs(pond, defaultBoardSize),
         round: 1,
       })
