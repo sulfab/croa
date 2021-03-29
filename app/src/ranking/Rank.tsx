@@ -7,18 +7,18 @@ import { FrogAnimation } from '../material/frog/FrogAnimation';
 
 type RankProps = {
     rank: number;
-    player: Player;
+    player?: Player;
 } & HTMLAttributes<HTMLDivElement> 
 
 const Rank: React.FC<RankProps> = ({ rank, player, ...props }) => {
-    const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player.color));
+    const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player?.color));
     return (
         <div { ...props } css={ rankContainer }>
             <div css={ getFrog(rank) }>
-                <FrogAnimation visible={ true } duration={ rank === 1? 0.6: 1 } delay={ rank * 0.7 } frog={ player.femaleFrogs.find(frog => frog.isQueen)! } loop={ true } animation={ rank === 1? 'jumping_front': 'blinking' } css={ css`position: relative;` }  />
+                { player && <FrogAnimation visible={ true } duration={ rank === 1? 0.6: 1 } delay={ rank * 0.7 } frog={ player.femaleFrogs.find(frog => frog.isQueen)! } loop={ true } animation={ rank === 1? 'jumping_front': 'blinking' } css={ css`position: relative;` }  /> }
             </div>
             <div css={ getRank(rank) }>
-                <CroaAvatar customStyle={ avatarStyle } css={ avatarCss } player={ player } playerInfo={ playerInfo } />
+                { player && <CroaAvatar customStyle={ avatarStyle } css={ avatarCss } player={ player } playerInfo={ playerInfo } /> }
             </div>
         </div>
     );

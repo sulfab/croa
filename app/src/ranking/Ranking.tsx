@@ -37,7 +37,7 @@ const Ranking: React.FC<RankingProps> = ({ players, ...props }) => {
                 <div css={ [rankingRanks, !displayRanking && reduceRankingAnimation] }>
                     <Rank rank={ 2 } css={ [rank, !displayRanking && reduceRankingAnimation] } player={ players.find(player => player.eliminated === players.length - 1)! }/>
                     <Rank rank={ 1 } css={ [rank, !displayRanking && reduceRankingAnimation] } player={ players.find(player => !player.eliminated)! }/>
-                    { players.length > 2 && <Rank rank={ 3 } css={ [rank, !displayRanking && reduceRankingAnimation] } player={ players.find(player => player.eliminated === players.length - 2)! } /> }
+                    <Rank rank={ 3 } css={ [rank, !displayRanking && reduceRankingAnimation] } player={ players.find(player => player.eliminated === players.length - 2) } />
                 </div>
             </div>
         </>
