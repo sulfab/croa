@@ -49,7 +49,7 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
       
       const bouncingFrog = frogs.find(frog => FrogStatus.BOUNCING === frog.status);
       if (bouncingFrog) {
-        return bouncingFrog.color === playerId? t('Your frog is bouncing on a water lily, she must jump on another slab'): t('{player}’s frog is bouncing on a water lily. Waiting for the frog jump...', { player: getName(activePlayer.color) })
+        return bouncingFrog.color === playerId? t('Your frog is bouncing on a water lily, she must jump on another tile'): t('{player}’s frog is bouncing on a water lily. Waiting for the frog jump...', { player: getName(activePlayer.color) })
       }
       
       const stungFrog = frogs.find(frog => FrogStatus.STUNG === frog.status);
