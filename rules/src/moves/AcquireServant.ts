@@ -46,7 +46,7 @@ export const acquireServant = (state: GameState | GameStateView, move: AcquireSe
         popNewServant(player);
 
         // Case where player win a servant after moving on a male slab
-    } else if (player.maleFrogs.find(token => token === male) && player.femaleFrogs.some(frog => !frog.position)) {
+    } else if (player.maleFrogs.find(token => token === male) !== undefined && player.femaleFrogs.some(frog => !frog.position)) {
         if (popNewServant(player)) {
             player.maleFrogs = player.maleFrogs.filter(maleToken => maleToken !== male);
         }
@@ -63,6 +63,7 @@ const popNewServant = (player: Player): boolean => {
 
         if (frog) {
             frog.position = {x: queen.position!.x, y: queen.position!.y};
+    
             return true;
         }
     }

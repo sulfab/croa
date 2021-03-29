@@ -99,7 +99,7 @@ const mayProduceFrogBirth = (player: Player, male: MaleFrog, frog: FemaleFrog) =
         return;
     }
 
-    if (player.maleFrogs.find(token => token === male) && player.femaleFrogs.some(frog => !frog.position)) {
+    if (player.maleFrogs.find(token => token === male) !== undefined && player.femaleFrogs.some(frog => !frog.position)) {
         player.birth = true;
         player.birthMale = male;
     }
