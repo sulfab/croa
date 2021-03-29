@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Player, PlayerColor } from '@gamepark/croa/player';
-import { Avatar } from 'avataaars';
-import { FC, HTMLAttributes } from 'react';
+import Avatar from 'avataaars';
+import { CSSProperties, FC, HTMLAttributes } from 'react';
 import { Images } from '../Resources';
 
 type CroaAvatarProps = {
@@ -12,19 +12,29 @@ type CroaAvatarProps = {
 const CroaAvatar: FC<CroaAvatarProps> = ({ player, playerInfo, ...props }) => {
 
     if (playerInfo?.avatar) {
-        return <Avatar { ...props } style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar}/>
+        return <Avatar style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar} />
     }
 
-    return <img { ...props } alt={'Player board'} src={playerDefaultImages.get(player.color)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>;
+    return <img { ...props } alt={'Player board'} src={playerDefaultImages.get(player.color)} css={[avatarImage, defaultAvatarStyle]} draggable="false"/>;
 };
 
-const avatarStyle = css`
+const avatarImage = css`
   position: absolute;
   height: 20%;
   top: 7%;
   left: 5%;
   border-radius: 100%;
 `;
+
+const avatarStyle: CSSProperties = {
+  position: 'absolute',
+  height: '30%',
+  top: '-10%',
+  width: '20%',
+  left: '-4%',
+  filter: 'drop-shadow(0 0.1em 0.3em black)',
+  borderRadius: '100%'
+};
 
 const defaultAvatarStyle = css`
     height: 29%;
