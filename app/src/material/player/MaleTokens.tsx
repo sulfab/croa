@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { MaleFrog } from '@gamepark/croa/frog';
+import { MaleFrog, maleFrogs } from '@gamepark/croa/frog';
 import { isAcquireServant } from '@gamepark/croa/moves';
 import { Player, PlayerColor } from '@gamepark/croa/player';
 import { useAnimation } from '@gamepark/react-client';
@@ -20,12 +20,12 @@ export const MaleTokens: FC<MaleTokensProps> = ({ player, color, ...props }) => 
     return (
         <div { ...props }>
             {
-                Object.keys(MaleFrog).map((male, index) => { 
+                maleFrogs.map((male, index) => { 
                     return (
                         <div key={ `${male}` }  css={ maleTokenContainer(index) }>
-                            <div css={ [maleTokenInner(!player.maleFrogs.includes(MaleFrog[male])), (animation && animation.move.male === MaleFrog[male]) && maleFrogAnimation(animation.duration)] }>
-                                <img css={[ maleTokenStyle ]} alt={`enabled ${male.toLowerCase()} male token`} src={playerMaleTokens!.get(MaleFrog[male])} />
-                                <img css={[ maleTokenStyle, disabledMaleTokenStyle ]} alt={`disabled ${male.toLowerCase()} male token`} src={maleToken.get(PlayerColor.Green)!.get(MaleFrog[male])} />
+                            <div css={ [maleTokenInner(!player.maleFrogs.includes(male)), (animation && animation.move.male === male) && maleFrogAnimation(animation.duration)] }>
+                                <img css={[ maleTokenStyle ]} alt={`enabled ${MaleFrog[male].toLowerCase()} male token`} src={playerMaleTokens!.get(male)} />
+                                <img css={[ maleTokenStyle, disabledMaleTokenStyle ]} alt={`disabled ${MaleFrog[male].toLowerCase()} male token`} src={maleToken.get(PlayerColor.Green)!.get(male)} />
                             </div>
                         </div>
                     )
