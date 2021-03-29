@@ -8,14 +8,14 @@ import { frogMiniContainer } from '../../utils/Styles';
 import { frogFromBoard } from '../../drag-objects';
 import { Position } from '@gamepark/croa/common/Position';
 import { DraggableProps } from '@gamepark/react-components/dist/Draggable/Draggable';
-import { EliminateFrog, isEliminateFrog, isMoveFrog, Move, MoveFrog } from '@gamepark/croa/moves';
+import { EliminateFrog, eliminateFrogMove, isEliminateFrog, isMoveFrog, Move, MoveFrog } from '@gamepark/croa/moves';
 import { FrogAnimation } from './FrogAnimation';
 
 
 type FrogMiniProps = {
     frog: FemaleFrog;
     otherFrogs: Array<FemaleFrog>;
-    target: boolean,
+    targeted: boolean,
     activePlayer?: PlayerColor;
     visualPosition?: Position;
     preTransform?: string;
@@ -23,7 +23,7 @@ type FrogMiniProps = {
     verticalOrientation: 'top' | 'bottom';
 } & Omit<DraggableProps<any, any, any>, 'item'>
 
-const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, target, horizontalOrientation, verticalOrientation, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
+const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontalOrientation, verticalOrientation, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
     const [selectedFrog, setSelectedFrog] = useDisplayState<number | undefined>(undefined);
     const playerId = usePlayerId();
     const play = usePlay();
@@ -37,7 +37,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, target, horizontalOr
         && !otherFrogs.some(first => first.isQueen 
                 && otherFrogs.some(second => first.id !== second.id && first.position!.x === second.position!.x  && first.position!.y === second.position!.y)
                 && (frog.position!.x !== first.position!.x || frog.position!.y !== first.position!.y))       
-        && FrogStatus.BOGGED !== frog.status && FrogStatus.STUNG !== frog.status
+        && ![FrogStatus.BOGGED, FrogStatus.STUNG, FrogStatus.MOVED].includes(frog.status) 
         && !otherFrogs.some(f => [FrogStatus.BOUNCING, FrogStatus.MOVED, FrogStatus.ELIMINATED].includes(f.status));
 
     // Detect change of frog between state and current frog
@@ -59,6 +59,12 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, target, horizontalOr
     };
 
     const onSelectFrog = () => {
+
+        // In case the selected frog is a targeted one, trigger elimination
+        if (targeted) {
+            return play(eliminateFrogMove(frog));
+        }
+
         if (!isCurrentPlayerFrog || !canBeMoved || animating) {
             return;
         }
@@ -82,6 +88,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, target, horizontalOr
         return 'blinking';
     }
     
+    
     return (
         <Draggable { ...props } 
                 onClick={ onSelectFrog }         
@@ -95,10 +102,10 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, target, horizontalOr
                 css={[
                     frogMiniContainer(frog, frogZIndex),
                     isSelectable && selectableFrog,
-                    frog.color !== playerId && pointEvents,
+                    frog.color !== playerId && !targeted && pointEvents,
                     FrogStatus.BOGGED === frog.status && boggedFrog(preTransform),
                     animatingElimination && frogDisappearance(animatingElimination.duration),
-                    target && targetedFrog
+                    targeted && targetedFrog
                 ]}>
             <FrogAnimation frog={ frog } animation="blinking" visible={ getAnimation() === "blinking" } duration={ 1 } delay={ Math.min(Math.abs(Math.tan(frog.color + frog.id * 2)), 3) } />
             <FrogAnimation frog={ frog } animation="jumping_front" visible={ getAnimation() === "jumping_front" } duration={ animatingMove && animatingMove.duration } css={ [css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />

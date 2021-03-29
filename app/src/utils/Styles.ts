@@ -52,7 +52,7 @@ export const frogOffset = (frogIndex: number, frog: FemaleFrog) => {
         case 1:
             return frog.isQueen? { top: 2.5, left: 4.5 } : { top: 5, left: 6 };
         case 2:
-            return frog.isQueen? { top: 2.5, left: 3.5 } : { top: 4.5, left: 3.5 };
+            return frog.isQueen? { top: 2.5, left: 3.5 } : { top: 5, left: 3.5 };
         default:
             return;
     }  

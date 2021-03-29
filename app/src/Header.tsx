@@ -38,13 +38,9 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
 
       const frogs = game.players.flatMap(p => p.femaleFrogs);
 
-      if (!animation && frogs.some(frog => FrogStatus.MOVED === frog.status)) {
-        return t('Croooooaak...');
-      }
-
       const isActivePlayer = activePlayer.color === playerId;
       if (activePlayer.eliminationChoice && activePlayer.eliminationChoice.length > 1) {
-        return isActivePlayer? t('You must choose which frog you want to eliminate'): t('{player} must choose a frog to eliminate', { player: getName(activePlayer.color) })
+        return isActivePlayer? t('Which frog do you want to eliminate ?'): t('{player} must choose a frog to eliminate', { player: getName(activePlayer.color) })
       }
       
       const bouncingFrog = frogs.find(frog => FrogStatus.BOUNCING === frog.status);
@@ -55,6 +51,10 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
       const stungFrog = frogs.find(frog => FrogStatus.STUNG === frog.status);
       if (stungFrog) {
         return stungFrog.color === playerId? t('Your frog got stung by a mosquito, you must play another frog or skip your turn'): t('{player}’s frog was stung by a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
+      }
+
+      if (!animation && frogs.some(frog => FrogStatus.MOVED === frog.status) && !game.players.some(player => player.eliminationChoice.length > 0)) {
+        return t('Croooooaak...');
       }
 
       return isActivePlayer? t('It’s your turn to play a frog'): t('It’s {player}’s turn to play a frog', { player: getName(activePlayer.color) } );

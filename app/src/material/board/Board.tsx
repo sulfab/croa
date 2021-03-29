@@ -140,7 +140,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
         return <FrogMini key={ 'frog-' + frog.color + '-' + frog.id }
                          activePlayer={ activePlayer?.color }
                          frog={ frog }
-                         target={ !!activePlayer && activePlayer.eliminationChoice.some(f => f.id === frog.id && f.color === frog.color) }
+                         targeted={ !!activePlayer && activePlayer.eliminationChoice.some(f => f.id === frog.id && f.color === frog.color) }
                          otherFrogs={ frogs.filter(f => f.color === activePlayer?.color && f.id !== frog.id && !!f.position) }
                          visualPosition={ visualPosition }
                          horizontalOrientation={ frogHorizontalOrientation(frog) }

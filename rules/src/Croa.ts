@@ -143,12 +143,15 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
 }
 export function getPredictableAutomaticMoves(state: GameState | GameStateView, activePlayer: Player): Move & MoveView | void {
 
+  if (activePlayer.eliminationChoice.length > 0) {
+    return;
+  }
+
   // If player has not played yet and it has only frogs Bogged or Stung
   const isBlocked = !activePlayer.done 
     && activePlayer.femaleFrogs.some(frog => !!frog.position) 
     && activePlayer.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.BOGGED, FrogStatus.STUNG].includes(frog.status));
-  if (isBlocked) {
-    console.log(JSON.parse(JSON.stringify(activePlayer)), "BLocked")
+  if (isBlocked && activePlayer.eliminationChoice.length === 0) {
     return skipTurnMove;
   }
 
@@ -185,8 +188,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   }
 
   // If the current player has finished playing, skip turn
-  if (activePlayer && activePlayer.done) {
-    console.log(JSON.parse(JSON.stringify(activePlayer)), "Skip")
+  if (activePlayer && activePlayer.done && activePlayer.eliminationChoice.length === 0) {
     return skipTurnMove;
   }
 
