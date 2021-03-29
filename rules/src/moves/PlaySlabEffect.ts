@@ -38,20 +38,21 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
             .find(frog => frog.position?.x === move.slabPosition.x && frog.position?.y === move.slabPosition.y);
 
         if (frog) {
-            const player = state.players.find(player => player.color === frog.color);
+            const player = state.players.find(player => player.color === frog.color)!;
             switch (slab.front) {
                 case SlabFrontType.PIKE:
                     frog.status = FrogStatus.ELIMINATED;
-                    player!.done = true;
+                    player.done = true;
                     break;
                 // Nothing to do
                 case SlabFrontType.REED:
                 case SlabFrontType.LOG:
-                    player!.done = true;
+                    player.done = true;
                     break;
                 // Can move another frog
                 case SlabFrontType.MOSQUITO:
                     frog.status = FrogStatus.STUNG;
+                    player.done = player.femaleFrogs.filter(f => !!f.position).every(f => [FrogStatus.BOGGED, FrogStatus.STUNG].includes(f.status));
                     break;
                 // Must move on another slab
                 case SlabFrontType.WATER_LILY:
@@ -60,7 +61,7 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
                 // Locked for one turn
                 case SlabFrontType.MUD:
                     frog.status = FrogStatus.BOGGED;
-                    player!.done = true;
+                    player.done = true;
                     break;
                 // Will create a new frog on the tile if its a queen
                 case SlabFrontType.RED_MALE:

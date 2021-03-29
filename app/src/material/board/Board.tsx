@@ -3,7 +3,7 @@ import { SlabTile } from '../tile/SlabTile';
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { FemaleFrog, FrogStatus } from '@gamepark/croa/frog';
 import { FrogMini } from '../frog/FrogMini';
-import { FrogPlacement, PlayerColor } from '@gamepark/croa/player';
+import { FrogPlacement, Player, PlayerColor } from '@gamepark/croa/player';
 import { css } from '@emotion/react';
 import { boardGap, boardWidth, frogOffset, getFrogXPositionOnBoard, getFrogYPositionOnBoard, queenHeight, queenWidth, servantHeight, servantWidth } from '../../utils/Styles';
 import { Position } from '@gamepark/croa/common/Position';
@@ -13,7 +13,7 @@ import { useAnimation } from '@gamepark/react-client';
 type BoardProps = {
     pond: Slab[][];
     frogs: Array<FemaleFrog>;
-    activePlayer?: PlayerColor;
+    activePlayer?: Player;
     playerIndex: number;
     playerCount: number;
 }
@@ -138,9 +138,10 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
         }
 
         return <FrogMini key={ 'frog-' + frog.color + '-' + frog.id }
-                         activePlayer={ activePlayer }
+                         activePlayer={ activePlayer?.color }
                          frog={ frog }
-                         otherFrogs={ frogs.filter(f => f.color === activePlayer && f.id !== frog.id && !!f.position) }
+                         target={ !!activePlayer && activePlayer.eliminationChoice.some(f => f.id === frog.id && f.color === frog.color) }
+                         otherFrogs={ frogs.filter(f => f.color === activePlayer?.color && f.id !== frog.id && !!f.position) }
                          visualPosition={ visualPosition }
                          horizontalOrientation={ frogHorizontalOrientation(frog) }
                          verticalOrientation={ frogVerticalOrientation(frog) }
@@ -157,7 +158,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
                             frogs={ frogs } position={{x: slab.x, y: slab.y}} 
                             visualPosition={{x, y}} 
                             boardSize={ pond.length }
-                            activePlayer={ activePlayer } /> ))}
+                            activePlayer={ activePlayer?.color } /> ))}
         </div>
     );
 }

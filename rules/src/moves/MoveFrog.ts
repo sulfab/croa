@@ -59,7 +59,7 @@ export const moveFrog = (state: GameState | GameStateView, move: MoveFrog): void
                 frogsOnSlab[0].status = FrogStatus.ELIMINATED;
             } else if (frogsOnSlab.length > 1) {
                 // In case its a servant, we let the choice if the max size is overpassed
-                player.eliminationChoice = [...frogsOnSlab];
+                player.eliminationChoice = frogsOnSlab;
             }
         } else if (!frogsOnSlab.some(frog => frog.color === player.color)) {
             // Direct elimination of frogs when the queen arrives

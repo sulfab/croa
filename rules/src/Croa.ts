@@ -46,7 +46,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
 
     // Player elimination choice
     if (player.eliminationChoice && player.eliminationChoice.length > 1) {
-      player.eliminationChoice.forEach(frog => moves.push(eliminateFrogMove({ color: frog.color, id: frog.id })))
+      player.eliminationChoice.forEach(frog => moves.push(eliminateFrogMove(frog)))
     }
     
     // By default, bogged or stung frogs can't be moved
@@ -143,6 +143,15 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
 }
 export function getPredictableAutomaticMoves(state: GameState | GameStateView, activePlayer: Player): Move & MoveView | void {
 
+  // If player has not played yet and it has only frogs Bogged or Stung
+  const isBlocked = !activePlayer.done 
+    && activePlayer.femaleFrogs.some(frog => !!frog.position) 
+    && activePlayer.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.BOGGED, FrogStatus.STUNG].includes(frog.status));
+  if (isBlocked) {
+    console.log(JSON.parse(JSON.stringify(activePlayer)), "BLocked")
+    return skipTurnMove;
+  }
+
   // In the case the current player has a bouncing frog and no destination is possible, automatically move it to its previous slab
   const bouncingFrog = activePlayer.femaleFrogs.find(frog => FrogStatus.BOUNCING === frog.status);
   if (bouncingFrog) {
@@ -152,24 +161,12 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
     }
   }
 
-  // Pass turn in some cases : only one frog and stun or jump on mosquito
-  // No elimination or elimination choice
-
-  // If player has at least one frog on board and all its frog are bogged or stung, skip turn
-  // Improve by asking the player to pass instead of doing it automatically
-  const blockedPlayer: Player | undefined = state.players.find(player => 
-    player.femaleFrogs.some(frog => !!frog.position) && player.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.BOGGED, FrogStatus.STUNG].includes(frog.status)));
-  if (blockedPlayer) {
-    return skipTurnMove;
-  }
-
   // If there is a frog to birth, pop it
-  const playerFrogBirth: Player | undefined = state.players.find(player => !!player.birth);
-  if (playerFrogBirth) {
-    return acquireServantMove(playerFrogBirth.color, playerFrogBirth.birthMale);
+  if (!!activePlayer.birth) {
+    return acquireServantMove(activePlayer.color, activePlayer.birthMale);
   }
   
-  // If there is frog to eliminate, eliminate it
+  // If there is frog to eliminate, eliminate it. It is not current player dependant
   const eliminatedWithoutChoice: FemaleFrog | undefined = state.players
     .flatMap(player => player.femaleFrogs)
     .find(frog => FrogStatus.ELIMINATED === frog.status);
@@ -187,7 +184,9 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
     return eliminateFrogMove(aloneFrogs);
   }
 
+  // If the current player has finished playing, skip turn
   if (activePlayer && activePlayer.done) {
+    console.log(JSON.parse(JSON.stringify(activePlayer)), "Skip")
     return skipTurnMove;
   }
 

@@ -24,7 +24,7 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
       <Letterbox css={letterBoxStyle}>
         { isGameOver(game.players) && <Ranking players={ game.players } css={ rankingBoard } /> }
         <div css={ gameBoard }>
-          <Board pond={ game.pond } frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.activePlayer } playerIndex={ playerIndex } playerCount={ game.players.length }/>
+          <Board pond={ game.pond } frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.players.find(player => player.color === game.activePlayer) } playerIndex={ playerIndex } playerCount={ game.players.length }/>
           <div css={[ playerBoards, leftPlayerBoards ]}>
             { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0%`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
             { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0%`}  player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }

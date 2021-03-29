@@ -54,7 +54,7 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
       
       const stungFrog = frogs.find(frog => FrogStatus.STUNG === frog.status);
       if (stungFrog) {
-        return stungFrog.color === playerId? t('Your frog got stung by a mosquito, you must move another frog or skip your turn'): t('{player}’s frog was stung by a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
+        return stungFrog.color === playerId? t('Your frog got stung by a mosquito, you must play another frog or skip your turn'): t('{player}’s frog was stung by a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
       }
 
       return isActivePlayer? t('It’s your turn to play a frog'): t('It’s {player}’s turn to play a frog', { player: getName(activePlayer.color) } );

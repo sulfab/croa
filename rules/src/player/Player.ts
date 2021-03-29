@@ -1,4 +1,4 @@
-import { MaleFrog, FemaleFrog, FemaleFrogId } from '../frog';
+import { MaleFrog, FemaleFrog } from '../frog';
 import { PlayerColor } from '.';
 
 export type Player = {
@@ -6,7 +6,7 @@ export type Player = {
   color: PlayerColor,
   maleFrogs: Array<MaleFrog>,
   femaleFrogs: Array<FemaleFrog>,
-  eliminationChoice: Array<FemaleFrogId>,
+  eliminationChoice: Array<FemaleFrog>,
   birth?: boolean,
   birthMale?: MaleFrog
   eliminated?: number

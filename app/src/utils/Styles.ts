@@ -58,10 +58,11 @@ export const frogOffset = (frogIndex: number, frog: FemaleFrog) => {
     }  
 };
 
-export const frogMiniContainer = (frog: FemaleFrog) => css`
+export const frogMiniContainer = (frog: FemaleFrog, zIndex: number) => css`
     height: ${(frog.isQueen? queenHeight : servantHeight)}%;
     width: ${frog.isQueen? queenWidth: servantWidth}%;
     position: absolute;
+    z-index: ${zIndex}; 
 `
 
 export const playerColors = new Map([

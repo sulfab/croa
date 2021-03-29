@@ -1,4 +1,4 @@
-import { FemaleFrogId, FrogStatus } from '../frog';
+import { FemaleFrog, FrogStatus } from '../frog';
 import { PlayerColor } from '../player';
 import { MoveType } from './';
 import Move from './Move';
@@ -15,7 +15,7 @@ export type EliminateFrog = {
  * Move to get back frogs
  * @param frog 
  */
-export function eliminateFrogMove(frog: FemaleFrogId): EliminateFrog {
+export function eliminateFrogMove(frog: FemaleFrog): EliminateFrog {
     return {
         type: MoveType.EliminateFrog,
         playerId: frog.color,
@@ -44,10 +44,14 @@ const eliminateFrog = (state: GameState | GameStateView, move: EliminateFrog) =>
         delete eliminatedFrog.position;
         eliminatedFrog.status = FrogStatus.READY;
 
-        // TODO: Generate a move for player elimination
         if (!player.eliminated && player.femaleFrogs.every(frog => !frog.position)) {
             const eliminatedCount: number[] = state.players.filter(p => !!p.eliminated).flatMap(player => player.eliminated!);
             player.eliminated = eliminatedCount.length === 0 ? 1 : Math.max(...eliminatedCount) + 1;
+        }
+
+        const groupedEliminationPlayer = state.players.find(p => p.eliminationChoice.some(f => f.id === eliminatedFrog.id && f.color === eliminatedFrog.color));
+        if (groupedEliminationPlayer) {
+            groupedEliminationPlayer.eliminationChoice = [];
         }
 
         // The eliminator win a servant birth if there is one available

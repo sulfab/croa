@@ -15,14 +15,15 @@ import { FrogAnimation } from './FrogAnimation';
 type FrogMiniProps = {
     frog: FemaleFrog;
     otherFrogs: Array<FemaleFrog>;
+    target: boolean,
     activePlayer?: PlayerColor;
     visualPosition?: Position;
     preTransform?: string;
-    horizontalOrientation: 'left'|'right'
-    verticalOrientation: 'top' | 'bottom'
+    horizontalOrientation: 'left'| 'right';
+    verticalOrientation: 'top' | 'bottom';
 } & Omit<DraggableProps<any, any, any>, 'item'>
 
-const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientation, verticalOrientation, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
+const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, target, horizontalOrientation, verticalOrientation, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
     const [selectedFrog, setSelectedFrog] = useDisplayState<number | undefined>(undefined);
     const playerId = usePlayerId();
     const play = usePlay();
@@ -82,7 +83,23 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientatio
     }
     
     return (
-        <Draggable { ...props } preTransform={ `${preTransform}` } draggable={ playerId === frog.color } onClick={ onSelectFrog } begin={ onDrag } canDrag={ () => activePlayer && canBeMoved } css={[frogMiniContainer(frog), isSelectable && selectableFrog, frog.color !== playerId && pointEvents, FrogStatus.BOGGED === frog.status && boggedFrog(preTransform), animatingElimination && frogDisappearance(animatingElimination.duration),  css`z-index: ${frogZIndex}; `]} item={ frogFromBoard(frog) } drop={ onDropFrog } end={ onSelectFrog }>
+        <Draggable { ...props } 
+                onClick={ onSelectFrog }         
+                item={ frogFromBoard(frog) } 
+                draggable={ playerId === frog.color } 
+                canDrag={ () => activePlayer && canBeMoved } 
+                begin={ onDrag } 
+                end={ onSelectFrog }
+                drop={ onDropFrog } 
+                preTransform={ `${preTransform}` } 
+                css={[
+                    frogMiniContainer(frog, frogZIndex),
+                    isSelectable && selectableFrog,
+                    frog.color !== playerId && pointEvents,
+                    FrogStatus.BOGGED === frog.status && boggedFrog(preTransform),
+                    animatingElimination && frogDisappearance(animatingElimination.duration),
+                    target && targetedFrog
+                ]}>
             <FrogAnimation frog={ frog } animation="blinking" visible={ getAnimation() === "blinking" } duration={ 1 } delay={ Math.min(Math.abs(Math.tan(frog.color + frog.id * 2)), 3) } />
             <FrogAnimation frog={ frog } animation="jumping_front" visible={ getAnimation() === "jumping_front" } duration={ animatingMove && animatingMove.duration } css={ [css`transform: rotateY(${horizontalOrientation === 'left' ? 180: 0}deg)`] } />
             <FrogAnimation frog={ frog } animation="jumping_back" visible={ getAnimation() === "jumping_back" } duration={ animatingMove && animatingMove.duration } css={ [css`transform: rotateY(${horizontalOrientation  === 'left' ? 180: 0}deg)`] } />
@@ -92,11 +109,11 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, horizontalOrientatio
 
 const pointEvents = css`
     pointer-events: none;
-`
+`;
 
 const boggedFrog = (preTransform?: string) => css`
     transform: ${preTransform} translate(0, 0.7em) rotateZ(-130deg);
-`
+`;
 
 const selectableFrogAnimation = keyframes`
     from {
@@ -105,12 +122,15 @@ const selectableFrogAnimation = keyframes`
     to {
         filter: drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold)
     }
-`
+`;
 
 const selectableFrog = css`
     animation: ${selectableFrogAnimation} 1s ease-in-out infinite alternate;
-`
+`;
 
+const targetedFrog = css`
+    filter: drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red)
+`;
 
 
 const frogDisappearanceAnimation = keyframes`

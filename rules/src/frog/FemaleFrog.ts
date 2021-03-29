@@ -12,8 +12,3 @@ export type FemaleFrog = {
     status: FrogStatus
 
 }
-
-export type FemaleFrogId = {
-    color: PlayerColor;
-    id: number;
-}
