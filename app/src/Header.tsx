@@ -2,11 +2,12 @@ import { css } from '@emotion/react'
 import { GameState } from '@gamepark/croa/GameState'
 import { isGameOver } from '@gamepark/croa/utils'
 import { PlayerColor } from '@gamepark/croa/player'
-import { Player as PlayerInfo, usePlayerId, usePlayers } from '@gamepark/react-client'
+import { Animation, Player as PlayerInfo, useAnimation, usePlayerId, usePlayers } from '@gamepark/react-client'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { FrogStatus } from '@gamepark/croa/frog'
 import { getPlayerName } from '@gamepark/croa/CroaOptions';
+import { Move } from '@gamepark/croa/moves'
 
 type Props = {
   loading: boolean
@@ -17,7 +18,8 @@ export default function Header({loading, game}: Props) {
   const {t} = useTranslation()
   const playerId = usePlayerId();
   const playersInfos = usePlayers<PlayerColor>();
-  const text = loading ? t('Game loading…') : getText(t, game, playerId, playersInfos)
+  const animation = useAnimation<Move>()
+  const text = loading ? t('Game loading…') : getText(t, game, playerId, playersInfos, animation)
   return (
     <header css={style}>
       <h1 css={titleStyle}>{text}</h1>
@@ -25,7 +27,7 @@ export default function Header({loading, game}: Props) {
   )
 }
 
-const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersInfos: Array<PlayerInfo<PlayerColor>>) => {
+const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersInfos: Array<PlayerInfo<PlayerColor>>, animation?: Animation<Move>) => {
   const getName = (color: PlayerColor) => playersInfos.find(p => p.id === color)?.name || getPlayerName(color, t);
   if (isGameOver(game.players)) {
     const lastPlayer = game.players.find(player => !player.eliminated)!;
@@ -33,17 +35,24 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
   } else {
     const activePlayer = game.players.find(player => game.activePlayer === player.color);
     if (activePlayer) {
+
+      const frogs = game.players.flatMap(p => p.femaleFrogs);
+
+      if (!animation && frogs.some(frog => FrogStatus.MOVED === frog.status)) {
+        return t('Croooooaak...');
+      }
+
       const isActivePlayer = activePlayer.color === playerId;
       if (activePlayer.eliminationChoice && activePlayer.eliminationChoice.length > 1) {
         return isActivePlayer? t('You must choose which frog you want to eliminate'): t('{player} must choose a frog to eliminate', { player: getName(activePlayer.color) })
       }
       
-      const bouncingFrog = game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)).find(frog => FrogStatus.BOUNCING === frog.status);
+      const bouncingFrog = frogs.find(frog => FrogStatus.BOUNCING === frog.status);
       if (bouncingFrog) {
         return bouncingFrog.color === playerId? t('Your frog is bouncing on a water lily, she must jump on another slab'): t('{player}’s frog is bouncing on a water lily. Waiting for the frog jump...', { player: getName(activePlayer.color) })
       }
       
-      const stungFrog = game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)).find(frog => FrogStatus.STUNG === frog.status);
+      const stungFrog = frogs.find(frog => FrogStatus.STUNG === frog.status);
       if (stungFrog) {
         return stungFrog.color === playerId? t('Your frog got stung by a mosquito, you must move another frog or skip your turn'): t('{player}’s frog was stung by a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
       }
