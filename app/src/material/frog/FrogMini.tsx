@@ -136,6 +136,7 @@ const selectableFrog = css`
 `;
 
 const targetedFrog = css`
+    z-index: 3;
     filter: drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red)
 `;
 
