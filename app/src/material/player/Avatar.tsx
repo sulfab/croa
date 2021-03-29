@@ -1,21 +1,21 @@
 import { css } from '@emotion/react';
 import { Player, PlayerColor } from '@gamepark/croa/player';
 import { Avatar } from 'avataaars';
-import { FC } from 'react';
+import { FC, HTMLAttributes } from 'react';
 import { Images } from '../Resources';
 
 type CroaAvatarProps = {
     player: Player
     playerInfo?: any
-}
+} & HTMLAttributes<HTMLImageElement>
 
-const CroaAvatar: FC<CroaAvatarProps> = ({ player, playerInfo }) => {
+const CroaAvatar: FC<CroaAvatarProps> = ({ player, playerInfo, ...props }) => {
 
     if (playerInfo?.avatar) {
-        return <Avatar style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar}/>
+        return <Avatar { ...props } style={avatarStyle} avatarStyle="Circle" {...playerInfo?.avatar}/>
     }
 
-    return <img alt={'Player board'} src={playerDefaultImages.get(player.color)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>;
+    return <img { ...props } alt={'Player board'} src={playerDefaultImages.get(player.color)} css={[avatarStyle, defaultAvatarStyle]} draggable="false"/>;
 };
 
 const avatarStyle = css`

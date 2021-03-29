@@ -4,7 +4,7 @@ import { LoadingScreen } from '@gamepark/react-components'
 import { useEffect, useState } from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
-import GameDisplay from './GameDisplay'
+import { GameDisplay } from './GameDisplay'
 import CroaBox from './material/visuals/croa-box.png';
 import { Images, AnimationTexts, AnimationTextures } from './material/Resources'
 import ImagesLoader from './utils/ImagesLoader'

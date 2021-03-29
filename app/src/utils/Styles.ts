@@ -7,7 +7,7 @@ export const screenRatio = 16 / 9;
 export const boardGap = 1;
 export const boardHeight = 90;
 export const boardWidthReduction = 1.06;
-export const boardWidth = 90 / screenRatio * boardWidthReduction;
+export const boardWidth = boardHeight / screenRatio * boardWidthReduction;
 
 export const playerWidth = (100 - 90 / screenRatio) / 2 - 5.5;
 
@@ -42,18 +42,8 @@ export const playerBoardServantWidth = playerBoardServantHeight / playerBoardRat
 export const playerBoardServantsAreaHeight = 40;
 export const playerBoardServantsAreaWidth = 60;
 
-
-
-export const getFrogLeft = (frog: FemaleFrog) => {
-    const baseLeft = 4;
-
-    if (frog.isQueen) {
-        return baseLeft;
-    }
-
-    return baseLeft + 4 + (playerBoardQueenWidth / playerBoardRatio) + (playerBoardServantWidth / playerBoardRatio + baseLeft - 6) * (frog.id - 1);
-} 
-
+export const rankingAreaHeight = 35;
+export const rankingAreaWidth = 35;
 export const frogOffset = (frogIndex: number, frog: FemaleFrog) => {
     
     switch(frogIndex) {

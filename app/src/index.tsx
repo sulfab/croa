@@ -54,7 +54,6 @@ const style = css`
       top: 0;
       width: 100%;
       height: 100%;
-      //background-color: rgba(173, 216, 230, 0.4);
     }
     
     background-image: url(${Images.BoardBackground});
