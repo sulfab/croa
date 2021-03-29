@@ -30,7 +30,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
     const animatingMove = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color)
     const animatingElimination = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color)
     const animating = useAnimations().length > 0;
-    const isCurrentPlayerFrog = playerId && playerId === frog.color && playerId === activePlayer;
+    const isCurrentPlayerFrog = playerId !== undefined && playerId === frog.color && playerId === activePlayer;
     const isSelected = selectedFrog && selectedFrog === frog.id && playerId === frog.color;    
     const canBeMoved = isCurrentPlayerFrog
         // If there is a queen and a servant on the same tile, only allow moving both
@@ -94,7 +94,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
                 onClick={ onSelectFrog }         
                 item={ frogFromBoard(frog) } 
                 draggable={ playerId === frog.color } 
-                canDrag={ () => activePlayer && canBeMoved } 
+                canDrag={ () => activePlayer !== undefined && canBeMoved } 
                 begin={ onDrag } 
                 end={ onSelectFrog }
                 drop={ onDropFrog } 

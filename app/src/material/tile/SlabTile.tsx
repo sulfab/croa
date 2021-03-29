@@ -58,7 +58,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
      */
     const canBeDropped = (frogId: number, frogs: Array<FemaleFrog>): boolean => {
         const frog = frogs.find(frog => frog.id === frogId && frog.color === playerId);
-        if (!playerId || !frog || !frog.position) {
+        if (playerId === undefined || !frog || !frog.position) {
             return false;
         }
             
