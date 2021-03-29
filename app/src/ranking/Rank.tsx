@@ -18,11 +18,27 @@ const Rank: React.FC<RankProps> = ({ rank, player, ...props }) => {
                 <FrogAnimation visible={ true } duration={ rank === 1? 0.6: 1 } delay={ rank * 0.7 } frog={ player.femaleFrogs.find(frog => frog.isQueen)! } loop={ true } animation={ rank === 1? 'jumping_front': 'blinking' } css={ css`position: relative;` }  />
             </div>
             <div css={ getRank(rank) }>
-                <CroaAvatar css={ css`height: 7em; width: 6em; filter: drop-shadow(0 0.2em 0.2em black); top: unset; left: unset;`} player={ player } playerInfo={ playerInfo } />
+                <CroaAvatar customStyle={ avatarStyle } css={ avatarCss } player={ player } playerInfo={ playerInfo } />
             </div>
         </div>
     );
 }
+
+const avatarCss = css`
+    height: 7em;
+    width: 6em;
+    filter: drop-shadow(0 0.2em 0.2em black);
+    top: unset;
+    left: unset;
+`;
+
+const avatarStyle = {
+    height: '7em',
+    width: '6em',
+    filter: 'drop-shadow(0 0.2em 0.2em black)',
+    top: 'unset',
+    left: 'unset'
+};
 
 const rankContainer = css`
     display: flex;
