@@ -14,7 +14,12 @@ export const PlayerBoardPlacement: { [key: number]: { getPlayerBoard: (playerInd
             }
 
             if (activePlayerIndex === 0) {
-                return playerIndex;
+                switch(playerIndex) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 3;
+                }
             }
 
             if (activePlayerIndex === 1) {
