@@ -65,22 +65,22 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
                     break;
                 // Will create a new frog on the tile if its a queen
                 case SlabFrontType.RED_MALE:
-                    mayProduceFrogBirth(player!, MaleFrog.Red, frog)
+                    mayProduceFrogBirth(player, MaleFrog.Red, frog)
                     break;
                 case SlabFrontType.BLUE_MALE:
-                    mayProduceFrogBirth(player!, MaleFrog.Blue, frog)
+                    mayProduceFrogBirth(player, MaleFrog.Blue, frog)
                     break;
                 case SlabFrontType.YELLOW_MALE:
-                    mayProduceFrogBirth(player!, MaleFrog.Yellow, frog)
+                    mayProduceFrogBirth(player, MaleFrog.Yellow, frog)
                     break;
                 case SlabFrontType.GREEN_MALE:
-                    mayProduceFrogBirth(player!, MaleFrog.Green, frog)
+                    mayProduceFrogBirth(player, MaleFrog.Green, frog)
                     break;
                 case SlabFrontType.PURPLE_MALE:
-                    mayProduceFrogBirth(player!, MaleFrog.Purple, frog)
+                    mayProduceFrogBirth(player, MaleFrog.Purple, frog)
                     break;
                 case SlabFrontType.PINK_MALE:
-                    mayProduceFrogBirth(player!, MaleFrog.Pink, frog)
+                    mayProduceFrogBirth(player, MaleFrog.Pink, frog)
                     break;
             }
         }
@@ -94,7 +94,7 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
  */
 const mayProduceFrogBirth = (player: Player, male: MaleFrog, frog: FemaleFrog) => {
 
-    player!.done = true;
+    player.done = true;
     if (!frog.isQueen) {
         return;
     }
