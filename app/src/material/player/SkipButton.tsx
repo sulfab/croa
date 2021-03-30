@@ -15,7 +15,7 @@ const SkipButton: FC<SkipButtonProps> = ({ color, ...props }) => {
     const { t } = useTranslation();
 
     return (
-        <span { ...props } css={ skipButton(color) } onClick={ () => play(skipTurnMove) }>{ t('Skip my turn') }</span>
+        <span { ...props } css={ skipButton(color) } onClick={ () => play(skipTurnMove) }>{ t('Skip your turn') }</span>
     )
 }
 

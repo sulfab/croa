@@ -52,7 +52,7 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
       const fedFrog = frogs.find(frog => FrogStatus.Fed === frog.status);
       if (fedFrog) {
         return fedFrog.color === playerId? 
-          <Trans  defaults="Your frog has eaten a mosquito, you can play another frog or <0/>"
+          <Trans  defaults="Your frog has eaten a mosquito, you can move another frog or <0/>"
                   components={[
                     <SkipButton key="skip-turn" css={ skipButton } color={ activePlayer.color } />
                   ]}/>
@@ -63,7 +63,7 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
         return t('Croooooaak...');
       }
 
-      return isActivePlayer? t('It’s your turn to play a frog'): t('It’s {player}’s turn to play a frog', { player: getName(activePlayer.color) } );
+      return isActivePlayer? t('It’s your turn to move a frog'): t('It’s {player}’s turn to move a frog', { player: getName(activePlayer.color) } );
     }
   }
 
