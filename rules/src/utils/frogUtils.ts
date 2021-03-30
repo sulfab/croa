@@ -11,7 +11,7 @@ export const getAllowedPositions = (allFrogs: Array<FemaleFrog>, frog: FemaleFro
         const frogX = frog.position!.x + i;
         const frogY = frog.position!.y + j;
         const isOutSideBoard = !(frogX >= 0 && frogY >= 0 && frogX < pond.length && frogY < pond.length);
-        const isBouncingFrogPreviousTile = FrogStatus.BOUNCING === frog.status && frog.previousPosition && frog.previousPosition.x === frog.position!.x + i && frog.previousPosition.y === frog.position!.y + j;
+        const isBouncingFrogPreviousTile = FrogStatus.Bouncing === frog.status && frog.previousPosition && frog.previousPosition.x === frog.position!.x + i && frog.previousPosition.y === frog.position!.y + j;
         if (!isOutSideBoard && !isBouncingFrogPreviousTile) {
           
           const slab = pond[frogX][frogY];
@@ -44,7 +44,7 @@ export const isAllowedMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, del
         
         // The servant can always be moved on a log slab
         // The player queen cannot be moved on a slab with one of its queens
-        if (!frog.isQueen && isKnownSlab(targetSlab) && targetSlab.displayed && SlabFrontType.LOG === targetSlab.front 
+        if (!frog.isQueen && isKnownSlab(targetSlab) && targetSlab.displayed && SlabFrontType.Log === targetSlab.front 
               && !frogsOnTargetSlab.some(f => f.color === frog.color && f.isQueen)) {
             return true;
         }

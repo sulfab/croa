@@ -1,5 +1,5 @@
 enum MoveType {
-  MoveFrog,
+  MoveFrog = 1,
   EliminateFrog,
   RevealSlab,
   PlaySlabEffect,

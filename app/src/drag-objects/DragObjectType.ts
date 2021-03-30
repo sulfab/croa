@@ -1,5 +1,5 @@
 enum DragObjectType {
-  FROG_FROM_BOARD = 'FROG_FROM_BOARD',
+  FrogFromBoard = 'FrogFromBoard',
 }
 
 export  {

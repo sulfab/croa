@@ -42,7 +42,7 @@ const eliminateFrog = (state: GameState | GameStateView, move: EliminateFrog) =>
     const eliminatedFrog = player.femaleFrogs.find(frog => frog.id === move.frogId)
     if (eliminatedFrog) {
         delete eliminatedFrog.position;
-        eliminatedFrog.status = FrogStatus.READY;
+        eliminatedFrog.status = FrogStatus.Ready;
 
         if (!player.eliminated && player.femaleFrogs.every(frog => !frog.position)) {
             const eliminatedCount: number[] = state.players.filter(p => !!p.eliminated).flatMap(player => player.eliminated!);
@@ -55,7 +55,7 @@ const eliminateFrog = (state: GameState | GameStateView, move: EliminateFrog) =>
         }
 
         // The eliminator win a servant birth if there is one available
-        const eliminator = state.players.find(p => p.femaleFrogs.some(frog => FrogStatus.MOVED === frog.status));
+        const eliminator = state.players.find(p => p.femaleFrogs.some(frog => FrogStatus.Moved === frog.status));
         if (eliminator && eliminatedFrog.isQueen) {
             eliminator.birth = true;
         }

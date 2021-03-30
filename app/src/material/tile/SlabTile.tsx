@@ -30,15 +30,15 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
     const selectedFrog = selectedFrogId && frogs.find(frog => frog.id === selectedFrogId && frog.color === playerId);
 
-    const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.STUNG !== selectedFrog.status
-    const isInvalidSlab = () => !animating && selectedFrog && isAdjacentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.STUNG !== selectedFrog.status;
+    const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Stung !== selectedFrog.status
+    const isInvalidSlab = () => !animating && selectedFrog && isAdjacentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Stung !== selectedFrog.status;
 
     /**
      * Does the current tile the previous tile if the from is a bouncing frog
      * @param frog Selected frog
      */
     const isBouncingFrogPreviousTile = (frog: FemaleFrog) => {
-        return FrogStatus.BOUNCING === frog.status && frog.previousPosition && frog.previousPosition.x === position.x && frog.previousPosition.y === position.y
+        return FrogStatus.Bouncing === frog.status && frog.previousPosition && frog.previousPosition.x === position.x && frog.previousPosition.y === position.y
     }
 
     /**
@@ -63,7 +63,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
         }
             
         let allowedMove = isAdjacentSlab(frog);
-        if (FrogStatus.BOUNCING === frog.status) {
+        if (FrogStatus.Bouncing === frog.status) {
             allowedMove = allowedMove && !isBouncingFrogPreviousTile(frog)
         }
 
@@ -71,7 +71,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     };
 
     const [, ref] = useDrop({
-        accept: DragObjectType.FROG_FROM_BOARD,
+        accept: DragObjectType.FrogFromBoard,
         canDrop: (item: FrogFromBoard) => canBeDropped(selectedFrogId || item.frog.id, frogs),
         drop: (item: FrogFromBoard) => moveFrogMove(item.frog.id, item.frog.color, position)
     });

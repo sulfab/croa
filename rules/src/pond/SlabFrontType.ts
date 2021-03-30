@@ -1,16 +1,16 @@
 enum SlabFrontType {
-    WATER_LILY,
-    MOSQUITO,
-    MUD,
-    PIKE,
-    REED,
-    LOG,
-    BLUE_MALE,
-    RED_MALE,
-    PINK_MALE,
-    PURPLE_MALE,
-    YELLOW_MALE,
-    GREEN_MALE
+    WaterLily = 1,
+    Mosquito,
+    Mud,
+    Pike,
+    Reed,
+    Log,
+    BlueMale,
+    RedMale,
+    PinkMale,
+    PurpleMale,
+    YellowMale,
+    GreenMale
 }
 
 export {

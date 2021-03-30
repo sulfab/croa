@@ -54,7 +54,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
             const frogPosition = frogPositions && frogPositions[frog.color] && frogPositions[frog.color]![frog.id];
             const newFrogPosition = animation && isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color? animation.move.slabPosition: frog.position;
             if (newFrogPosition && frogPosition && newFrogPosition!.x === frogPosition.position.x && newFrogPosition!.y === frogPosition.position.y) {
-                newFrogPositions[frog.color]![frog.id] = { index: frogPosition.index, position: newFrogPosition, eliminated: FrogStatus.ELIMINATED === frog.status };
+                newFrogPositions[frog.color]![frog.id] = { index: frogPosition.index, position: newFrogPosition, eliminated: FrogStatus.Eliminated === frog.status };
             } else {
                 frogToPlace.push(frog)
             }
@@ -64,10 +64,10 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
             const newFrogPosition = animation && isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color? animation.move.slabPosition: frog.position;
             const positions = Object.values(newFrogPositions || {})
                     .flatMap(player => Object.values(player || []))
-                    .filter(o => o.position.x === newFrogPosition!.x && o.position.y === newFrogPosition!.y && FrogStatus.ELIMINATED !== frog.status)
+                    .filter(o => o.position.x === newFrogPosition!.x && o.position.y === newFrogPosition!.y && FrogStatus.Eliminated !== frog.status)
                     .map(o => o.index);
             
-            newFrogPositions[frog.color]![frog.id] = { position: newFrogPosition!, index: [0, 1, 2].filter(i => !positions.includes(i))[0], eliminated: FrogStatus.ELIMINATED === frog.status };
+            newFrogPositions[frog.color]![frog.id] = { position: newFrogPosition!, index: [0, 1, 2].filter(i => !positions.includes(i))[0], eliminated: FrogStatus.Eliminated === frog.status };
         })
 
         setFrogPositions(newFrogPositions)

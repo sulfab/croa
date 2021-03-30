@@ -50,10 +50,10 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
     }
     
     // By default, bogged or stung frogs can't be moved
-    let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.BOGGED, FrogStatus.STUNG].includes(frog.status));
+    let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.Bogged, FrogStatus.Stung].includes(frog.status));
 
     // If there is a bouncing frog, only this can be moved
-    const bouncingFrog: FemaleFrog | undefined = player.femaleFrogs.find(frog => FrogStatus.BOUNCING === frog.status);
+    const bouncingFrog: FemaleFrog | undefined = player.femaleFrogs.find(frog => FrogStatus.Bouncing === frog.status);
     if (bouncingFrog) {
       movableFrogs = [bouncingFrog];
     } else {
@@ -150,13 +150,13 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   // If player has not played yet and it has only frogs Bogged or Stung
   const isBlocked = !activePlayer.done 
     && activePlayer.femaleFrogs.some(frog => !!frog.position) 
-    && activePlayer.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.BOGGED, FrogStatus.STUNG].includes(frog.status));
+    && activePlayer.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.Bogged, FrogStatus.Stung].includes(frog.status));
   if (isBlocked && activePlayer.eliminationChoice.length === 0) {
     return skipTurnMove;
   }
 
   // In the case the current player has a bouncing frog and no destination is possible, automatically move it to its previous slab
-  const bouncingFrog = activePlayer.femaleFrogs.find(frog => FrogStatus.BOUNCING === frog.status);
+  const bouncingFrog = activePlayer.femaleFrogs.find(frog => FrogStatus.Bouncing === frog.status);
   if (bouncingFrog) {
     const allFrogs = state.players.flatMap(player => player.femaleFrogs).filter(frog => !!frog.position);
     if (getAllowedPositions(allFrogs, bouncingFrog, state.pond).length === 0 && bouncingFrog.previousPosition) {
@@ -172,7 +172,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   // If there is frog to eliminate, eliminate it. It is not current player dependant
   const eliminatedWithoutChoice: FemaleFrog | undefined = state.players
     .flatMap(player => player.femaleFrogs)
-    .find(frog => FrogStatus.ELIMINATED === frog.status);
+    .find(frog => FrogStatus.Eliminated === frog.status);
 
   if (eliminatedWithoutChoice) {
     return eliminateFrogMove(eliminatedWithoutChoice);
@@ -193,7 +193,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   }
 
   // If the tile is not known, reveal the tile, instead play the tile
-  const lastFrogPlayed: FemaleFrog | undefined = state.players.flatMap(p => p.femaleFrogs).find(f => f.id === activePlayer.lastPlayedFrogId && FrogStatus.MOVED === f.status);
+  const lastFrogPlayed: FemaleFrog | undefined = state.players.flatMap(p => p.femaleFrogs).find(f => f.id === activePlayer.lastPlayedFrogId && FrogStatus.Moved === f.status);
   if (lastFrogPlayed && lastFrogPlayed.position) {
     const slabToPlay: Slab | Pick<Slab, 'back'> | undefined = state.pond[lastFrogPlayed.position.x][lastFrogPlayed.position.y] 
     if (slabToPlay && isKnownSlab(slabToPlay)) {

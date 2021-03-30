@@ -1,8 +1,8 @@
 export enum FrogStatus {
-    READY,
-    BOGGED,
-    BOUNCING,
-    STUNG,
-    MOVED,
-    ELIMINATED
+    Ready = 1,
+    Bogged,
+    Bouncing,
+    Stung,
+    Moved,
+    Eliminated
 }

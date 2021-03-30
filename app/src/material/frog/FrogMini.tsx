@@ -37,8 +37,8 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
         && !otherFrogs.some(first => first.isQueen 
                 && otherFrogs.some(second => first.id !== second.id && first.position!.x === second.position!.x  && first.position!.y === second.position!.y)
                 && (frog.position!.x !== first.position!.x || frog.position!.y !== first.position!.y))       
-        && ![FrogStatus.BOGGED, FrogStatus.STUNG, FrogStatus.MOVED].includes(frog.status) 
-        && !otherFrogs.some(f => [FrogStatus.BOUNCING, FrogStatus.MOVED, FrogStatus.ELIMINATED].includes(f.status));
+        && ![FrogStatus.Bogged, FrogStatus.Stung, FrogStatus.Moved].includes(frog.status) 
+        && !otherFrogs.some(f => [FrogStatus.Bouncing, FrogStatus.Moved, FrogStatus.Eliminated].includes(f.status));
 
     // Detect change of frog between state and current frog
     // Unset the frog if it can't be moved
@@ -103,7 +103,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
                     frogMiniContainer(frog, frogZIndex),
                     isSelectable && selectableFrog,
                     frog.color !== playerId && !targeted && pointEvents,
-                    FrogStatus.BOGGED === frog.status && boggedFrog(preTransform),
+                    FrogStatus.Bogged === frog.status && boggedFrog(preTransform),
                     animatingElimination && frogDisappearance(animatingElimination.duration),
                     targeted && targetedFrog
                 ]}>

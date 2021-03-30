@@ -1,5 +1,5 @@
 export enum MaleFrog {
-    Red,
+    Red = 1,
     Blue,
     Pink,
     Yellow,

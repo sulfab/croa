@@ -3,51 +3,51 @@ import { SlabBackType } from './SlabBackType';
 import { SlabFrontType } from './SlabFrontType';
 
 const WaterLilies: Array<Slab> = [
-    ...Array(6).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.WATER_LILY }),
-    ...Array(4).fill({ back: SlabBackType.DEEP, front: SlabFrontType.WATER_LILY }),
-    ...Array(4).fill({ back: SlabBackType.DEEP, front: SlabFrontType.WATER_LILY })
+    ...Array(6).fill({ back: SlabBackType.Shallow, front: SlabFrontType.WaterLily }),
+    ...Array(4).fill({ back: SlabBackType.Deep, front: SlabFrontType.WaterLily }),
+    ...Array(4).fill({ back: SlabBackType.Deep, front: SlabFrontType.WaterLily })
 ];
 
 const Mosquitos: Array<Slab> = [
-    ...Array(4).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.MOSQUITO }),
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.MOSQUITO }),
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.MOSQUITO })
+    ...Array(4).fill({ back: SlabBackType.Shallow, front: SlabFrontType.Mosquito }),
+    ...Array(2).fill({ back: SlabBackType.Deep, front: SlabFrontType.Mosquito }),
+    ...Array(2).fill({ back: SlabBackType.Deep, front: SlabFrontType.Mosquito })
 ];
 
 const Mud: Array<Slab> = [
-    ...Array(4).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.MUD })
+    ...Array(4).fill({ back: SlabBackType.Shallow, front: SlabFrontType.Mud })
 ];
 
 const Pikes: Array<Slab> = [
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.PIKE }),
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.PIKE })
+    ...Array(2).fill({ back: SlabBackType.Deep, front: SlabFrontType.Pike }),
+    ...Array(2).fill({ back: SlabBackType.Deep, front: SlabFrontType.Pike })
 ];
 
 const Reeds: Array<Slab> = [
-    ...Array(10).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.REED }),
-    ...Array(3).fill({ back: SlabBackType.DEEP, front: SlabFrontType.REED }),
-    ...Array(3).fill({ back: SlabBackType.DEEP, front: SlabFrontType.REED })
+    ...Array(10).fill({ back: SlabBackType.Shallow, front: SlabFrontType.Reed }),
+    ...Array(3).fill({ back: SlabBackType.Deep, front: SlabFrontType.Reed }),
+    ...Array(3).fill({ back: SlabBackType.Deep, front: SlabFrontType.Reed })
 ];
 
 const Males: Array<Slab> = [
-    ...Array(1).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.RED_MALE }),
-    ...Array(1).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.GREEN_MALE }),
-    ...Array(1).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.YELLOW_MALE }),
-    ...Array(1).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.PURPLE_MALE }),
-    ...Array(1).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.BLUE_MALE }),
-    ...Array(1).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.PINK_MALE }),
-    ...Array(1).fill({ back: SlabBackType.DEEP, front: SlabFrontType.RED_MALE }),
-    ...Array(1).fill({ back: SlabBackType.DEEP, front: SlabFrontType.GREEN_MALE }),
-    ...Array(1).fill({ back: SlabBackType.DEEP, front: SlabFrontType.YELLOW_MALE }),
-    ...Array(1).fill({ back: SlabBackType.DEEP, front: SlabFrontType.PURPLE_MALE }),
-    ...Array(1).fill({ back: SlabBackType.DEEP, front: SlabFrontType.BLUE_MALE }),
-    ...Array(1).fill({ back: SlabBackType.DEEP, front: SlabFrontType.PINK_MALE }),
+    ...Array(1).fill({ back: SlabBackType.Shallow, front: SlabFrontType.RedMale }),
+    ...Array(1).fill({ back: SlabBackType.Shallow, front: SlabFrontType.GreenMale }),
+    ...Array(1).fill({ back: SlabBackType.Shallow, front: SlabFrontType.YellowMale }),
+    ...Array(1).fill({ back: SlabBackType.Shallow, front: SlabFrontType.PurpleMale }),
+    ...Array(1).fill({ back: SlabBackType.Shallow, front: SlabFrontType.BlueMale }),
+    ...Array(1).fill({ back: SlabBackType.Shallow, front: SlabFrontType.PinkMale }),
+    ...Array(1).fill({ back: SlabBackType.Deep, front: SlabFrontType.RedMale }),
+    ...Array(1).fill({ back: SlabBackType.Deep, front: SlabFrontType.GreenMale }),
+    ...Array(1).fill({ back: SlabBackType.Deep, front: SlabFrontType.YellowMale }),
+    ...Array(1).fill({ back: SlabBackType.Deep, front: SlabFrontType.PurpleMale }),
+    ...Array(1).fill({ back: SlabBackType.Deep, front: SlabFrontType.BlueMale }),
+    ...Array(1).fill({ back: SlabBackType.Deep, front: SlabFrontType.PinkMale }),
 ];
 
 const Logs: Array<Slab> = [
-    ...Array(2).fill({ back: SlabBackType.SHALLOW, front: SlabFrontType.LOG }),
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.LOG }),
-    ...Array(2).fill({ back: SlabBackType.DEEP, front: SlabFrontType.LOG }),
+    ...Array(2).fill({ back: SlabBackType.Shallow, front: SlabFrontType.Log }),
+    ...Array(2).fill({ back: SlabBackType.Deep, front: SlabFrontType.Log }),
+    ...Array(2).fill({ back: SlabBackType.Deep, front: SlabFrontType.Log }),
 ];
 
 export {

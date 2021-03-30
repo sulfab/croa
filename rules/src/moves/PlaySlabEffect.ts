@@ -40,46 +40,46 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
         if (frog) {
             const player = state.players.find(player => player.color === frog.color)!;
             switch (slab.front) {
-                case SlabFrontType.PIKE:
-                    frog.status = FrogStatus.ELIMINATED;
+                case SlabFrontType.Pike:
+                    frog.status = FrogStatus.Eliminated;
                     player.done = true;
                     break;
                 // Nothing to do
-                case SlabFrontType.REED:
-                case SlabFrontType.LOG:
+                case SlabFrontType.Reed:
+                case SlabFrontType.Log:
                     player.done = true;
                     break;
                 // Can move another frog
-                case SlabFrontType.MOSQUITO:
-                    frog.status = FrogStatus.STUNG;
-                    player.done = player.femaleFrogs.filter(f => !!f.position).every(f => [FrogStatus.BOGGED, FrogStatus.STUNG].includes(f.status));
+                case SlabFrontType.Mosquito:
+                    frog.status = FrogStatus.Stung;
+                    player.done = player.femaleFrogs.filter(f => !!f.position).every(f => [FrogStatus.Bogged, FrogStatus.Stung].includes(f.status));
                     break;
                 // Must move on another slab
-                case SlabFrontType.WATER_LILY:
-                    frog.status = FrogStatus.BOUNCING;
+                case SlabFrontType.WaterLily:
+                    frog.status = FrogStatus.Bouncing;
                     break;
                 // Locked for one turn
-                case SlabFrontType.MUD:
-                    frog.status = FrogStatus.BOGGED;
+                case SlabFrontType.Mud:
+                    frog.status = FrogStatus.Bogged;
                     player.done = true;
                     break;
                 // Will create a new frog on the tile if its a queen
-                case SlabFrontType.RED_MALE:
+                case SlabFrontType.RedMale:
                     mayProduceFrogBirth(player, MaleFrog.Red, frog)
                     break;
-                case SlabFrontType.BLUE_MALE:
+                case SlabFrontType.BlueMale:
                     mayProduceFrogBirth(player, MaleFrog.Blue, frog)
                     break;
-                case SlabFrontType.YELLOW_MALE:
+                case SlabFrontType.YellowMale:
                     mayProduceFrogBirth(player, MaleFrog.Yellow, frog)
                     break;
-                case SlabFrontType.GREEN_MALE:
+                case SlabFrontType.GreenMale:
                     mayProduceFrogBirth(player, MaleFrog.Green, frog)
                     break;
-                case SlabFrontType.PURPLE_MALE:
+                case SlabFrontType.PurpleMale:
                     mayProduceFrogBirth(player, MaleFrog.Purple, frog)
                     break;
-                case SlabFrontType.PINK_MALE:
+                case SlabFrontType.PinkMale:
                     mayProduceFrogBirth(player, MaleFrog.Pink, frog)
                     break;
             }
