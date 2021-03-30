@@ -1,15 +1,15 @@
-import {css, Global} from '@emotion/react'
+import {css, Global} from '@emotion/react';
 import Croa from '@gamepark/croa/Croa';
 import { CroaOptionsDescription } from '@gamepark/croa/CroaOptions';
 import { CroaAnimation } from './Animations';
 import CroaView from '@gamepark/croa/CroaView';
-import { GameProvider, setupTranslation} from '@gamepark/react-client'
-import normalize from 'emotion-normalize'
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
-import { Images } from './material/Resources'
-import translations from './translations.json'
+import { GameProvider, setupTranslation} from '@gamepark/react-client';
+import normalize from 'emotion-normalize';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { Images } from './material/Resources';
+import translations from './translations.json';
 
 setupTranslation(translations);
 
@@ -62,7 +62,12 @@ const style = css`
 
 ReactDOM.render(
   <React.StrictMode>
-    <GameProvider game="croa" Rules={ Croa } RulesView={ CroaView } animations={ CroaAnimation } optionsDescription={ CroaOptionsDescription }>
+    <GameProvider 
+        game="croa"
+        Rules={ Croa }
+        RulesView={ CroaView }
+        animations={ CroaAnimation } 
+        optionsDescription={ CroaOptionsDescription }>
       <App/>
     </GameProvider>
     <Global styles={[normalize, style]}/>

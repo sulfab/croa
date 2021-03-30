@@ -18,8 +18,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
       super({
         activePlayer: arg.players[0].id,
         players: arg.players.map((player, index) => initializePlayerBoard(arg.players.length, index, player.id)), 
-        pond: shuffleSlabs(pond, defaultBoardSize),
-        round: 1,
+        pond: shuffleSlabs(pond, defaultBoardSize)
       })
     } else {
       super(arg)
@@ -51,6 +50,11 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
     
     // By default, bogged or fed frogs can't be moved
     let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.Bogged, FrogStatus.Fed].includes(frog.status));
+
+    // In case the player has a fed frog, allow skip turn
+    if (player.femaleFrogs.some(frog => FrogStatus.Fed === frog.status)) {
+      moves.push(skipTurnMove);
+    }
 
     // If there is a bouncing frog, only this can be moved
     const bouncingFrog: FemaleFrog | undefined = player.femaleFrogs.find(frog => FrogStatus.Bouncing === frog.status);

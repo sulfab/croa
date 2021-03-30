@@ -8,6 +8,9 @@ import { ServantFrogs } from './ServantFrogs';
 import { CroaAvatar } from './Avatar';
 import { useSelector } from 'react-redux';
 import { PlayerInfos } from './PlayerInfos';
+import { FrogStatus } from '@gamepark/croa/frog';
+import { usePlayerId } from '@gamepark/react-client';
+import { SkipButton } from './SkipButton';
 
 type PlayerBoardProps = {
     player: Player
@@ -16,11 +19,14 @@ type PlayerBoardProps = {
 } & HTMLAttributes<HTMLDivElement>
 
 const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...props }) => {
+    const playerId = usePlayerId<PlayerColor>();
     const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player.color));
     const displayedColor = player.eliminated? PlayerColor.Green: player.color;
+    const fedFrog = player.femaleFrogs.find(frog => FrogStatus.Fed === frog.status);
 
     return (
         <div { ...props } css={ playerBoard }>
+            { player.color === playerId && fedFrog && <SkipButton color={ playerId } css={ skipButton }  />  }
             <CroaAvatar player={ player } playerInfo={ playerInfo } />
             <div css={[playerBoardContent(displayedColor), player.eliminated && eliminatedPlayer, activePlayer === player.color && playerBoardActive ]}>
                 <PlayerInfos player={ player } playerInfo={ playerInfo }/>
@@ -44,6 +50,15 @@ const playerBoard = css`
     height: ${ playerBoardHeight }%;
 `;
 
+const skipButton = css`
+    top: -25%;
+    height: 20%;
+    position: absolute;
+    width: 80%;
+    right: 0%;
+    font-size: 3em;
+`
+
 const playerBoardContent = (playerColor: PlayerColor) => css`
     z-index: -1;
     border: 0.3em solid rgb(${playerColors.get(playerColor)!.rgb.r}, ${playerColors.get(playerColor)!.rgb.g}, ${playerColors.get(playerColor)!.rgb.b});
@@ -59,7 +74,6 @@ const eliminatedPlayer = css`
         filter: grayscale(1)
     }
 `;
-
 
 const maleTokensStyle = css`
     position: absolute;

@@ -4,10 +4,11 @@ import { isGameOver } from '@gamepark/croa/utils'
 import { PlayerColor } from '@gamepark/croa/player'
 import { Animation, Player as PlayerInfo, useAnimation, usePlayerId, usePlayers } from '@gamepark/react-client'
 import { TFunction } from 'i18next'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { FrogStatus } from '@gamepark/croa/frog'
 import { getPlayerName } from '@gamepark/croa/CroaOptions';
 import { Move } from '@gamepark/croa/moves'
+import { SkipButton } from './material/player/SkipButton'
 
 type Props = {
   loading: boolean
@@ -50,7 +51,12 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
       
       const fedFrog = frogs.find(frog => FrogStatus.Fed === frog.status);
       if (fedFrog) {
-        return fedFrog.color === playerId? t('Your frog has eaten a mosquito, you can play another frog or skip your turn'): t('{player}’s frog has eaten a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
+        return fedFrog.color === playerId? 
+          <Trans  defaults="Your frog has eaten a mosquito, you can play another frog or <0/>"
+                  components={[
+                    <SkipButton key="skip-turn" css={ skipButton } color={ activePlayer.color } />
+                  ]}/>
+        : t('{player}’s frog has eaten a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
       }
 
       if (!animation && frogs.some(frog => FrogStatus.Moved === frog.status) && !game.players.some(player => player.eliminationChoice.length > 0)) {
@@ -86,4 +92,14 @@ const titleStyle = css`
   text-overflow: ellipsis;
   overflow: hidden;
   font-weight: normal;
+`
+
+const skipButton = css`
+  position: absolute;
+  height: 67%;
+  bottom: 15%;
+  width: 10%;
+  margin-left: 1%;
+  line-height: 1.5em;
+  font-size: 0.7em;
 `
