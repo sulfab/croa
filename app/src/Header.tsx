@@ -88,6 +88,7 @@ const titleStyle = css`
   margin: 0;
   line-height: 1.25;
   font-size: 4em;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;

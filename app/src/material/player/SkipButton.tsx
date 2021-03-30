@@ -25,6 +25,7 @@ const skipButton = (playerColor: PlayerColor) => css`
     background-color: rgb(${playerColors.get(playerColor)!.rgb.r}, ${playerColors.get(playerColor)!.rgb.g}, ${playerColors.get(playerColor)!.rgb.b});
     text-align: center;
     border-radius: 0.1em;
+    letter-spacing: 0.03em;
     animation: ${skipButtonAnimation} 1s ease-in infinite alternate;
 `;
 

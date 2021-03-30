@@ -48,6 +48,7 @@ const nameStyle = css`
   white-space: nowrap;
   overflow: hidden;
   position:absolute;
+  letter-spacing: 0.03em;
   left: 10%;
 `;
 
