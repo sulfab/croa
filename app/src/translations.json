@@ -148,7 +148,7 @@
             "Pink Player": "Joueur rose",
             "Red Player": "Joueur rouge",
             "Victory! You win the game": "Victoire! Vous avez gagné la partie",
-            "{player} wins the game": "{player} gagne la game",
+            "{player} wins the game": "{player} gagne la partie",
             "Which frog do you want to eliminate ?": "Quelle grenouille voulez vous éliminer ?",
             "{player} must choose a frog to eliminate": "{player} doit choisir une grenouille à éliminer",
             "Your frog is bouncing on a water lily, she must jump on another tile": "Votre grenouille rebondit sur un nénuphar, elle doit sauter sur une autre dalle",
