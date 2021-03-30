@@ -46,7 +46,13 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
         if (isSelected && !canBeMoved) {
             setSelectedFrog(undefined);
         }
-    }, [isSelected, canBeMoved, setSelectedFrog]);
+        
+        if (!isSelected && canBeMoved && frog.status === FrogStatus.Bouncing) {
+            setSelectedFrog(frog.id);
+        }
+
+    // eslint-disable-next-line
+    }, [isSelected, canBeMoved, frog]);
 
     const onDropFrog = (move: Move) => {
         if (move) {
@@ -74,7 +80,9 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
             return setSelectedFrog(frog.id)
         }
 
-        return setSelectedFrog(undefined);
+        if (FrogStatus.Bouncing !== frog.status) {
+            return setSelectedFrog(undefined);
+        }
     }
 
     const isMoveFrogAnimation = () => animatingMove && isMoveFrog(animatingMove.move)
