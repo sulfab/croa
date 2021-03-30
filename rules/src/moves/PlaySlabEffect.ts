@@ -51,8 +51,8 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
                     break;
                 // Can move another frog
                 case SlabFrontType.Mosquito:
-                    frog.status = FrogStatus.Stung;
-                    player.done = player.femaleFrogs.filter(f => !!f.position).every(f => [FrogStatus.Bogged, FrogStatus.Stung].includes(f.status));
+                    frog.status = FrogStatus.Fed;
+                    player.done = player.femaleFrogs.filter(f => !!f.position).every(f => [FrogStatus.Bogged, FrogStatus.Fed].includes(f.status));
                     break;
                 // Must move on another slab
                 case SlabFrontType.WaterLily:

@@ -49,8 +49,8 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
       player.eliminationChoice.forEach(frog => moves.push(eliminateFrogMove(frog)))
     }
     
-    // By default, bogged or stung frogs can't be moved
-    let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.Bogged, FrogStatus.Stung].includes(frog.status));
+    // By default, bogged or fed frogs can't be moved
+    let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.Bogged, FrogStatus.Fed].includes(frog.status));
 
     // If there is a bouncing frog, only this can be moved
     const bouncingFrog: FemaleFrog | undefined = player.femaleFrogs.find(frog => FrogStatus.Bouncing === frog.status);
@@ -147,10 +147,10 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
     return;
   }
 
-  // If player has not played yet and it has only frogs Bogged or Stung
+  // If player has not played yet and it has only frogs Bogged or Fed
   const isBlocked = !activePlayer.done 
     && activePlayer.femaleFrogs.some(frog => !!frog.position) 
-    && activePlayer.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.Bogged, FrogStatus.Stung].includes(frog.status));
+    && activePlayer.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.Bogged, FrogStatus.Fed].includes(frog.status));
   if (isBlocked && activePlayer.eliminationChoice.length === 0) {
     return skipTurnMove;
   }

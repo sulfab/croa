@@ -37,7 +37,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
         && !otherFrogs.some(first => first.isQueen 
                 && otherFrogs.some(second => first.id !== second.id && first.position!.x === second.position!.x  && first.position!.y === second.position!.y)
                 && (frog.position!.x !== first.position!.x || frog.position!.y !== first.position!.y))       
-        && ![FrogStatus.Bogged, FrogStatus.Stung, FrogStatus.Moved].includes(frog.status) 
+        && ![FrogStatus.Bogged, FrogStatus.Fed, FrogStatus.Moved].includes(frog.status) 
         && !otherFrogs.some(f => [FrogStatus.Bouncing, FrogStatus.Moved, FrogStatus.Eliminated].includes(f.status));
 
     // Detect change of frog between state and current frog

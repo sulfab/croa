@@ -30,8 +30,8 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
     const selectedFrog = selectedFrogId && frogs.find(frog => frog.id === selectedFrogId && frog.color === playerId);
 
-    const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Stung !== selectedFrog.status
-    const isInvalidSlab = () => !animating && selectedFrog && isAdjacentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Stung !== selectedFrog.status;
+    const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Fed !== selectedFrog.status
+    const isInvalidSlab = () => !animating && selectedFrog && isAdjacentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Fed !== selectedFrog.status;
 
     /**
      * Does the current tile the previous tile if the from is a bouncing frog

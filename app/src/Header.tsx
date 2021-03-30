@@ -48,9 +48,9 @@ const getText = (t: TFunction, game: GameState, playerId: PlayerColor, playersIn
         return bouncingFrog.color === playerId? t('Your frog is bouncing on a water lily, she must jump on another tile'): t('{player}’s frog is bouncing on a water lily. Waiting for the frog jump...', { player: getName(activePlayer.color) })
       }
       
-      const stungFrog = frogs.find(frog => FrogStatus.Stung === frog.status);
-      if (stungFrog) {
-        return stungFrog.color === playerId? t('Your frog got stung by a mosquito, you must play another frog or skip your turn'): t('{player}’s frog was stung by a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
+      const fedFrog = frogs.find(frog => FrogStatus.Fed === frog.status);
+      if (fedFrog) {
+        return fedFrog.color === playerId? t('Your frog has eaten a mosquito, you can play another frog or skip your turn'): t('{player}’s frog has eaten a mosquito. Waiting for another frog to jump...', { player: getName(activePlayer.color) })
       }
 
       if (!animation && frogs.some(frog => FrogStatus.Moved === frog.status) && !game.players.some(player => player.eliminationChoice.length > 0)) {
