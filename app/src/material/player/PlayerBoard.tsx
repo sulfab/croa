@@ -26,7 +26,8 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
 
     return (
         <div { ...props } css={ playerBoard }>
-            { player.color === playerId && fedFrog && <SkipButton color={ playerId } css={ skipButton }  />  }
+            { activePlayer && player.color === playerId && fedFrog && <SkipButton color={ playerId } css={ skipButton }  />  }
+            
             <CroaAvatar player={ player } playerInfo={ playerInfo } />
             <div css={[playerBoardContent(displayedColor), player.eliminated && eliminatedPlayer, activePlayer === player.color && playerBoardActive ]}>
                 <PlayerInfos player={ player } playerInfo={ playerInfo }/>
