@@ -4,6 +4,7 @@ import { Player } from '../player';
 import { FemaleFrog, FrogStatus, MaleFrog } from '../frog';
 import { GameState, GameStateView } from '../GameState';
 import { isKnownSlab, SlabFrontType } from '../pond';
+import { isGameOver } from '../utils';
 
 export type PlaySlabEffect = {
     type: MoveType.PlaySlabEffect,
@@ -52,7 +53,7 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
                 // Can move another frog
                 case SlabFrontType.Mosquito:
                     frog.status = FrogStatus.Fed;
-                    player.done = player.femaleFrogs.filter(f => !!f.position).every(f => [FrogStatus.Bogged, FrogStatus.Fed].includes(f.status));
+                    player.done = isGameOver(state.players) || player.femaleFrogs.filter(f => !!f.position).every(f => [FrogStatus.Bogged, FrogStatus.Fed].includes(f.status));
                     break;
                 // Must move on another slab
                 case SlabFrontType.WaterLily:
