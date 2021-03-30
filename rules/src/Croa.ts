@@ -163,6 +163,11 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
       return moveFrogMove(bouncingFrog.id, bouncingFrog.color, bouncingFrog.previousPosition);
     }
   }
+
+  // If there is a frog to birth, pop it
+  if (!!activePlayer.birth) {
+    return acquireServantMove(activePlayer.color, activePlayer.birthMale);
+  }
   
   // If there is frog to eliminate, eliminate it. It is not current player dependant
   const eliminatedWithoutChoice: FemaleFrog | undefined = state.players
@@ -180,11 +185,6 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
       .find(frog => !frog.isQueen && !!frog.position);
   if (aloneFrogs) {
     return eliminateFrogMove(aloneFrogs);
-  }
-
-  // If there is a frog to birth, pop it
-  if (!!activePlayer.birth) {
-    return acquireServantMove(activePlayer.color, activePlayer.birthMale);
   }
 
   // If the current player has finished playing, skip turn
