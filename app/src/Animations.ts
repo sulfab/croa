@@ -13,7 +13,7 @@ const CroaAnimation: Animations<GameState, MoveView, PlayerColor, PlayerColor> =
             case MoveType.RevealSlab:
                 return 2;
             case MoveType.AcquireServant:
-                return 1.5;
+                return !move.male? 0.5: 1.5;
             case MoveType.SkipTurn:
                 return 0;
             default:
