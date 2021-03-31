@@ -28,7 +28,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
             { activePlayer && player.color === playerId && fedFrog && <SkipButton color={ playerId } css={ skipButton }  />  }
             <div css={[playerBoardContent, player.eliminated && eliminatedPlayer]}>
                 <div css={activePlayer === player.color && playerBoardActive} />
-                <PlayerInfos player={ player } playerInfo={ playerInfo }/>
+                <PlayerInfos player={ player } playerInfo={ playerInfo } color={ displayedColor }/>
                 <div css={ queenFrogContainer }>
                     { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } visible={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ css`position: relative;` }  />) }
                 </div>
