@@ -32,8 +32,19 @@ export const skipTurn = (state: GameState | GameStateView): void => {
     player.done = false;
     delete player.lastPlayedFrogId;
 
-    const playerNotEliminated = state.players.filter(player => !player.eliminated)
-    const activePlayerIndex = playerNotEliminated.findIndex(player => player.color === state.activePlayer)
-    const nextPlayerIndex = (activePlayerIndex + 1) % playerNotEliminated.length
-    state.activePlayer = playerNotEliminated.length > 1 ? playerNotEliminated[nextPlayerIndex].color : undefined
+    if (state.players.filter(player => !player.eliminated).length <= 1) {
+        delete state.activePlayer;
+        return;
+    }
+
+    for (let i = 1; i <= state.players.length; i++) {
+        const activePlayerIndex = state.players.findIndex(player => player.color === state.activePlayer)
+        const nextPlayerIndex = (activePlayerIndex + i) % state.players.length
+
+        const nextPlayer = state.players[nextPlayerIndex];
+        if (!nextPlayer.eliminated) {
+            state.activePlayer = nextPlayer.color;
+            return;
+        }
+    }
 }
