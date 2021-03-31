@@ -81,7 +81,7 @@ const slabDescrîption = css`
 const slabDescriptions = new Map<SlabFrontType, { title: (t: TFunction) => string, description: (t: TFunction) => any }>();
 
 slabDescriptions.set(SlabFrontType.WaterLily, { title: (t) => t('Water lily'), description: (t) => t('Water lily description') });
-slabDescriptions.set(SlabFrontType.Mosquito, { title: (t) => t('Mosquito lily'), description: (t) => t('Mosquito description') });
+slabDescriptions.set(SlabFrontType.Mosquito, { title: (t) => t('Mosquito'), description: (t) => t('Mosquito description') });
 slabDescriptions.set(SlabFrontType.Mud, { title: (t) => t('Mud'), description: (t) => t('Mud description') });
 slabDescriptions.set(SlabFrontType.Pike, { title: (t) => t('Pike'), description: (t) => t('Pike description') });
 slabDescriptions.set(SlabFrontType.Reed, { title: (t) => t('Reed'), description: (t) => t('Reed description') });
