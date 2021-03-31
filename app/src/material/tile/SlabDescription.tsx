@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { SlabFrontType } from '@gamepark/croa/pond';
 import { TFunction } from 'i18next';
 import { FC, HTMLAttributes } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 type SlabDescriptionProps = {
     slab: SlabFrontType,
@@ -15,11 +15,11 @@ const SlabDescription: FC<SlabDescriptionProps> = ({ slab, ...props }) => {
         <div { ...props } css={ slabDescriptionContainer }>
             <div css={ slabTitleContainer }>
                 <span css={ slabTitleBar} />    
-                <span css={ slabTitle }>{ slabDescriptions.get(SlabFrontType.RedMale)?.title(t) }</span>
+                <span css={ slabTitle }>{ slabDescriptions.get(slab)?.title(t) }</span>
                 <span css={ slabTitleBar} />    
             </div>
             <div css={ slabDescrîption }>
-                { slabDescriptions.get(SlabFrontType.RedMale)?.description }
+                { slabDescriptions.get(slab)?.description(t) }
             </div>
         </div>
     );
@@ -78,20 +78,34 @@ const slabDescrîption = css`
     padding-bottom: 3%;
 `
 
-const slabDescriptions = new Map<SlabFrontType, { title: (t: TFunction) => string, description: any }>();
+const slabDescriptions = new Map<SlabFrontType, { title: (t: TFunction) => string, description: (t: TFunction) => any }>();
 
-slabDescriptions.set(SlabFrontType.WaterLily, { title: (t) => t('Water lily'), description: <Trans defaults="Water lily description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.Mosquito, { title: (t) => t('Mosquito'), description: <Trans defaults="Mosquito description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.Mud, { title: (t) => t('Mud'), description: <Trans defaults="Mud description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.Pike, { title: (t) => t('Pike'), description: <Trans defaults="Pike description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.Reed, { title: (t) => t('Reed'), description: <Trans defaults="Reed description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.Log, { title: (t) => t('Log'), description: <Trans defaults="Log description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.BlueMale, { title: (t) => t('Males'), description: <Trans defaults="Males description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.GreenMale, { title: (t) => t('Males'), description: <Trans defaults="Males description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.RedMale, { title: (t) => t('Males'), description: <Trans defaults="Males description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.YellowMale, { title: (t) => t('Males'), description: <Trans defaults="Males description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.PurpleMale, { title: (t) => t('Males'), description: <Trans defaults="Males description" components={[ <span css={ css`color: gold;` } />]} /> });
-slabDescriptions.set(SlabFrontType.PinkMale, { title: (t) => t('Males'), description: <Trans defaults="Males description" components={[ <span css={ css`color: gold;` } />]} /> });
+slabDescriptions.set(SlabFrontType.WaterLily, { title: (t) => t('Water lily'), description: (t) => t('Water lily description') });
+slabDescriptions.set(SlabFrontType.Mosquito, { title: (t) => t('Mosquito lily'), description: (t) => t('Mosquito description') });
+slabDescriptions.set(SlabFrontType.Mud, { title: (t) => t('Mud'), description: (t) => t('Mud description') });
+slabDescriptions.set(SlabFrontType.Pike, { title: (t) => t('Pike'), description: (t) => t('Pike description') });
+slabDescriptions.set(SlabFrontType.Reed, { title: (t) => t('Reed'), description: (t) => t('Reed description') });
+slabDescriptions.set(SlabFrontType.Log, { title: (t) => t('Log'), description: (t) => logDescription(t) });
+slabDescriptions.set(SlabFrontType.RedMale, { title: (t) => t('Males'), description: (t) => t('Males description') });
+slabDescriptions.set(SlabFrontType.GreenMale, { title: (t) => t('Males'), description: (t) => t('Males description') });
+slabDescriptions.set(SlabFrontType.BlueMale, { title: (t) => t('Males'), description: (t) => t('Males description') });
+slabDescriptions.set(SlabFrontType.YellowMale, { title: (t) => t('Males'), description: (t) => t('Males description') });
+slabDescriptions.set(SlabFrontType.PurpleMale, { title: (t) => t('Males'), description: (t) => t('Males description') });
+slabDescriptions.set(SlabFrontType.PinkMale, { title: (t) => t('Males'), description: (t) => t('Males description') });
+
+const logDescription = (t: TFunction) => {
+
+    return (
+        <div>
+            <span>{ t('Log description') }</span>
+            <ul>
+                <li>{ t('Log description 1') }</li>
+                <li>{ t('Log description 2') }</li>
+                <li>{ t('Log description 3') }</li>
+            </ul>
+        </div>
+    )
+}
 
 export {
     SlabDescription
