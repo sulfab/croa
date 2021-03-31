@@ -72,5 +72,12 @@ export const playerColors = new Map([
     [PlayerColor.Pink, { rgb: { r: 237, g: 111,b: 167 }, hsl: { h: 333, s: 77.8, l: 68.2 }}]
 ]);
 
+export const playerColorsDark = new Map([
+    [PlayerColor.Red, { rgb: { r: 148, g: 7, b: 35 }}],
+    [PlayerColor.Blue, { rgb: { r: 7, g: 94, b: 138 }}],
+    [PlayerColor.Green, { rgb: { r: 53, g: 118, b: 26 }}],
+    [PlayerColor.Pink, { rgb: { r: 181, g: 48, b: 107 }}]
+])
+
 export const getFrogXPositionOnBoard = (frogX: number, boardSize: number, offset: number) => (100 / boardSize * frogX) + (1 / boardSize * frogX) + offset;
 export const getFrogYPositionOnBoard = (frogY: number, boardSize: number, offset: number) => (100 / boardSize * frogY) + (1 / boardSize * frogY) + offset;

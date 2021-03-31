@@ -88,19 +88,20 @@ const titleStyle = css`
   margin: 0;
   line-height: 1.25;
   font-size: 4em;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   font-weight: normal;
+  display: flex;
+  justify-content: center;
 `
 
 const skipButton = css`
-  position: absolute;
-  height: 67%;
+  height: 100%;
   bottom: 15%;
-  width: 10%;
   margin-left: 1%;
   line-height: 1.5em;
-  font-size: 0.7em;
+  font-size: 0.25em;
+  min-width: 11%;
 `

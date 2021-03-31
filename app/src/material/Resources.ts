@@ -86,6 +86,8 @@ import RedServantJumpingBack from './frog/animations/jumping/red-servant-back.pn
 import GreenServantJumpingBack from './frog/animations/jumping/green-servant-back.png';
 import PinkServantJumpingBack from './frog/animations/jumping/pink-servant-back.png';
 
+import CroaButton from './player/visuals/button.png';
+
 const Images = {
     BlueMale, GreenMale, PinkMale, YellowMale, PurpleMale, RedMale,
     WaterLily, Mosquito, Mud, Reed, Pike, Log, Shallow, Deep,
@@ -101,7 +103,7 @@ const Images = {
     BlueServantJumpingFront, RedServantJumpingFront ,GreenServantJumpingFront, PinkServantJumpingFront,
     BlueQueenJumpingBack, RedQueenJumpingBack ,GreenQueenJumpingBack, PinkQueenJumpingBack,
     BlueServantJumpingBack, RedServantJumpingBack ,GreenServantJumpingBack, PinkServantJumpingBack,
-    BoardBackground
+    BoardBackground, CroaButton
 }
 
 const AnimationTexts = [

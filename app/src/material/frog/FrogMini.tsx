@@ -132,10 +132,10 @@ const boggedFrog = (preTransform?: string) => css`
 
 const selectableFrogAnimation = keyframes`
     from {
-        filter: drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold)
+        filter: drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold)
     }
     to {
-        filter: drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold) drop-shadow(0 0 0.2em gold)
+        filter: drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold)
     }
 `;
 

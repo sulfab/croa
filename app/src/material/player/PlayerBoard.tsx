@@ -1,11 +1,10 @@
 import { css } from '@emotion/react';
 import { Player, PlayerColor } from '@gamepark/croa/player';
 import { FC, HTMLAttributes } from 'react'
-import { playerBoardHeight, playerBoardMaleTokensHeight, playerBoardQueenWidth, playerBoardServantsAreaHeight, playerBoardServantsAreaWidth, playerBoardWidth, playerColors, queenHeight, queenWidth } from '../../utils/Styles';
+import { playerBoardHeight, playerBoardMaleTokensHeight, playerBoardQueenWidth, playerBoardServantsAreaHeight, playerBoardServantsAreaWidth, playerBoardWidth, queenHeight, queenWidth } from '../../utils/Styles';
 import { MaleTokens } from './MaleTokens';
 import { FrogAnimation } from '../frog/FrogAnimation';
 import { ServantFrogs } from './ServantFrogs';
-import { CroaAvatar } from './Avatar';
 import { useSelector } from 'react-redux';
 import { PlayerInfos } from './PlayerInfos';
 import { FrogStatus } from '@gamepark/croa/frog';
@@ -27,9 +26,8 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
     return (
         <div { ...props } css={ playerBoard }>
             { activePlayer && player.color === playerId && fedFrog && <SkipButton color={ playerId } css={ skipButton }  />  }
-            
-            <CroaAvatar player={ player } playerInfo={ playerInfo } />
-            <div css={[playerBoardContent(displayedColor), player.eliminated && eliminatedPlayer, activePlayer === player.color && playerBoardActive ]}>
+            <div css={[playerBoardContent, player.eliminated && eliminatedPlayer]}>
+                <div css={activePlayer === player.color && playerBoardActive} />
                 <PlayerInfos player={ player } playerInfo={ playerInfo }/>
                 <div css={ queenFrogContainer }>
                     { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } visible={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ css`position: relative;` }  />) }
@@ -42,32 +40,36 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
 }
 
 const playerBoardActive = css`
-    box-shadow: 0 0.1em 0.5em 0.5em gold
+    position: absolute;
+    bottom: 0%;
+    background-color: gold;
+    height: 51%;
+    width: 101%;
+    left: -0.5%;
+    border-radius: 3em;
 `;
 
 const playerBoard = css`
     position: absolute;
     width: 100%;
     height: ${ playerBoardHeight }%;
+    display: flex;
+    justify-content: center;
 `;
 
 const skipButton = css`
-    top: -25%;
-    height: 20%;
+    top: -40%;
+    height: 22%;
     position: absolute;
-    width: 80%;
-    right: 0%;
-    font-size: 3em;
+    min-width: 70%;
 `
 
-const playerBoardContent = (playerColor: PlayerColor) => css`
+const playerBoardContent = css`
     z-index: -1;
-    border: 0.3em solid rgb(${playerColors.get(playerColor)!.rgb.r}, ${playerColors.get(playerColor)!.rgb.g}, ${playerColors.get(playerColor)!.rgb.b});
     border-radius: 5%;
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: hsla(${playerColors.get(playerColor)!.hsl.h} ,${playerColors.get(playerColor)!.hsl.s}%, 90%, 0.7);
 `;
 
 const eliminatedPlayer = css`
@@ -88,7 +90,7 @@ const maleTokensStyle = css`
 const queenFrogHeight = queenHeight * 100 / playerBoardHeight;
 const queenFrogWidth = queenWidth * 100 / playerBoardWidth;
 const queenFrogContainer = css`
-    bottom: ${ 15 + playerBoardMaleTokensHeight }%;  
+    bottom: ${ 40 + playerBoardMaleTokensHeight }%;  
     left: 5%;
     height: ${ queenFrogHeight }%;
     width: ${ queenFrogWidth }%;
@@ -99,7 +101,7 @@ const queenFrogContainer = css`
 const servantFrogContainer = css`
     height: ${ playerBoardServantsAreaHeight }%;
     width: ${ playerBoardServantsAreaWidth }%;
-    bottom: ${ 20 + playerBoardMaleTokensHeight }%;  
+    bottom: ${ 45 + playerBoardMaleTokensHeight }%;  
     left: ${ 7 + playerBoardQueenWidth }%;
     position: absolute;
 `;
