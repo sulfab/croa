@@ -34,6 +34,7 @@ const playSlabEffect = (state: GameState | GameStateView, move: PlaySlabEffect):
     const slab = state.pond[move.slabPosition.x][move.slabPosition.y];
 
     if (slab && isKnownSlab(slab)) {
+        state.lastSlab = slab.front;
         const frog = state.players
             .flatMap(player => player.femaleFrogs.filter(frog => !!frog.position && player.lastPlayedFrogId === frog.id))
             .find(frog => frog.position?.x === move.slabPosition.x && frog.position?.y === move.slabPosition.y);

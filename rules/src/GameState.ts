@@ -1,10 +1,11 @@
 import { Player, PlayerColor } from './player';
-import { Slab } from './pond';
+import { Slab, SlabFrontType } from './pond';
 
 export interface GameState {
   players: Array<Player>;
   activePlayer?: PlayerColor;
   pond: Slab[][];
+  lastSlab?: SlabFrontType;
 }
 
 export type GameStateView = Omit<GameState, 'pond'> & {
