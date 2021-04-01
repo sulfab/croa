@@ -7,13 +7,14 @@ import { FrogAnimation } from '../frog/FrogAnimation';
 
 type ServantFrogsProps = {
     frogs: Array<FemaleFrog>,
-    color?: PlayerColor
+    color?: PlayerColor,
+    horizontalOrientation?: 'left'|'right'
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const ServantFrogs: FC<ServantFrogsProps> = ({ frogs, color, ...props }) => {
+const ServantFrogs: FC<ServantFrogsProps> = ({ frogs, color, horizontalOrientation, ...props }) => {
     return (
         <div { ...props }>
-            { frogs.map((frog, index) => <FrogAnimation key={ index } visible={ true } frog={ frog } color={ color || frog.color } animation="blinking" css={ frogPosition(index + 2) }  />) }
+            { frogs.map((frog, index) => <FrogAnimation key={ index } visible={ true } frog={ frog } color={ color || frog.color } animation="blinking" css={ [frogPosition(index + 2), horizontalOrientation === 'left' && leftOrientation ] }  />) }
         </div>
     )
 }
@@ -27,6 +28,10 @@ const frogPosition = (frogId: number) => css`
     height: ${ height }%;
     width: ${ width }%;
     z-index: ${ frogId % 2 };
+`;
+
+const leftOrientation = css`
+    transform: rotateY(180deg)
 `;
 
 export {

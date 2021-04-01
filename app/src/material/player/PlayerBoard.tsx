@@ -30,9 +30,9 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
                 <div css={activePlayer === player.color && playerBoardActive} />
                 <PlayerInfos player={ player } playerInfo={ playerInfo } color={ displayedColor }/>
                 <div css={ queenFrogContainer }>
-                    { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } visible={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ css`position: relative;` }  />) }
+                    { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } visible={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ [css`position: relative;`,  index > 1 && leftOrientation] }  />) }
                 </div>
-                <ServantFrogs css={ servantFrogContainer } frogs={ player.femaleFrogs.filter(frog => !frog.isQueen && !frog.position) } color={ displayedColor } />
+                <ServantFrogs css={ servantFrogContainer } frogs={ player.femaleFrogs.filter(frog => !frog.isQueen && !frog.position) } color={ displayedColor } horizontalOrientation={ index > 1 ? 'left': 'right'} />
                 <MaleTokens css={ [maleTokensStyle, css`bottom: 5%;`]}  player={ player } color={ displayedColor } />
             </div>
         </div>
@@ -47,6 +47,10 @@ const playerBoardActive = css`
     width: 101%;
     left: -0.5%;
     border-radius: 3em;
+`;
+
+const leftOrientation = css`
+    transform: rotateY(180deg)
 `;
 
 const playerBoard = css`
