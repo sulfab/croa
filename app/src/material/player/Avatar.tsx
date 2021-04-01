@@ -7,16 +7,17 @@ import { Images } from '../Resources';
 type CroaAvatarProps = {
     player: Player
     playerInfo?: any,
-    customStyle?: CSSProperties
-} & HTMLAttributes<HTMLImageElement>
+    customStyle?: CSSProperties,
+    color?: PlayerColor
+} & Omit<HTMLAttributes<HTMLImageElement>, 'color'>
 
-const CroaAvatar: FC<CroaAvatarProps> = ({ player, customStyle, playerInfo, ...props }) => {
+const CroaAvatar: FC<CroaAvatarProps> = ({ player, customStyle, playerInfo, color, ...props }) => {
 
     if (playerInfo?.avatar) {
         return <Avatar  style={{ ...avatarStyle, ...customStyle }} avatarStyle="Circle" {...playerInfo?.avatar} />
     }
 
-    return <img { ...props } alt={'Player board'} src={playerDefaultImages.get(player.color)} css={[defaultAvatarStyle]} draggable="false"/>;
+    return <img { ...props } alt={'Player board'} src={playerDefaultImages.get(color || player.color)} css={[defaultAvatarStyle]} draggable="false"/>;
 };
 
 const avatarStyle: CSSProperties = {

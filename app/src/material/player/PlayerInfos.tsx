@@ -21,7 +21,7 @@ const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color }) 
     return (
         <>
         <div css={ avatarContainer(realColor) }>
-            <CroaAvatar player={ player } playerInfo={ playerInfo } customStyle={ avatarStyle } css={ avatarCss } />
+            <CroaAvatar player={ player } playerInfo={ playerInfo } customStyle={ avatarStyle } css={ avatarCss } color={ realColor } />
         </div>
         <div css={titleStyle(realColor)}>
             <span css={[nameStyle]}>{ playerInfo?.name || getPlayerName(player.color, t) }</span>
