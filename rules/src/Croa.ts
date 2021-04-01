@@ -1,4 +1,4 @@
-import { IncompleteInformation, SequentialGame } from '@gamepark/rules-api'
+import { IncompleteInformation, SequentialGame, Competitive } from '@gamepark/rules-api'
 import { CroaOptions, isGameOptions } from './CroaOptions'
 import { FemaleFrog, FrogStatus } from './frog'
 import { GameState, GameStateView } from './GameState'
@@ -10,7 +10,9 @@ import { acquireServantMove } from './moves/AcquireServant';
 
 const defaultBoardSize = 8;
 
-export default class Croa extends SequentialGame<GameState, Move, PlayerColor> implements IncompleteInformation<GameState, GameStateView, Move, MoveView, PlayerColor>  {
+export default class Croa extends SequentialGame<GameState, Move, PlayerColor> 
+  implements IncompleteInformation<GameState, GameStateView, Move, MoveView, PlayerColor>,
+             Competitive<GameState, Move, PlayerColor>  {
   constructor(state: GameState) // from saved state
   constructor(options: CroaOptions)
   constructor(arg: GameState | CroaOptions) {
@@ -24,6 +26,15 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor> i
       super(arg)
     }
   }  
+
+  
+  rankPlayers(colorA: PlayerColor, colorB: PlayerColor): number {
+    const playerCount = this.state.players.length;
+    const playerA = this.state.players.find(p => colorA === p.color);
+    const playerB = this.state.players.find(p => colorB === p.color);
+
+    return (playerB?.eliminated || playerCount) - (playerA?.eliminated || playerCount);
+  }
 
   /**
    * The player id is directly set in the state in order to simplify the management
