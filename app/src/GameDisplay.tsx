@@ -8,8 +8,8 @@ import { PlayerBoardPlacement } from './material/player/PlayerBoardPlacement';
 import { Ranking } from './ranking/Ranking';
 import { playerBoardHeight, playerWidth } from './utils/Styles';
 import React from 'react';
-import { slabFrontImages } from './utils/SlabImages';
-import { SlabDescription } from './material/tile/SlabDescription';
+import { SlabDescription } from './material/tile/description/SlabDescription';
+import { SlabDescriptionVisual } from './material/tile/description/SlabDescriptionVisual';
 
 type Props = {
   game: GameState
@@ -28,7 +28,7 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
           <Board pond={ game.pond } playerColors={ game.players.map(p => p.color )} frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.players.find(player => player.color === game.activePlayer) } playerIndex={ playerIndex } playerCount={ game.players.length }/>
           <div css={[ playerBoards, leftPlayerBoards ]}>
             { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0%`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
-            { game.lastSlab && <img css={ lastFrontSlab } src={ slabFrontImages.get(game.lastSlab)} alt={"Last slab"} />}
+            <SlabDescriptionVisual slab={ game.lastSlab } css={ lastSlabImage } />
             { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0%`}  player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }
           
           </div>
@@ -82,14 +82,11 @@ const fadeIn = keyframes`
   }
 `
 
-const lastFrontSlab = css`
+const lastSlabImage = css`
   position: absolute;
-  border-radius: 15%;
-  border: 1px solid black;
-  box-shadow: 0.1em 0.1em 0.7em black;
-  height: 20%; 
-  top: ${ (100 - playerBoardHeight - 20) / 2 }%;
   right: 0;
+  height: 25%; 
+  top: ${ (100 - playerBoardHeight - 20) / 2 }%;
 `;
 
 const lastFrontSlabDescription = css`

@@ -64,7 +64,7 @@ const backSlab = css`
         margin-bottom: 7%;
     };
     &:not(:first-child) {
-        top: 53%;
+        top: 52%;
     }
 
 `;
