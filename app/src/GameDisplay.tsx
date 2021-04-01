@@ -25,7 +25,7 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
       <Letterbox css={letterBoxStyle}>
         { !game.activePlayer && <Ranking players={ game.players } css={ rankingBoard } /> }
         <div css={ gameBoard }>
-          <Board pond={ game.pond } frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.players.find(player => player.color === game.activePlayer) } playerIndex={ playerIndex } playerCount={ game.players.length }/>
+          <Board pond={ game.pond } playerColors={ game.players.map(p => p.color )} frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.players.find(player => player.color === game.activePlayer) } playerIndex={ playerIndex } playerCount={ game.players.length }/>
           <div css={[ playerBoards, leftPlayerBoards ]}>
             { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0%`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
             { game.lastSlab && <img css={ lastFrontSlab } src={ slabFrontImages.get(game.lastSlab)} alt={"Last slab"} />}

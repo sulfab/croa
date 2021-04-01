@@ -9,6 +9,7 @@ import { boardGap, boardWidth, frogOffset, getFrogXPositionOnBoard, getFrogYPosi
 import { Position } from '@gamepark/croa/common/Position';
 import { AcquireServant, isAcquireServant, isMoveFrog, isRevealSlab, MoveFrog, RevealSlab } from '@gamepark/croa/moves';
 import { useAnimation } from '@gamepark/react-client';
+import { PlayerBoardPlacement } from '../player/PlayerBoardPlacement';
 
 type BoardProps = {
     pond: Slab[][];
@@ -16,6 +17,7 @@ type BoardProps = {
     activePlayer?: Player;
     playerIndex: number;
     playerCount: number;
+    playerColors: Array<PlayerColor>;
 }
 
 const toPositions = (pond: Slab[][]): Position[][] => pond.map((row, x) => row.map((_, y) => ({ x, y })));
@@ -37,7 +39,7 @@ const rotate = (matrix: Position[][], times: number): Position[][]   => {
     return matrix;
   }
 
-const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, frogs, activePlayer }) => { 
+const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, frogs, activePlayer, playerColors }) => { 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const orientedSlabPositions = useMemo(() => rotate(toPositions(pond), FrogPlacement[playerCount][playerIndex].currentPlayerRotation), [playerCount, playerIndex]); 
     const animation = useAnimation<MoveFrog | AcquireServant | RevealSlab>(animation => isMoveFrog(animation.move) || isAcquireServant(animation.move) || isRevealSlab(animation.move));
@@ -108,7 +110,8 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
             return newX < actualX ? 'left': 'right';
         }
 
-        return 'right';
+        const frogPlayerIndex = playerColors.findIndex(p => p === frog.color);
+        return PlayerBoardPlacement[playerCount].getPlayerBoard(frogPlayerIndex, playerIndex) > 1? 'left': 'right';
     }
 
     const isFrogAnimation = (frog: FemaleFrog) => animation && isMoveFrog(animation.move) && animation.move.playerId === frog.color && animation.move.frogId === frog.id;
