@@ -111,7 +111,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
                     frogMiniContainer(frog, frogZIndex),
                     isSelectable && selectableFrog,
                     frog.color !== playerId && !targeted && pointEvents,
-                    FrogStatus.Bogged === frog.status && boggedFrog(preTransform),
+                    FrogStatus.Bogged === frog.status && boggedFrog(horizontalOrientation, preTransform),
                     animatingElimination && frogDisappearance(animatingElimination.duration),
                     targeted && targetedFrog
                 ]}>
@@ -126,8 +126,8 @@ const pointEvents = css`
     pointer-events: none;
 `;
 
-const boggedFrog = (preTransform?: string) => css`
-    transform: ${preTransform} translate(0, 0.7em) rotateZ(-130deg);
+const boggedFrog = (horizontalOrientation: 'left'|'right', preTransform?: string) => css`
+    transform: ${preTransform} translate(1em, 1em) rotateZ(${horizontalOrientation === 'left'? 140: -140}deg);
 `;
 
 const selectableFrogAnimation = keyframes`
