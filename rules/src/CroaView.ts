@@ -1,15 +1,23 @@
-import { Game } from '@gamepark/rules-api';
+import { Action, Game, Undo } from '@gamepark/rules-api';
 import { getPredictableAutomaticMoves } from './Croa';
 import { GameStateView } from './GameState';
 import { eliminateFrog, acquireServant, moveFrog, MoveType, MoveView, playSlabEffect, revealSlabInView, skipTurn } from './moves';
+import { PlayerColor } from './player';
 
-export default class CroaView implements Game<GameStateView, MoveView> {
+export default class CroaView implements 
+    Game<GameStateView, MoveView>,
+    Undo<GameStateView, MoveView, PlayerColor> {
 
     state: GameStateView;
 
     constructor(state: GameStateView) {
         this.state = state;
     }
+
+    canUndo(action: Action<MoveView, PlayerColor>, consecutiveActions: Action<MoveView, PlayerColor>[]): boolean {
+      return !action.consequences.some(move => [MoveType.SkipTurn, MoveType.RevealSlab].includes(move.type))
+        && consecutiveActions.length === 0;
+    }  
 
     getAutomaticMove() {
         // If the tile is not known, reveal the tile, instead play the tile
