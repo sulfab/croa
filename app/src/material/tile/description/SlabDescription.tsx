@@ -19,7 +19,7 @@ const SlabDescription: FC<SlabDescriptionProps> = ({ slab, ...props }) => {
                 <span css={ slabTitleBar} />    
             </div>
             <div css={ slabDescription }>
-                { slabDescriptions.get(SlabFrontType.Log)?.description(t) }
+                { slabDescriptions.get(slab)?.description(t) }
             </div>
         </div>
     );
