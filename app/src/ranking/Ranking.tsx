@@ -56,7 +56,7 @@ const rankingOverlay = css`
     align-items: center;
     justify-content: center;
     background: rgba(103, 128, 159, 0.5);
-    transition: opacity 0.5s linear;
+    transition: opacity 0.5s linear, visibility 0.7s linear;
 `;
 
 const rankingTitle = css`
@@ -124,6 +124,7 @@ const rankingContainerDisabled = css`
 
 const disappearAnimation = css`
     opacity: 0;
+    visibility: hidden;
 `
 
 const rank = css`
