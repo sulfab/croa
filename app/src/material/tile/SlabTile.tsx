@@ -1,7 +1,7 @@
 import { Slab } from '@gamepark/croa/pond';
 import { isRevealSlab, moveFrogMove, RevealSlabView } from '@gamepark/croa/moves'
 import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from '@gamepark/react-client';
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent, useRef } from 'react';
 import './SlabTile.css';
 import { DragObjectType, FrogFromBoard } from '../../drag-objects';
 import { FemaleFrog, FrogStatus } from '@gamepark/croa/frog';
@@ -28,6 +28,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     const playerId = usePlayerId<PlayerColor>();
     const animation = useAnimation<RevealSlabView>(animation => isRevealSlab(animation.move) && animation.move.slabPosition.x === position.x && animation.move.slabPosition.y === position.y)
     const animating = useAnimations().length > 0
+    const hoverEvent = useRef<NodeJS.Timeout>()
 
     const selectedFrog = croaState?.selectedFrog && frogs.find(frog => frog.id === croaState.selectedFrog && frog.color === playerId);
 
@@ -80,18 +81,6 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
         })
     });
 
-    useEffect(() => {
-        if (isOver) {
-            if (croaState?.highlightedSlab !== slab.front) {
-                setCroaState({
-                    ...croaState,
-                    highlightedSlab: slab.front
-                });
-            }
-        }
-    // eslint-disable-next-line
-    }, [isOver, slab.front])
-
     const onTileClick = () => {
         if (croaState?.selectedFrog && canBeDropped(croaState?.selectedFrog, frogs)) {
             return play(moveFrogMove(croaState?.selectedFrog, playerId!, position));
@@ -100,18 +89,23 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
     const highlightSlab= () => {
         if (slab.front && croaState?.highlightedSlab !== slab.front) {
-            
-            setCroaState({
-                ...croaState,
-                highlightedSlab: slab.front
-            });
+            hoverEvent.current = setTimeout(() => {
+                setCroaState({
+                    ...croaState,
+                    highlightedSlab: slab.front
+                });
+            }, 100);
         }
+    }
 
-        if (croaState?.highlightedSlab === slab.front) {}
+    const onLeaveTile = () => {
+        if (hoverEvent.current) {
+            console.log(clearTimeout(hoverEvent.current))
+        }
     }
     
     return (
-        <div ref={ ref } onClick={ onTileClick } onMouseEnter={ highlightSlab } className="slab" css={[animation && css`z-index: 2` ]}>
+        <div ref={ ref } onClick={ onTileClick } onMouseEnter={ highlightSlab } onMouseLeave={ onLeaveTile } className="slab" css={[animation && css`z-index: 2` ]}>
             <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
                 <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}/>
                 { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>

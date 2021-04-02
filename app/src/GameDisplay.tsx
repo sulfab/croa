@@ -28,13 +28,13 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
           <Board pond={ game.pond } playerColors={ game.players.map(p => p.color )} frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.players.find(player => player.color === game.activePlayer) } playerIndex={ playerIndex } playerCount={ game.players.length }/>
           <div css={[ playerBoards, leftPlayerBoards ]}>
             { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0%`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
-            <SlabDescriptionVisual slab={ game.lastSlab } css={ lastSlabImage } />
+            <SlabDescriptionVisual css={ lastSlabImage } />
             { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0%`}  player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }
           
           </div>
           <div css={[ playerBoards, rightPlayerBoards ]}>
             { getPlayer(2) && <PlayerBoard index={2} css={ css`top: 0%`} player={ getPlayer(2)! } activePlayer={ game.activePlayer }  /> }
-            { game.lastSlab && <SlabDescription css={ lastFrontSlabDescription } slab={ game.lastSlab   } />}
+            <SlabDescription css={ lastFrontSlabDescription } />
             { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0%`} player={ getPlayer(3)! } activePlayer={ game.activePlayer } /> }
           </div>
         </div>

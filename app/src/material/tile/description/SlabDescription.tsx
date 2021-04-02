@@ -2,29 +2,19 @@ import { css } from '@emotion/react';
 import { SlabFrontType } from '@gamepark/croa/pond';
 import { useDisplayState } from '@gamepark/react-client';
 import { TFunction } from 'i18next';
-import { FC, HTMLAttributes, useEffect, useState } from 'react';
+import { FC, HTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CroaState } from 'src/state/CroaState';
 
 type SlabDescriptionProps = {
-    slab: SlabFrontType,
+    slab?: SlabFrontType,
 } & HTMLAttributes<HTMLDivElement>
 
-const SlabDescription: FC<SlabDescriptionProps> = ({ slab, ...props }) => {
+const SlabDescription: FC<SlabDescriptionProps> = ({ ...props }) => {
     const { t } = useTranslation();
     const [croaState] = useDisplayState<CroaState | undefined>(undefined);
-    const [displayedSlab, setDisplaySlab] = useState(slab);
 
-    useEffect(() => {
-        if (slab !== displayedSlab) {
-            setDisplaySlab(slab);
-        } else if (croaState?.highlightedSlab && croaState?.highlightedSlab !== displayedSlab) {
-            setDisplaySlab(croaState?.highlightedSlab);
-        }
-    // eslint-disable-next-line
-    }, [croaState?.highlightedSlab, slab]);
-
-    if (!displayedSlab) {
+    if (!croaState?.highlightedSlab) {
         return null;
     }
 
@@ -32,11 +22,11 @@ const SlabDescription: FC<SlabDescriptionProps> = ({ slab, ...props }) => {
         <div { ...props } css={ slabDescriptionContainer }>
             <div css={ slabTitleContainer }>
                 <span css={ slabTitleBar} />    
-                <span css={ slabTitle }>{ slabDescriptions.get(displayedSlab)?.title(t) }</span>
+                <span css={ slabTitle }>{ slabDescriptions.get(croaState?.highlightedSlab)?.title(t) }</span>
                 <span css={ slabTitleBar} />    
             </div>
             <div css={ slabDescription }>
-                { slabDescriptions.get(displayedSlab)?.description(t) }
+                { slabDescriptions.get(croaState?.highlightedSlab)?.description(t) }
             </div>
         </div>
     );
