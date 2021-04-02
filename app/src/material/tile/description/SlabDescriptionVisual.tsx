@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import { Slab, SlabBackType, SlabFrontType, WaterLilies, Mosquitos, Mud, Pikes, Reeds, Males, Logs } from '@gamepark/croa/pond';
-import { FC, HTMLAttributes } from 'react'
+import { useDisplayState } from '@gamepark/react-client';
+import { FC, HTMLAttributes, useEffect, useState } from 'react'
+import { CroaState } from 'src/state/CroaState';
 import { slabBackImages, slabFrontImages } from '../../../utils/SlabImages';
 
 type SlabDescriptionVisualProps = {
@@ -8,8 +10,19 @@ type SlabDescriptionVisualProps = {
 } & HTMLAttributes<HTMLImageElement>;
 
 const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, ...props }) => {
+    const [croaState,] = useDisplayState<CroaState | undefined>(undefined);
+    const [displayedSlab, setDisplaySlab] = useState<SlabFrontType | undefined>(slab);
 
-    if (!slab) {
+    useEffect(() => {
+        if (slab !== displayedSlab) {
+            setDisplaySlab(slab);
+        } else if (croaState?.highlightedSlab && croaState?.highlightedSlab !== displayedSlab) {
+            setDisplaySlab(croaState?.highlightedSlab);
+        }
+    // eslint-disable-next-line
+    }, [croaState?.highlightedSlab, slab]);
+
+    if (!displayedSlab) {
         return null;
     }
 
@@ -19,15 +32,15 @@ const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, ...props 
             <div css={ backSlabs }>
                 <div css={ backSlab }>
                     <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Shallow)} alt={"Shallow tile"} />
-                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(slab)?.filter(s => s.back === SlabBackType.Shallow).length }</span>
+                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(displayedSlab)?.filter(s => s.back === SlabBackType.Shallow).length }</span>
                 </div>
                 <div css={ backSlab }>
                     <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Deep)} alt={"Deep tile"} /> 
-                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(slab)?.filter(s => s.back === SlabBackType.Deep).length }</span>
+                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(displayedSlab)?.filter(s => s.back === SlabBackType.Deep).length }</span>
                 </div>
             </div>
             <div css={ frontSlab }>
-                <img css={ frontSlabImage } src={ slabFrontImages.get(slab)} alt={"Last slab"} />
+                <img css={ frontSlabImage } src={ slabFrontImages.get(displayedSlab)} alt={"Last slab"} />
             </div>
         </div>
     )
