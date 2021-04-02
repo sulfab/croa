@@ -22,7 +22,7 @@ type FrogMiniProps = {
     preTransform?: string;
     horizontalOrientation: 'left'| 'right';
     verticalOrientation: 'top' | 'bottom';
-} & Omit<DraggableProps<any, any, any>, 'item'>
+} & Omit<DraggableProps<any, any, any>, 'type' | 'item'>
 
 const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontalOrientation, verticalOrientation, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
     const [croaState, setCroaState] = useDisplayState<CroaState | undefined>(undefined);
@@ -72,6 +72,8 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
             ...croaState,
             selectedFrog: frog.id
         });
+
+        return frogFromBoard(frog);
     };
 
     const onSelectFrog = () => {
@@ -115,11 +117,11 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
     
     return (
         <Draggable { ...props } 
-                onClick={ onSelectFrog }         
-                item={ frogFromBoard(frog) } 
+                onClick={ onSelectFrog }     
+                type={ frogFromBoard(frog).type }     
                 draggable={ playerId === frog.color } 
                 canDrag={ () => activePlayer !== undefined && canBeMoved } 
-                begin={ onDrag } 
+                item={ onDrag } 
                 end={ onSelectFrog }
                 drop={ onDropFrog } 
                 preTransform={ `${preTransform}` } 

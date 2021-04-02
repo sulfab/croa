@@ -26,8 +26,8 @@ export default function App() {
   return (
     <DndProvider options={HTML5ToTouch}>
       <LoadingScreen display={loading} gameBox={ CroaBox } author="Igor Polouchine" artist={["Claire Wendling", "David Cochard"]} publisher="Origames" css={ css`font-weight:normal; letter-spacing: 0.15em;` }  />
-      {!loading && <GameDisplay game={game}/>}
-      <Header loading={loading} game={game}/>
+      {!loading && <GameDisplay game={game!}/>}
+      <Header loading={loading} game={game!}/>
       <ImagesLoader images={Object.values(Images)} animationTexts={ AnimationTexts } animationTextures={ AnimationTextures } onImagesLoad={() => setImagesLoading(false)}/>
     </DndProvider>
   )
