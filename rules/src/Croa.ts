@@ -1,4 +1,4 @@
-import { IncompleteInformation, SequentialGame, Competitive } from '@gamepark/rules-api'
+import { IncompleteInformation, SequentialGame, Competitive, TimeLimit } from '@gamepark/rules-api'
 import { CroaOptions, isGameOptions } from './CroaOptions'
 import { FemaleFrog, FrogStatus } from './frog'
 import { GameState, GameStateView } from './GameState'
@@ -12,7 +12,8 @@ const defaultBoardSize = 8;
 
 export default class Croa extends SequentialGame<GameState, Move, PlayerColor> 
   implements IncompleteInformation<GameState, GameStateView, Move, MoveView, PlayerColor>,
-             Competitive<GameState, Move, PlayerColor>  {
+             Competitive<GameState, Move, PlayerColor>,
+             TimeLimit<GameState, Move, PlayerColor>  {
   constructor(state: GameState) // from saved state
   constructor(options: CroaOptions)
   constructor(arg: GameState | CroaOptions) {
@@ -27,6 +28,10 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
     }
   }  
 
+  giveTime(playerId: PlayerColor): number {
+    const player = this.state.players.find(p => p.color === playerId)!;
+    return !player.lastPlayedFrogId? 2: 0.5;
+  }  
   
   rankPlayers(colorA: PlayerColor, colorB: PlayerColor): number {
     const playerCount = this.state.players.length;
