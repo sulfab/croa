@@ -1,4 +1,4 @@
-import { IncompleteInformation, SequentialGame, Competitive, TimeLimit } from '@gamepark/rules-api'
+import { IncompleteInformation, SequentialGame, Competitive, TimeLimit, Undo, Action } from '@gamepark/rules-api'
 import { CroaOptions, isGameOptions } from './CroaOptions'
 import { FemaleFrog, FrogStatus } from './frog'
 import { GameState, GameStateView } from './GameState'
@@ -13,7 +13,8 @@ const defaultBoardSize = 8;
 export default class Croa extends SequentialGame<GameState, Move, PlayerColor> 
   implements IncompleteInformation<GameState, GameStateView, Move, MoveView, PlayerColor>,
              Competitive<GameState, Move, PlayerColor>,
-             TimeLimit<GameState, Move, PlayerColor>  {
+             TimeLimit<GameState, Move, PlayerColor>,
+             Undo<GameState, Move, PlayerColor>  {
   constructor(state: GameState) // from saved state
   constructor(options: CroaOptions)
   constructor(arg: GameState | CroaOptions) {
@@ -40,6 +41,11 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
 
     return (playerB?.eliminated || playerCount) - (playerA?.eliminated || playerCount);
   }
+
+  canUndo(action: Action<Move, PlayerColor>, consecutiveActions: Action<Move, PlayerColor>[]): boolean {
+    return !action.consequences.some(move => [MoveType.SkipTurn, MoveType.RevealSlab].includes(move.type))
+      && consecutiveActions.length === 0;
+  }  
 
   /**
    * The player id is directly set in the state in order to simplify the management
