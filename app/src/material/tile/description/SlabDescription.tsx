@@ -18,7 +18,7 @@ const SlabDescription: FC<SlabDescriptionProps> = ({ slab, ...props }) => {
                 <span css={ slabTitle }>{ slabDescriptions.get(slab)?.title(t) }</span>
                 <span css={ slabTitleBar} />    
             </div>
-            <div css={ slabDescrîption }>
+            <div css={ slabDescription }>
                 { slabDescriptions.get(slab)?.description(t) }
             </div>
         </div>
@@ -63,7 +63,7 @@ const slabTitle = css`
     text-transform: uppercase;
 `;
 
-const slabDescrîption = css`
+const slabDescription = css`
     top: 15%;
     width: 100%;
     font-size: 1.2em;
@@ -76,6 +76,15 @@ const slabDescrîption = css`
     overflow-y: auto;
     padding-right: 3%;
     padding-bottom: 3%;
+    scrollbar-color: rgba(74, 74, 74, 0.3) transparent;
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+        width: 0.4em;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 7px;
+        background-color: rgba(74, 74, 74, 1);
+    }
 `
 
 const slabDescriptions = new Map<SlabFrontType, { title: (t: TFunction) => string, description: (t: TFunction) => any }>();
