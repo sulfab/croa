@@ -19,7 +19,7 @@ const SlabDescription: FC<SlabDescriptionProps> = ({ slab, ...props }) => {
                 <span css={ slabTitleBar} />    
             </div>
             <div css={ slabDescription }>
-                { slabDescriptions.get(slab)?.description(t) }
+                { slabDescriptions.get(SlabFrontType.Log)?.description(t) }
             </div>
         </div>
     );
@@ -83,7 +83,7 @@ const slabDescription = css`
     }
     &::-webkit-scrollbar-thumb {
         border-radius: 7px;
-        background-color: rgba(74, 74, 74, 1);
+        background-color: rgba(255, 255, 255, 1);
     }
 `
 
