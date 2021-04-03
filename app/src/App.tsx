@@ -1,5 +1,5 @@
 import { GameState } from '@gamepark/croa/GameState'
-import { useGame} from '@gamepark/react-client'
+import { Menu, useGame} from '@gamepark/react-client'
 import { LoadingScreen } from '@gamepark/react-components'
 import { useEffect, useState } from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
@@ -29,6 +29,7 @@ export default function App() {
       {!loading && <GameDisplay game={game!}/>}
       <Header loading={loading} game={game!}/>
       <ImagesLoader images={Object.values(Images)} animationTexts={ AnimationTexts } animationTextures={ AnimationTextures } onImagesLoad={() => setImagesLoading(false)}/>
+      <Menu />
     </DndProvider>
   )
 }
