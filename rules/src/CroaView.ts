@@ -16,6 +16,7 @@ export default class CroaView implements
 
     canUndo(action: Action<MoveView, PlayerColor>, consecutiveActions: Action<MoveView, PlayerColor>[]): boolean {
       return !action.consequences.some(move => [MoveType.SkipTurn, MoveType.RevealSlab].includes(move.type))
+        && action.consequences.some(move => move.type === MoveType.PlaySlabEffect)        
         && consecutiveActions.length === 0;
     }  
 
