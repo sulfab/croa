@@ -16,16 +16,18 @@ const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, ...props 
         return null;
     }
 
+    const isMale = (slab: SlabFrontType) => [SlabFrontType.BlueMale, SlabFrontType.GreenMale, SlabFrontType.PinkMale, SlabFrontType.PurpleMale, SlabFrontType.YellowMale].includes(slab);
+
     return (
         <div { ...props } css={ slabDescriptionVisual }>
             <div css={ backSlabs }>
                 <div css={ backSlab }>
                     <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Shallow)} alt={"Shallow tile"} />
-                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(croaState?.highlightedSlab)?.filter(s => s.back === SlabBackType.Shallow).length }</span>
+                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(croaState?.highlightedSlab)?.filter(s => s.back === SlabBackType.Shallow).length! / (isMale(croaState?.highlightedSlab)? 6: 1) }</span>
                 </div>
                 <div css={ backSlab }>
                     <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Deep)} alt={"Deep tile"} /> 
-                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(croaState?.highlightedSlab)?.filter(s => s.back === SlabBackType.Deep).length }</span>
+                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(croaState?.highlightedSlab)?.filter(s => s.back === SlabBackType.Deep).length! / (isMale(croaState?.highlightedSlab)? 6: 1) }</span>
                 </div>
             </div>
             <div css={ frontSlab }>
