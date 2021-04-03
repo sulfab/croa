@@ -95,7 +95,7 @@ const backForFrontSlab = new Map<SlabFrontType, Array<Slab>>([
     [SlabFrontType.RedMale, Males],
     [SlabFrontType.BlueMale, Males],
     [SlabFrontType.GreenMale, Males],
-    [SlabFrontType.RedMale, Males],
+    [SlabFrontType.PinkMale, Males],
     [SlabFrontType.YellowMale, Males],
     [SlabFrontType.PurpleMale, Males],
     [SlabFrontType.Log, Logs],
