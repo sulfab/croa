@@ -100,7 +100,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
     const onLeaveTile = () => {
         if (hoverEvent.current) {
-            console.log(clearTimeout(hoverEvent.current))
+            clearTimeout(hoverEvent.current);
         }
     }
     
