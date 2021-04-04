@@ -10,6 +10,7 @@ import { playerBoardHeight, playerWidth } from './utils/Styles';
 import React from 'react';
 import { SlabDescription } from './material/tile/description/SlabDescription';
 import { SlabDescriptionVisual } from './material/tile/description/SlabDescriptionVisual';
+import TutorialPopup from './tutorial/TutorialPopup';
 
 type Props = {
   game: GameState
@@ -38,6 +39,7 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
             { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0%`} player={ getPlayer(3)! } activePlayer={ game.activePlayer } /> }
           </div>
         </div>
+        {game.tutorial && <TutorialPopup game={game}/>}
       </Letterbox>
     </>
   )

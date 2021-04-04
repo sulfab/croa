@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { Images } from './material/Resources';
 import translations from './translations.json';
+import { CroaTutorial } from './tutorial/CroaTutorial';
 
 setupTranslation(translations);
 
@@ -66,6 +67,7 @@ ReactDOM.render(
         game="croa"
         Rules={ Croa }
         RulesView={ CroaView }
+        tutorial={ CroaTutorial }
         animations={ CroaAnimation } 
         optionsDescription={ CroaOptionsDescription }>
       <App/>
