@@ -1,7 +1,7 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import { Slab, SlabBackType, SlabFrontType, WaterLilies, Mosquitos, Mud, Pikes, Reeds, Males, Logs } from '@gamepark/croa/pond';
 import { useDisplayState } from '@gamepark/react-client';
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useEffect, useState } from 'react'
 import { CroaState } from 'src/state/CroaState';
 import { slabBackImages, slabFrontImages } from '../../../utils/SlabImages';
 
@@ -11,31 +11,63 @@ type SlabDescriptionVisualProps = {
 
 const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, ...props }) => {
     const [croaState,] = useDisplayState<CroaState | undefined>(undefined);
+    const [currentSlab, setCurrentSlab] = useState<SlabFrontType | undefined>(croaState?.highlightedSlab)
 
-    if (!croaState?.highlightedSlab) {
-        return null;
-    }
+    useEffect(() => {
+        if (croaState?.highlightedSlab && currentSlab !== croaState?.highlightedSlab) {
+            setCurrentSlab(croaState?.highlightedSlab)
+        }
+    // eslint-disable-next-line
+    }, [croaState?.highlightedSlab])
 
     const isMale = (slab: SlabFrontType) => [SlabFrontType.BlueMale, SlabFrontType.GreenMale, SlabFrontType.PinkMale, SlabFrontType.PurpleMale, SlabFrontType.YellowMale].includes(slab);
 
     return (
-        <div { ...props } css={ slabDescriptionVisual }>
+        <div { ...props } css={ [slabDescriptionVisual, croaState?.highlightedSlab? fadeAnimation: fadeOutAnimation] }>
             <div css={ backSlabs }>
                 <div css={ backSlab }>
-                    <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Shallow)} alt={"Shallow tile"} />
-                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(croaState?.highlightedSlab)?.filter(s => s.back === SlabBackType.Shallow).length! / (isMale(croaState?.highlightedSlab)? 6: 1) }</span>
+                    { currentSlab && <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Shallow)} alt={"Shallow tile"} />}
+                    <span css={ backSlabImageCounter }>{ currentSlab && backForFrontSlab.get(currentSlab)?.filter(s => s.back === SlabBackType.Shallow).length! / (isMale(currentSlab)? 6: 1) }</span>
                 </div>
                 <div css={ backSlab }>
-                    <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Deep)} alt={"Deep tile"} /> 
-                    <span css={ backSlabImageCounter }>{ backForFrontSlab.get(croaState?.highlightedSlab)?.filter(s => s.back === SlabBackType.Deep).length! / (isMale(croaState?.highlightedSlab)? 6: 1) }</span>
+                    { currentSlab && <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Deep)} alt={"Deep tile"} /> }
+                    <span css={ backSlabImageCounter }>{ currentSlab && backForFrontSlab.get(currentSlab)?.filter(s => s.back === SlabBackType.Deep).length! / (isMale(currentSlab)? 6: 1) }</span>
                 </div>
             </div>
             <div css={ frontSlab }>
-                <img css={ frontSlabImage } src={ slabFrontImages.get(croaState?.highlightedSlab)} alt={"Last slab"} />
+                { currentSlab && <img css={ frontSlabImage } src={ currentSlab && slabFrontImages.get(currentSlab)} alt={"Last slab"} />}
             </div>
         </div>
     )
 };
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`
+
+const fadeOut = keyframes`
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+`
+
+const fadeAnimation = css`
+    opacity: 1;
+    animation: ${fadeIn} 0.3s;
+`
+
+const fadeOutAnimation = css`
+    opacity: 0;
+    animation: ${fadeOut} 0.3s;
+`
 
 const slabDescriptionVisual = css`
   width: 100%;

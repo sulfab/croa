@@ -1,8 +1,8 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import { SlabFrontType } from '@gamepark/croa/pond';
 import { useDisplayState } from '@gamepark/react-client';
 import { TFunction } from 'i18next';
-import { FC, HTMLAttributes } from 'react';
+import { FC, HTMLAttributes, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CroaState } from 'src/state/CroaState';
 
@@ -13,24 +13,56 @@ type SlabDescriptionProps = {
 const SlabDescription: FC<SlabDescriptionProps> = ({ ...props }) => {
     const { t } = useTranslation();
     const [croaState] = useDisplayState<CroaState | undefined>(undefined);
+    const [currentSlab, setCurrentSlab] = useState<SlabFrontType | undefined>(croaState?.highlightedSlab)
 
-    if (!croaState?.highlightedSlab) {
-        return null;
-    }
+    useEffect(() => {
+        if (croaState?.highlightedSlab && currentSlab !== croaState?.highlightedSlab) {
+            setCurrentSlab(croaState?.highlightedSlab)
+        }
+    // eslint-disable-next-line
+    }, [croaState?.highlightedSlab])
 
     return (
-        <div { ...props } css={ slabDescriptionContainer }>
+        <div { ...props } css={ [slabDescriptionContainer, croaState?.highlightedSlab? fadeAnimation: fadeOutAnimation] }>
             <div css={ slabTitleContainer }>
                 <span css={ slabTitleBar} />    
-                <span css={ slabTitle }>{ slabDescriptions.get(croaState?.highlightedSlab)?.title(t) }</span>
+                <span css={ slabTitle }>{ currentSlab && slabDescriptions.get(currentSlab)?.title(t) }</span>
                 <span css={ slabTitleBar} />    
             </div>
             <div css={ slabDescription }>
-                { slabDescriptions.get(croaState?.highlightedSlab)?.description(t) }
+                { currentSlab && slabDescriptions.get(currentSlab)?.description(t) }
             </div>
         </div>
     );
 };
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`
+
+const fadeOut = keyframes`
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+`
+
+const fadeAnimation = css`
+    opacity: 1;
+    animation: ${fadeIn} 0.3s;
+`
+
+const fadeOutAnimation = css`
+    opacity: 0;
+    animation: ${fadeOut} 0.3s;
+`
 
 const slabDescriptionContainer = css`
     border-radius: 1em;
