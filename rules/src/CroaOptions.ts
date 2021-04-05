@@ -25,12 +25,12 @@ export const CroaOptionsDescription: OptionsDescription<{}, CroaPlayerOptions> =
 export function getPlayerName(playerId: PlayerColor, t: TFunction) {
     switch (playerId) {
         case PlayerColor.Blue:
-            return t('Blue Player')
+            return t('Blue')
         case PlayerColor.Green:
-            return t('Green Player')
+            return t('Green')
         case PlayerColor.Red:
-            return t('Red Player')
+            return t('Red')
         case PlayerColor.Pink:
-            return t('Pink Player')
+            return t('Pink')
     }
 }
