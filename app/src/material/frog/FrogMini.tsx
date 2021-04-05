@@ -22,7 +22,7 @@ type FrogMiniProps = {
     preTransform?: string;
     horizontalOrientation: 'left'| 'right';
     verticalOrientation: 'top' | 'bottom';
-} & Omit<DraggableProps<any, any, any>, 'type' | 'item'>
+} & Omit<DraggableProps<any, any>, 'type' | 'item'>
 
 const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontalOrientation, verticalOrientation, otherFrogs, activePlayer, visualPosition, preTransform, ...props }) => {
     const [croaState, setCroaState] = useDisplayState<CroaState | undefined>(undefined);
