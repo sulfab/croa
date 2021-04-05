@@ -16,9 +16,10 @@ import {
 } from '../utils/Styles';
 import tutorialArrowLight from '../utils/tutorial-arrow-light.png'
 import { CroaState } from 'src/state/CroaState'
+import { SlabFrontType } from '@gamepark/croa/pond'
 
 const TutorialPopup: React.FC<{ game: GameStateView }> = ({game}) => {
-  const [croaState] = useDisplayState<CroaState | undefined>(undefined);
+  const [croaState, setCroaState] = useDisplayState<CroaState | undefined>(undefined);
   const {t} = useTranslation()
   const [failures] = useFailures()
   const playerId = usePlayerId<PlayerColor>()
@@ -68,7 +69,27 @@ const TutorialPopup: React.FC<{ game: GameStateView }> = ({game}) => {
       setTutorialIndex(tutorialDescription[tutorialStep].length - 1)
       setTutorialDisplay(true)
     }
-  }, [tutorialStep, failures])
+  }, [tutorialStep, failures]);
+
+  useEffect(() => {
+    if (!tutorialStep) {
+      if (tutorialIndex === 5 || (tutorialIndex === 6 && !croaState?.highlightedSlab)) {
+        setCroaState({
+          ...croaState,
+          highlightedSlab: SlabFrontType.Log
+        })
+      }
+
+      if (tutorialIndex === 7 || (tutorialIndex === 4 && !!croaState?.highlightedSlab)) {
+        setCroaState({
+          ...croaState,
+          highlightedSlab: undefined
+        })
+      }
+    }
+  // eslint-disable-next-line
+  }, [tutorialStep, tutorialIndex])
+
   const currentMessage = tutorialMessage(tutorialIndex)
   const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length
   return (
