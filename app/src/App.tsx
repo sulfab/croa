@@ -6,7 +6,7 @@ import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import { GameDisplay } from './GameDisplay'
 import CroaBox from './material/visuals/croa-box.png';
-import { Images, AnimationTexts, AnimationTextures } from './material/Resources'
+import { Images} from './material/Resources'
 import ImagesLoader from './utils/ImagesLoader'
 import Header from './Header'
 import { css } from '@emotion/react';
@@ -28,7 +28,7 @@ export default function App() {
       <LoadingScreen display={loading} gameBox={ CroaBox } author="Igor Polouchine" artist={["Claire Wendling", "David Cochard"]} publisher="Origames" css={ css`font-weight:normal; letter-spacing: 0.15em;` }  />
       {!loading && <GameDisplay game={game!}/>}
       <Header loading={loading} game={game!}/>
-      <ImagesLoader images={Object.values(Images)} animationTexts={ AnimationTexts } animationTextures={ AnimationTextures } onImagesLoad={() => setImagesLoading(false)}/>
+      <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)}/>
       <Menu />
     </DndProvider>
   )

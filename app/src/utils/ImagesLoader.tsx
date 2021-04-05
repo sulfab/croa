@@ -2,8 +2,6 @@ import React, { useRef } from 'react';
 
 type Props = {
   images: string[]
-  animationTexts?: string[];
-  animationTextures?: string[];
   onImagesLoad?: () => void
 }
 
