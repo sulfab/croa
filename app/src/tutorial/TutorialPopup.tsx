@@ -343,7 +343,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Frog move'),
-      text: (t: TFunction) => t('As you can see, some tiles are surrounded by a color. The yellow indicated that the target tile is a valid target while red indicated that tile is not valid. You cannot move your frog on a tile that contains one of your other frog (There is an exception on the log that is a pacific tile).'),
+      text: (t: TFunction) => t('As you can see, some tiles are surrounded by a color. The yellow indicated that the target tile is a valid target while red indicated that tile is not valid. You cannot move your frog on a tile that contains one of your other frog (There is an exception on the log that is a peaceful tile for maximum two servants).'),
       boxTop: 61,
       boxLeft: 50,
       boxWidth: 80,
