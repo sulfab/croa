@@ -421,7 +421,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Oops!'),
-      text: (t: TFunction) => t('Be careful of the Pike. This effect will eliminates the frog on the tile. In case the frog is your Queen, you’re eliminated from the game'),
+      text: (t: TFunction) => t('Be careful of the Pike. This tile eliminates the frog. In case the frog is your Queen, you’re eliminated from the game.'),
       boxTop: 31,
       boxLeft: 55,
       boxWidth: 40,
@@ -433,7 +433,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Move your Queen'),
-      text: (t: TFunction) => t('Move your queen on this tile.'),
+      text: (t: TFunction) => t('Move your Queen on this tile.'),
       boxTop: 38,
       boxLeft: 50,
       boxWidth: 40,
@@ -459,7 +459,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Finish it !'),
-      text: (t: TFunction) => t('Now... Eliminates the opponent by moving your queen on the same tile !'),
+      text: (t: TFunction) => t('Now... Eliminates the opponent by moving your Queen on the same tile !'),
       boxTop: 46,
       boxLeft: 20,
       boxWidth: 40,
