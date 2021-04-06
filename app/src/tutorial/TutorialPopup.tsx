@@ -253,14 +253,14 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Welcome to Croak!'),
-      text: (_: TFunction) => <Trans defaults="In Croak, you are a frog clan that wants their Queen to be <0>THE</0> Queen of the pond!" components={[<strong />]} />,
+      text: (_: TFunction) => <Trans defaults="tutorial.welcome" components={[<strong />]} />,
       boxTop: 50,
       boxLeft: 50,
       boxWidth: 60
     },
     {
       title: (t: TFunction) => t('Your frogs'),
-      text: (t: TFunction) => t('This is your frog clan: The blue clan. You have one Queen and until six servants.'),
+      text: (t: TFunction) => t('tutorial.yourFrogs'),
       boxTop: 58,
       boxLeft: 25,
       boxWidth: 50,
@@ -272,7 +272,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Your opponent'),
-      text: (t: TFunction) => t('In this tutorial, you play against one opponent controlled by the machine: The pink clan.'),
+      text: (t: TFunction) => t('tutorial.opponentFrogs'),
       boxTop: 40,
       boxLeft: 70,
       boxWidth: 50,
@@ -284,14 +284,14 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Goal of the game'),
-      text: (t: TFunction) => t('The game consists of taking controls of the pond by chasing the Queen of other clans. The player with the last Queen in the pond wins the game !'),
+      text: (t: TFunction) => t('tutorial.goal'),
       boxTop: 50,
       boxLeft: 50,
       boxWidth: 60
     },
     {
       title: (t: TFunction) => t('Game help'),
-      text: (t: TFunction) => t('The header on the top of the game will help you to know what you can do and what your opponent can do.'),
+      text: (t: TFunction) => t('tutorial.help.header'),
       boxTop: 18,
       boxLeft: 50,
       boxWidth: 60,
@@ -304,8 +304,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
     {
       title: (t: TFunction) => t('Game help'),
       text: (t: TFunction) => isTouchDevice()?  
-          t('When you long press a revealed tile, the number of copy of this tile for each water type (shallow or deep) will be displayed here.'): 
-          t('When you put your mouse on a revealed tile, the number of copy of this tile for each water type (shallow or deep) will be displayed here.'),
+          t('tutorial.help.description.b'):
+          t('tutorial.help.description.a'),
       boxTop: 42,
       boxLeft: 57,
       boxWidth: 60,
@@ -317,7 +317,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Game help'),
-      text: (t: TFunction) => t('And the description of the tile will be displayed here.'),
+      text: (t: TFunction) => t('tutorial.help.description.c'),
       boxTop: 43,
       boxLeft: 43,
       boxWidth: 50,
@@ -329,7 +329,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Frog move'),
-      text: (t: TFunction) => t('Now, select your Queen by clicking on it.'),
+      text: (t: TFunction) => t('tutorial.select.queen'),
       boxTop: 68,
       boxLeft: 45,
       boxWidth: 70,
@@ -343,7 +343,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Frog move'),
-      text: (t: TFunction) => t('As you can see, some tiles are surrounded by a color. The yellow indicated that the target tile is a valid target while red indicated that tile is not valid. You cannot move your frog on a tile that contains one of your other frog (There is an exception on the log that is a peaceful tile for maximum two servants).'),
+      text: (t: TFunction) => t('tutorial.select.targets'),
       boxTop: 63,
       boxLeft: 50,
       boxWidth: 80,
@@ -355,7 +355,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Frog move'),
-      text: (t: TFunction) => t('Select this tile to move your frog on it. Note: You can also move a frog by dragging it and dropping it on a valid tile.'),
+      text: (t: TFunction) => t('tutorial.select.move'),
       boxTop: 63,
       boxLeft: 50,
       boxWidth: 80,
@@ -369,7 +369,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Tile revealing'),
-      text: (t: TFunction) => t('Depending on the tile you move your frog on, there can be different effects. Here, the tile is a Water Lily. This one allow you to move your frog again on another tile.'),
+      text: (t: TFunction) => t('tutorial.tile.effect.waterlily'),
       boxTop: 57,
       boxLeft: 50,
       boxWidth: 80,
@@ -381,7 +381,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Move your frog'),
-      text: (t: TFunction) => t('Now jump on this tile !'),
+      text: (t: TFunction) => t('tutorial.tile.jump'),
       boxTop: 52,
       boxLeft: 47,
       boxWidth: 50,
@@ -395,7 +395,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Move another frog'),
-      text: (t: TFunction) => t('Your Queen has eaten a mosquito. This effect allow you to move another frog or skip your turn. In our case, we will play this frog.'),
+      text: (t: TFunction) => t('tutorial.tile.effect.mosquito'),
       boxTop: 71,
       boxLeft: 30,
       boxWidth: 40,
@@ -407,7 +407,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Move another frog'),
-      text: (t: TFunction) => t('Move the servant on this tile.'),
+      text: (t: TFunction) => t('tutorial.servant.move'),
       boxTop: 76,
       boxLeft: 37,
       boxWidth: 40,
@@ -421,7 +421,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Oops!'),
-      text: (t: TFunction) => t('Be careful of the Pike. This tile eliminates the frog. In case the frog is your Queen, you’re eliminated from the game.'),
+      text: (t: TFunction) => t('tutorial.tile.effect.pike'),
       boxTop: 28,
       boxLeft: 58,
       boxWidth: 40,
@@ -433,7 +433,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Move your Queen'),
-      text: (t: TFunction) => t('Move your Queen on this tile.'),
+      text: (t: TFunction) => t('tutorial.17'),
       boxTop: 40.5,
       boxLeft: 45,
       boxWidth: 40,
@@ -447,7 +447,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Acquire a servant'),
-      text: (t: TFunction) => t('You can acquire new servant in two ways. Either by killing another player Queen or moving a Queen on a tile with a male on it.'),
+      text: (t: TFunction) => t('tutorial.acquire.servant' +
+        ''),
       boxTop: 46,
       boxLeft: 22,
       boxWidth: 40,
@@ -459,7 +460,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Finish it !'),
-      text: (t: TFunction) => t('Now... Eliminates the opponent by moving your Queen on the same tile !'),
+      text: (t: TFunction) => t('tutorial.elimination'),
       boxTop: 46,
       boxLeft: 22,
       boxWidth: 40,
@@ -475,7 +476,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
 
 const tutorialEndGame = {
   title: (t: TFunction) => t('Congratulations!'),
-  text: (t: TFunction) => t('You have finished your first game! You can now play with your friends, or meet other players via our chat room on Discord.'),
+  text: (t: TFunction) => t('tutorial.end'),
   boxTop: 50,
   boxLeft: 50,
   boxWidth: 87
