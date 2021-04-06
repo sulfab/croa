@@ -1,4 +1,4 @@
-import { IncompleteInformation, SequentialGame, Competitive, TimeLimit, Undo, Action } from '@gamepark/rules-api'
+import { IncompleteInformation, SequentialGame, Competitive, TimeLimit, Undo, Action, Eliminations } from '@gamepark/rules-api'
 import { CroaOptions, isGameOptions } from './CroaOptions'
 import { FemaleFrog, FrogStatus } from './frog'
 import { GameState, GameStateView } from './GameState'
@@ -10,30 +10,31 @@ import { acquireServantMove } from './moves/AcquireServant';
 
 const defaultBoardSize = 8;
 
-export default class Croa extends SequentialGame<GameState, Move, PlayerColor> 
+export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
   implements IncompleteInformation<GameState, GameStateView, Move, MoveView, PlayerColor>,
              Competitive<GameState, Move, PlayerColor>,
              TimeLimit<GameState, Move, PlayerColor>,
-             Undo<GameState, Move, PlayerColor>  {
+             Undo<GameState, Move, PlayerColor>,
+             Eliminations<GameState, Move, PlayerColor> {
   constructor(state: GameState) // from saved state
   constructor(options: CroaOptions)
   constructor(arg: GameState | CroaOptions) {
     if (isGameOptions(arg)) {
       super({
         activePlayer: arg.players[0].id,
-        players: arg.players.map((player, index) => initializePlayerBoard(arg.players.length, index, player.id)), 
+        players: arg.players.map((player, index) => initializePlayerBoard(arg.players.length, index, player.id)),
         pond: shuffleSlabs(pond, defaultBoardSize)
       })
     } else {
       super(arg)
     }
-  }  
+  }
 
   giveTime(playerId: PlayerColor): number {
     const player = this.state.players.find(p => p.color === playerId)!;
     return !player.lastPlayedFrogId? 2: 0.5;
-  }  
-  
+  }
+
   rankPlayers(colorA: PlayerColor, colorB: PlayerColor): number {
     const playerCount = this.state.players.length;
     const playerA = this.state.players.find(p => colorA === p.color);
@@ -45,7 +46,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
   canUndo(action: Action<Move, PlayerColor>, consecutiveActions: Action<Move, PlayerColor>[]): boolean {
     return !action.consequences.some(move => [MoveType.SkipTurn, MoveType.RevealSlab].includes(move.type))
       && consecutiveActions.length === 0;
-  }  
+  }
 
   /**
    * The player id is directly set in the state in order to simplify the management
@@ -69,7 +70,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
     if (player.eliminationChoice && player.eliminationChoice.length > 1) {
       player.eliminationChoice.forEach(frog => moves.push(eliminateFrogMove(frog)))
     }
-    
+
     // By default, bogged or fed frogs can't be moved
     let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.Bogged, FrogStatus.Fed].includes(frog.status));
 
@@ -87,7 +88,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
       if (queenFrog) {
         const servantFrogsOnSlab = movableFrogs
           .filter(frog => frog.id !== queenFrog.id && frog.position!.x === queenFrog.position!.x && frog.position!.y === queenFrog.position!.y)
-  
+
         // If there is a queen frog and servants on the same slab, only one of them must be moved
         if (servantFrogsOnSlab && servantFrogsOnSlab.length) {
           movableFrogs = [queenFrog, ...servantFrogsOnSlab];
@@ -97,7 +98,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
 
     const allFrogs = this.state.players.flatMap(player => player.femaleFrogs.filter(frog => !!frog.position));
     movableFrogs
-      .filter(frog => !!frog.position)  
+      .filter(frog => !!frog.position)
       .forEach(frog => getAllowedPositions(allFrogs, frog, this.state.pond).forEach(position => moves.push(moveFrogMove(frog.id, frog.color, position))))
 
     return moves; // return all the moves that active player is allowed to play depending on current this.state
@@ -112,7 +113,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
 
     const lastFrogPlayed: FemaleFrog | undefined = activePlayer.femaleFrogs.find(f => f.id === activePlayer.lastPlayedFrogId);
     if (lastFrogPlayed && lastFrogPlayed.position) {
-      const slabToPlay: Slab | Pick<Slab, 'back'> | undefined = this.state.pond[lastFrogPlayed.position.x][lastFrogPlayed.position.y] 
+      const slabToPlay: Slab | Pick<Slab, 'back'> | undefined = this.state.pond[lastFrogPlayed.position.x][lastFrogPlayed.position.y]
       if (slabToPlay && isKnownSlab(slabToPlay)) {
 
         //First trigger the slab display
@@ -146,11 +147,11 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
         skipTurn(this.state);
         break;
     }
-  }  
-  
+  }
+
   getView(): GameStateView {
     return {
-      ...this.state, 
+      ...this.state,
       pond: this.state.pond.map(rowSlabs => rowSlabs.map(slab => slab.displayed? slab: { back: slab.back }))
     };
   }
@@ -164,7 +165,11 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
         }
     }
 
-    return move;  
+    return move;
+  }
+
+  isEliminated(playerId: PlayerColor): boolean {
+    return this.state.players.find(player => player.color === playerId)?.eliminated !== undefined
   }
 }
 export function getPredictableAutomaticMoves(state: GameState | GameStateView, activePlayer: Player): Move & MoveView | void {
@@ -174,8 +179,8 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   }
 
   // If player has not played yet and it has only frogs Bogged or Fed
-  const isBlocked = !activePlayer.done 
-    && activePlayer.femaleFrogs.some(frog => !!frog.position) 
+  const isBlocked = !activePlayer.done
+    && activePlayer.femaleFrogs.some(frog => !!frog.position)
     && activePlayer.femaleFrogs.filter(frog => !!frog.position).every(frog => [FrogStatus.Bogged, FrogStatus.Fed].includes(frog.status));
   if (isBlocked && activePlayer.eliminationChoice.length === 0) {
     return skipTurnMove;
@@ -194,7 +199,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   if (!!activePlayer.birth) {
     return acquireServantMove(activePlayer.color, activePlayer.birthMale);
   }
-  
+
   // If there is frog to eliminate, eliminate it. It is not current player dependant
   const eliminatedWithoutChoice: FemaleFrog | undefined = state.players
     .flatMap(player => player.femaleFrogs)
@@ -202,7 +207,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
 
   if (eliminatedWithoutChoice) {
     return eliminateFrogMove(eliminatedWithoutChoice);
-  }    
+  }
 
   // If there is no queen for a player, remove all servant
   const aloneFrogs: FemaleFrog | undefined = state.players
@@ -221,12 +226,12 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   // If the tile is not known, reveal the tile, instead play the tile
   const lastFrogPlayed: FemaleFrog | undefined = state.players.flatMap(p => p.femaleFrogs).find(f => f.id === activePlayer.lastPlayedFrogId && FrogStatus.Moved === f.status);
   if (lastFrogPlayed && lastFrogPlayed.position) {
-    const slabToPlay: Slab | Pick<Slab, 'back'> | undefined = state.pond[lastFrogPlayed.position.x][lastFrogPlayed.position.y] 
+    const slabToPlay: Slab | Pick<Slab, 'back'> | undefined = state.pond[lastFrogPlayed.position.x][lastFrogPlayed.position.y]
     if (slabToPlay && isKnownSlab(slabToPlay)) {
       // Then play the slab
       if (slabToPlay.displayed) {
         return playSlabEffectMove(lastFrogPlayed.position);
       }
-    }    
+    }
   }
 }
