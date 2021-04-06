@@ -187,5 +187,5 @@ export const closePopupStyle = css`
   }
 `
 
-export const getFrogXPositionOnBoard = (frogX: number, boardSize: number, offset: number) => (100 / boardSize * frogX) + (1 / boardSize * frogX) + offset;
-export const getFrogYPositionOnBoard = (frogY: number, boardSize: number, offset: number) => (100 / boardSize * frogY) + (1 / boardSize * frogY) + offset;
+export const getFrogXPositionOnBoard = (frogX: number, boardSize: number, offset?: number) => (100 / boardSize * frogX) + (1 / boardSize * frogX) + (offset || 0);
+export const getFrogYPositionOnBoard = (frogY: number, boardSize: number, offset?: number) => (100 / boardSize * frogY) + (1 / boardSize * frogY) + (offset || 0);

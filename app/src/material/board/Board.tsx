@@ -127,7 +127,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
         if (position) {
             const visualPosition = getVisualPosition(position);
             const offset = frogOffset(frogPositions[frog.color]![frog.id].index, frog);
-            return `translate(${ getFrogXPositionOnBoard(visualPosition?.x!, pond.length, offset!.left) * 100 / (frog.isQueen? queenWidth: servantWidth) }%, ${ getFrogYPositionOnBoard(visualPosition?.y!, pond.length, offset!.top) * 100 / (frog.isQueen? queenHeight: servantHeight)}%)`
+            return `translate(${ getFrogXPositionOnBoard(visualPosition?.x!, pond.length, offset?.left) * 100 / (frog.isQueen? queenWidth: servantWidth) }%, ${ getFrogYPositionOnBoard(visualPosition?.y!, pond.length, offset?.top) * 100 / (frog.isQueen? queenHeight: servantHeight)}%)`
         }
 
         return undefined;
