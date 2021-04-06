@@ -25,8 +25,8 @@ const TutorialPopup: React.FC<{ game: GameStateView }> = ({game}) => {
   const playerId = usePlayerId<PlayerColor>()
   const actions = useActions<Move, PlayerColor>()
   const animation = useAnimation<Move>(animation => isMoveFrog(animation.move) || isRevealSlab(animation.move))
-  const actionsNumber = (actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0);
-  const tutorialStep = actionsNumber + (actionsNumber > 0? 1: croaState?.selectedFrog? 1: 0);
+  const actionsNumber = (actions !== undefined ? actions.filter(action => action.playerId === playerId && !action.pending).length : 0);
+  const tutorialStep = actionsNumber + (actionsNumber > 0? 1: (croaState?.selectedFrog? 1: 0));
   const previousActionNumber = useRef(actionsNumber)
   const [tutorialIndex, setTutorialIndex] = useState(0)
   const [tutorialEnd, setTutorialEnd] = useState(false)
@@ -104,7 +104,7 @@ const TutorialPopup: React.FC<{ game: GameStateView }> = ({game}) => {
           {currentMessage && <p css={ popupMessage }>{currentMessage.text(t)}</p>}
 
           <div css={ buttonContainer }>
-            {tutorialIndex > 0 && <Button color={ playerId }css={[button, backButton]} onClick={() => moveTutorial(-1)} >{'<<'}</Button>}
+            {tutorialIndex > 0 && <Button color={ playerId } css={[button, backButton]} onClick={() => moveTutorial(-1)} >{'<<'}</Button>}
             <Button color={ playerId } css={ [button, okButton] } onClick={() => moveTutorial(1)}>{t('OK')}</Button>
           </div>
         </div>
@@ -292,12 +292,12 @@ const tutorialDescription: TutorialStepDescription[][] = [
     {
       title: (t: TFunction) => t('Game help'),
       text: (t: TFunction) => t('The header on the top of the game will help you to know what you can do and what your opponent can do.'),
-      boxTop: 20,
+      boxTop: 18,
       boxLeft: 50,
       boxWidth: 60,
       arrow: {
         angle: 0,
-        top: 7,
+        top: 5,
         left: 40
       }
     },
@@ -344,24 +344,24 @@ const tutorialDescription: TutorialStepDescription[][] = [
     {
       title: (t: TFunction) => t('Frog move'),
       text: (t: TFunction) => t('As you can see, some tiles are surrounded by a color. The yellow indicated that the target tile is a valid target while red indicated that tile is not valid. You cannot move your frog on a tile that contains one of your other frog (There is an exception on the log that is a peaceful tile for maximum two servants).'),
-      boxTop: 61,
+      boxTop: 63,
       boxLeft: 50,
       boxWidth: 80,
       arrow: {
         angle: 180,
-        top: 61,
+        top: 63,
         left: 22
       }
     },
     {
       title: (t: TFunction) => t('Frog move'),
       text: (t: TFunction) => t('Select this tile to move your frog on it. Note: You can also move a frog by dragging it and dropping it on a valid tile.'),
-      boxTop: 61,
+      boxTop: 63,
       boxLeft: 50,
       boxWidth: 80,
       arrow: {
         angle: 180,
-        top: 61,
+        top: 63,
         left: 22
       }
     }
@@ -382,13 +382,13 @@ const tutorialDescription: TutorialStepDescription[][] = [
     {
       title: (t: TFunction) => t('Move your frog'),
       text: (t: TFunction) => t('Now jump on this tile !'),
-      boxTop: 47,
+      boxTop: 52,
       boxLeft: 47,
       boxWidth: 50,
       arrow: {
         angle: 180, 
-        top: 47,
-        left: 30
+        top: 52,
+        left: 29.5
       }
     }
   ],
@@ -397,23 +397,23 @@ const tutorialDescription: TutorialStepDescription[][] = [
       title: (t: TFunction) => t('Move another frog'),
       text: (t: TFunction) => t('Your Queen has eaten a mosquito. This effect allow you to move another frog or skip your turn. In our case, we will play this frog.'),
       boxTop: 71,
-      boxLeft: 35,
+      boxLeft: 30,
       boxWidth: 40,
       arrow: {
         angle: -180,
         top: 71,
-        left: 22
+        left: 21
       }
     },
     {
       title: (t: TFunction) => t('Move another frog'),
       text: (t: TFunction) => t('Move the servant on this tile.'),
-      boxTop: 71,
-      boxLeft: 35,
+      boxTop: 76,
+      boxLeft: 37,
       boxWidth: 40,
       arrow: {
         angle: -180,
-        top: 71,
+        top: 76,
         left: 29
       }
     }
@@ -422,25 +422,25 @@ const tutorialDescription: TutorialStepDescription[][] = [
     {
       title: (t: TFunction) => t('Oops!'),
       text: (t: TFunction) => t('Be careful of the Pike. This tile eliminates the frog. In case the frog is your Queen, you’re eliminated from the game.'),
-      boxTop: 31,
-      boxLeft: 55,
+      boxTop: 28,
+      boxLeft: 58,
       boxWidth: 40,
       arrow: {
         angle: 0,
-        top: 18,
-        left: 50
+        top: 15,
+        left: 49.5
       }
     },
     {
       title: (t: TFunction) => t('Move your Queen'),
       text: (t: TFunction) => t('Move your Queen on this tile.'),
-      boxTop: 38,
-      boxLeft: 50,
+      boxTop: 40.5,
+      boxLeft: 45,
       boxWidth: 40,
       arrow: {
         angle: -180,
-        top: 37,
-        left: 36
+        top: 40,
+        left: 36.5
       }
     }
   ],
@@ -449,24 +449,24 @@ const tutorialDescription: TutorialStepDescription[][] = [
       title: (t: TFunction) => t('Acquire a servant'),
       text: (t: TFunction) => t('You can acquire new servant in two ways. Either by killing another player Queen or moving a Queen on a tile with a male on it.'),
       boxTop: 46,
-      boxLeft: 20,
+      boxLeft: 22,
       boxWidth: 40,
       arrow: {
         angle: 90,
         top: 38,
-        left: 36
+        left: 37.5
       }
     },
     {
       title: (t: TFunction) => t('Finish it !'),
       text: (t: TFunction) => t('Now... Eliminates the opponent by moving your Queen on the same tile !'),
       boxTop: 46,
-      boxLeft: 20,
+      boxLeft: 22,
       boxWidth: 40,
       arrow: {
         angle: 90,
         top: 38,
-        left: 36
+        left: 37.5
       }
     }
   
