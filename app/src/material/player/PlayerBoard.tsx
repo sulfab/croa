@@ -1,7 +1,16 @@
 import { css } from '@emotion/react';
 import { Player, PlayerColor } from '@gamepark/croa/player';
-import { FC, HTMLAttributes } from 'react'
-import { playerBoardHeight, playerBoardMaleTokensHeight, playerBoardQueenWidth, playerBoardServantsAreaHeight, playerBoardServantsAreaWidth, playerBoardWidth, queenHeight, queenWidth } from '../../utils/Styles';
+import { FC, HTMLAttributes } from 'react';
+import {
+    playerBoardHeight,
+    playerBoardMaleTokensHeight,
+    playerBoardQueenWidth,
+    playerBoardServantsAreaHeight,
+    playerBoardServantsAreaWidth,
+    playerBoardWidth,
+    queenHeight,
+    queenWidth
+} from '../../utils/Styles';
 import { MaleTokens } from './MaleTokens';
 import { FrogAnimation } from '../frog/FrogAnimation';
 import { ServantFrogs } from './ServantFrogs';
@@ -41,7 +50,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
 
 const playerBoardActive = css`
     position: absolute;
-    bottom: 0%;
+    bottom: 0;
     background-color: gold;
     height: 51%;
     width: 101%;
