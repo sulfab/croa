@@ -1,5 +1,5 @@
 import { Slab } from '@gamepark/croa/pond';
-import { isRevealSlab, moveFrogMove, RevealSlabView } from '@gamepark/croa/moves'
+import { isRevealSlab, moveFrogMove, RevealSlabView } from '@gamepark/croa/moves';
 import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from '@gamepark/react-client';
 import { FunctionComponent, useRef } from 'react';
 import './SlabTile.css';
@@ -11,7 +11,8 @@ import { useDrop } from 'react-dnd';
 import { css, keyframes } from '@emotion/react';
 import { isAllowedMove } from '@gamepark/croa/utils';
 import { slabBackImages, slabFrontImages } from '../../utils/SlabImages';
-import { CroaState } from 'src/state/CroaState';
+import { useLongPress } from '../../utils/useLongPress';
+import { CroaState } from '../../state/CroaState';
 
 type SlabTileProps = {
     slab: Slab;
@@ -27,8 +28,8 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     const play = usePlay();
     const playerId = usePlayerId<PlayerColor>();
     const animation = useAnimation<RevealSlabView>(animation => isRevealSlab(animation.move) && animation.move.slabPosition.x === position.x && animation.move.slabPosition.y === position.y)
-    const animating = useAnimations().length > 0
-    const hoverEvent = useRef<NodeJS.Timeout>()
+    const animating = useAnimations().length > 0;
+    const hoverEvent = useRef<NodeJS.Timeout>();
 
     const selectedFrog = croaState?.selectedFrog && frogs.find(frog => frog.id === croaState.selectedFrog && frog.color === playerId);
 
@@ -103,9 +104,23 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
             clearTimeout(hoverEvent.current);
         }
     }
+    const longPress = useLongPress({
+        onClick: onTileClick,
+        onLongPress: () => {
+            setCroaState({
+                ...croaState,
+                highlightedSlab: slab.front
+            });
+
+            if (window.navigator.vibrate) {
+                window.navigator.vibrate(200)
+            }
+        },
+        onMouseLeave: onLeaveTile
+    })
     
     return (
-        <div ref={ ref } onClick={ onTileClick } onMouseEnter={ highlightSlab } onMouseLeave={ onLeaveTile } className="slab" css={[animation && css`z-index: 2` ]}>
+        <div ref={ ref } onClick={ onTileClick } onMouseEnter={ highlightSlab } className="slab" css={[animation && css`z-index: 2` ]} { ...longPress }>
             <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
                 <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}/>
                 { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>
