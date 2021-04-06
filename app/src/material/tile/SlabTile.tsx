@@ -120,7 +120,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     })
     
     return (
-        <div ref={ ref } onClick={ onTileClick } onMouseEnter={ highlightSlab } className="slab" css={[animation && css`z-index: 2` ]} { ...longPress }>
+        <div ref={ ref } onMouseEnter={ highlightSlab } className="slab" css={[animation && css`z-index: 2` ]} { ...longPress }>
             <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
                 <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}/>
                 { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>
