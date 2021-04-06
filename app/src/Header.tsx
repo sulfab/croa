@@ -71,7 +71,7 @@ export default function Header({loading, game}: Props) {
       }
     }
   // eslint-disable-next-line
-  }, [game, activePlayer, animation])
+  }, [game, activePlayer, animation && animation.move])
 
 
   return (
