@@ -30,14 +30,15 @@ const Ranking: React.FC<RankingProps> = ({ players, ...props }) => {
     return (
         <>
             <div css={ [rankingOverlay, !displayRanking && disappearAnimation] } onClick={ () => setDisplayRanking(false)} />
-            <div { ...props } css={[rankingContainer(getRankingTranslate()), !displayRanking && rankingContainerDisabled]}>            
+            <div { ...props } css={[rankingContainer(getRankingTranslate()), !displayRanking && rankingContainerDisabled]}>
                 <div css={ [rankingTitle, !displayRanking && rankingTitleReduced] } onClick={ () => setDisplayRanking(!displayRanking)}>
                     { t('Podium') }
                 </div>
                 <div css={ [rankingRanks, !displayRanking && reduceRankingAnimation] }>
-                    <Rank rank={ 2 } css={ [rank, !displayRanking && reduceRankingAnimation] } player={ players.find(player => player.eliminated === players.length - 1)! }/>
-                    <Rank rank={ 1 } css={ [rank, !displayRanking && reduceRankingAnimation] } player={ players.find(player => !player.eliminated)! }/>
-                    <Rank rank={ 3 } css={ [rank, !displayRanking && reduceRankingAnimation] } player={ players.find(player => player.eliminated === players.length - 2) } />
+                    <Rank rank={ 4 } css={ [rank(!displayRanking), !displayRanking && hideRanking] } player={ players.find(player => player.eliminated === players.length - 4)! } />
+                    <Rank rank={ 2 } reduced={ !displayRanking } css={ [rank(!displayRanking), !displayRanking && reduceRankingAnimation] } player={ players.find(player => player.eliminated === players.length - 1)! }/>
+                    <Rank rank={ 1 } reduced={ !displayRanking } css={ [rank(!displayRanking), !displayRanking && reduceRankingAnimation] } player={ players.find(player => !player.eliminated)! }/>
+                    <Rank rank={ 3 } reduced={ !displayRanking } css={ [rank(!displayRanking), !displayRanking && reduceRankingAnimation] } player={ players.find(player => player.eliminated === players.length - 2) } />
                 </div>
             </div>
         </>
@@ -58,6 +59,12 @@ const rankingOverlay = css`
     background: rgba(103, 128, 159, 0.5);
     transition: opacity 0.5s linear, visibility 0.7s linear;
 `;
+
+const hideRanking = css`
+    opacity: 0;
+    height: 0;
+    width: 0;
+`
 
 const rankingTitle = css`
     position: absolute;
@@ -103,7 +110,7 @@ const rankingTitleReduced = css`
     width: 70%;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    box-shadow: 0 0 0.3em 0em black;
+    box-shadow: 0 0 0.3em 0 black;
     border: 0.1em solid black;
 `; 
 
@@ -127,14 +134,14 @@ const disappearAnimation = css`
     visibility: hidden;
 `
 
-const rank = css`
+const rank = (reduced: boolean) => css`
     position: relative;
     pointer-events: none;
     top: -35%;
     height: 125%;
     width: 22%;
-    left: 17%;
-    transition-property: height, border, box-shadow;
+    left: ${reduced? 17: 6}%;
+    transition-property: height, border, opacity, width;
     transition-duration: 1s;
 `
 
