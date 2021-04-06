@@ -106,7 +106,7 @@ export const FrogPlacement: { [key: number]: { [key: number]: { currentPlayerRot
         { id: 5, isQueen: false, color }, 
         { id: 6, isQueen: false, color }, 
         { id: 7, isQueen: false, color }
-      ).map(frog => ({ ...frog, status: FrogStatus.Ready})),
+      ).map(frog => ({ ...frog, status: FrogStatus.Ready, previousPosition: frog.position})),
       eliminationChoice: [],
       done: false
     }
