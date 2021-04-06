@@ -5,15 +5,15 @@ import { pond, SlabBackType, SlabFrontType } from '@gamepark/croa/pond';
 import { shuffleSlabs } from '@gamepark/croa/utils';
 import { Tutorial } from '@gamepark/react-client';
 
-const tilesToPlace: Array<{ tile: SlabFrontType, x: number, y: number }> = [
-    { tile: SlabFrontType.WaterLily, x: 1, y: 1 },
-    { tile: SlabFrontType.Mosquito, x: 2, y: 2 },
-    { tile: SlabFrontType.Reed, x: 0, y: 2 },
-    { tile: SlabFrontType.Reed, x: 3, y: 3 },
-    { tile: SlabFrontType.PurpleMale, x: 4, y: 4 },
-    { tile: SlabFrontType.WaterLily, x: 5, y: 5 },
-    { tile: SlabFrontType.WaterLily, x: 6, y: 6 },
-    { tile: SlabFrontType.Pike, x: 7, y: 5 }
+const tilesToPlace: Array<{ front: SlabFrontType, back: SlabBackType, x: number, y: number }> = [
+    { front: SlabFrontType.WaterLily, back: SlabBackType.Deep, x: 1, y: 1 },
+    { front: SlabFrontType.Mosquito, back: SlabBackType.Shallow, x: 2, y: 2 },
+    { front: SlabFrontType.Reed, back: SlabBackType.Deep, x: 0, y: 2 },
+    { front: SlabFrontType.Reed, back: SlabBackType.Shallow, x: 3, y: 3 },
+    { front: SlabFrontType.PurpleMale, back: SlabBackType.Deep, x: 4, y: 4 },
+    { front: SlabFrontType.WaterLily, back: SlabBackType.Shallow, x: 5, y: 5 },
+    { front: SlabFrontType.WaterLily, back: SlabBackType.Deep, x: 6, y: 6 },
+    { front: SlabFrontType.Pike, back: SlabBackType.Deep, x: 7, y: 5 }
 ]
 
 
@@ -21,8 +21,8 @@ const shuffledPond = shuffleSlabs(pond, 8).map((row, x) => row.map((tile, y) => 
     const newTile = tilesToPlace.find(tile => tile.x === x && tile.y === y);
     if (newTile) {
         return {
-            front: newTile.tile,
-            back: newTile.x % 2 === 0? SlabBackType.Deep: SlabBackType.Shallow
+            front: newTile.front,
+            back: newTile.back
         }
     }
 

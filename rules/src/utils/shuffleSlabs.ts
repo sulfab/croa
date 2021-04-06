@@ -1,13 +1,11 @@
 import { Slab } from '../pond';
+import shuffle from 'lodash.shuffle';
 
 const shuffleSlabs = (pond: Array<Slab>, dimension: number): Slab[][] => {
-    const slabBoard: Slab[][] = [];
-    for (let i = pond.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pond[i], pond[j]] = [pond[j], pond[i]];
-    }
+  const slabBoard: Slab[][] = [];
+  const shuffledSlab = shuffle(pond);
   
-    for (let i = 0; i < pond.length; i++) {
+    for (let i = 0; i < shuffledSlab.length; i++) {
       if (i % dimension === 0) {
         slabBoard.push(pond.slice(i, i + dimension));
       }
