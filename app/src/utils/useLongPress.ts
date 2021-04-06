@@ -79,7 +79,7 @@ export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance =
       onTouchStart: start,
       onTouchMove: move,
       onTouchEnd: stop
-    }), [start, move, stop]
+    }), [start, move, stop, mouseLeave]
   )
 }
 
