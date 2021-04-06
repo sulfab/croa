@@ -11,7 +11,7 @@ import React, {useState} from 'react';
 import {SlabDescription} from './material/tile/description/SlabDescription';
 import {SlabDescriptionVisual} from './material/tile/description/SlabDescriptionVisual';
 import TutorialPopup from './tutorial/TutorialPopup';
-import WelcomePopup from './welcome/WelcomePopup';
+import WelcomePopup from './popup/WelcomePopup';
 
 type Props = {
   game: GameState
