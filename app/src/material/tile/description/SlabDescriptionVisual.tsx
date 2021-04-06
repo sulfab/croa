@@ -77,7 +77,7 @@ const frontSlab = css`
   position: absolute; 
   height: 100%;
   width: 66%;
-  right: 0%;
+  right: 0;
 `
 
 const frontSlabImage = css`
@@ -90,16 +90,16 @@ const backSlabs = css`
     position: absolute;
     height: 100%;
     width: 33%;
-    left: 0%;
+    left: 0;
 `;
 
 const backSlab = css`
     position: absolute;
     height: 48%;
-    &:first-child {
+    &:first-of-type {
         margin-bottom: 7%;
     };
-    &:not(:first-child) {
+    &:not(:first-of-type) {
         top: 52%;
     }
 
