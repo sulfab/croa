@@ -13,7 +13,7 @@ type CroaAvatarProps = {
 
 const CroaAvatar: FC<CroaAvatarProps> = ({ player, customStyle, playerInfo, color, ...props }) => {
 
-    if (!playerInfo?.avatar) {
+    if (playerInfo?.avatar) {
         return <Avatar  style={{ ...avatarStyle, ...customStyle }} avatarStyle="Circle" {...playerInfo?.avatar} />
     }
 
