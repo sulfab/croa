@@ -15,14 +15,15 @@ type RankProps = {
 const Rank: React.FC<RankProps> = ({ rank, player, reduced, ...props }) => {
     const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player?.color));
     const [gamePoints,] = useState(playerInfo?.gamePointsDelta);
+    const hasGamePoints = typeof gamePoints === 'number';
     return (
         <div { ...props } css={ rankContainer }>
             <div css={ [getFrog(rank), reduced && hideFrog ] }>
                 { player && <FrogAnimation visible={ true } duration={ rank === 1? 0.6: 1 } delay={ rank * 0.7 } frog={ player.femaleFrogs.find(frog => frog.isQueen)! } loop={ true } animation={ rank === 1? 'jumping_front': 'blinking' } css={ css`position: relative;` }  /> }
             </div>
             <div css={ [getRank(rank), reduced && rankDisabled] }>
-                { player && <CroaAvatar customStyle={ avatarStyle } css={ avatarCss } player={ player} playerInfo={ playerInfo } /> }
-                { gamePoints !== undefined &&
+                { player && <CroaAvatar customStyle={ avatarStyle(hasGamePoints && !reduced) } css={ avatarCss(hasGamePoints && !reduced) } player={ player} playerInfo={ playerInfo } /> }
+                { hasGamePoints &&
                     <span css={ [gamePointsStyle, reduced && hideGamePoints] }>
                         <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
                         {gamePoints > 0 && '+'}{playerInfo?.gamePointsDelta}
@@ -34,6 +35,7 @@ const Rank: React.FC<RankProps> = ({ rank, player, reduced, ...props }) => {
 }
 
 const gamePointsStyle = css`
+    position: absolute;
     height: 1.2em;
     font-size: 3em;
     width: 100%;
@@ -48,25 +50,25 @@ const hideGamePoints = css`
     height: 0;
 `
 
-const avatarCss = css`
-    position: relative;
+const avatarCss = (gamePoints?: boolean) => css`
+    position: absolute;
     height: 7em;
     width: 6em;
     filter: drop-shadow(0 0.2em 0.2em black);
     top: unset;
     left: unset;
-    margin-bottom: 0.4em;
+    margin-bottom: ${gamePoints? 4.1: 0.4}em;
 `;
 
-const avatarStyle: CSSProperties = {
-    position: 'relative',
+const avatarStyle = (gamePoints?: boolean): CSSProperties => ({
+    position: 'absolute',
     height: '7em',
     width: '6em',
     filter: 'drop-shadow(0 0.2em 0.2em black)',
     top: 'unset',
     left: 'unset',
-    marginBottom: '0.4em'
-};
+    marginBottom: gamePoints? '4.1em': '0.4em'
+});
 
 const rankContainer = css`
     display: flex;
