@@ -6,7 +6,7 @@ import { acquireServant, eliminateFrog, eliminateFrogMove, Move, moveFrog, moveF
 import { initializePlayerBoard, Player, PlayerColor } from './player'
 import { isKnownSlab, pond, Slab } from './pond'
 import { getAllowedPositions, shuffleSlabs } from './utils'
-import { acquireServantMove } from './moves/AcquireServant';
+import { acquireServantMove } from './moves';
 
 const defaultBoardSize = 8;
 
@@ -30,9 +30,8 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
     }
   }
 
-  giveTime(playerId: PlayerColor): number {
-    const player = this.state.players.find(p => p.color === playerId)!;
-    return !player.lastPlayedFrogId? 2: 0.5;
+  giveTime(): number {
+    return 30;
   }
 
   rankPlayers(colorA: PlayerColor, colorB: PlayerColor): number {
