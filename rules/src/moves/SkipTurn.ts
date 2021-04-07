@@ -21,7 +21,7 @@ export const skipTurn = (state: GameState | GameStateView): void => {
     }
 
     // On turn skipping, frog mud is removed, frog are not bouncing anymore and deleting previous position
-    const lastPlayedFrog = player.femaleFrogs.find(frog => frog.id === player.lastPlayedFrogId);
+    const lastPlayedFrog = player.femaleFrogs.find(frog => frog.id === player.lastFrogId);
     player.femaleFrogs
         .filter(f => !lastPlayedFrog || lastPlayedFrog.color !== f.color || lastPlayedFrog.id !== f.id || FrogStatus.Bogged !== f.status)
         .forEach(f => {
@@ -30,7 +30,7 @@ export const skipTurn = (state: GameState | GameStateView): void => {
         });
 
     player.done = false;
-    delete player.lastPlayedFrogId;
+    delete player.lastFrogId;
 
     if (state.players.filter(player => !player.eliminated).length <= 1) {
         delete state.activePlayer;

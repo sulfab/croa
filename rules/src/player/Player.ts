@@ -11,5 +11,5 @@ export type Player = {
   birthMale?: MaleFrog
   eliminated?: number
   done: boolean
-  lastPlayedFrogId?: number
+  lastFrogId?: number
 }

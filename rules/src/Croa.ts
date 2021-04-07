@@ -110,7 +110,7 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
       return;
     }
 
-    const lastFrogPlayed: FemaleFrog | undefined = activePlayer.femaleFrogs.find(f => f.id === activePlayer.lastPlayedFrogId);
+    const lastFrogPlayed: FemaleFrog | undefined = activePlayer.femaleFrogs.find(f => f.id === activePlayer.lastFrogId);
     if (lastFrogPlayed && lastFrogPlayed.position) {
       const slabToPlay: Slab | Pick<Slab, 'back'> | undefined = this.state.pond[lastFrogPlayed.position.x][lastFrogPlayed.position.y]
       if (slabToPlay && isKnownSlab(slabToPlay)) {
@@ -223,7 +223,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameStateView, a
   }
 
   // If the tile is not known, reveal the tile, instead play the tile
-  const lastFrogPlayed: FemaleFrog | undefined = state.players.flatMap(p => p.femaleFrogs).find(f => f.id === activePlayer.lastPlayedFrogId && FrogStatus.Moved === f.status);
+  const lastFrogPlayed: FemaleFrog | undefined = state.players.flatMap(p => p.femaleFrogs).find(f => f.id === activePlayer.lastFrogId && FrogStatus.Moved === f.status);
   if (lastFrogPlayed && lastFrogPlayed.position) {
     const slabToPlay: Slab | Pick<Slab, 'back'> | undefined = state.pond[lastFrogPlayed.position.x][lastFrogPlayed.position.y]
     if (slabToPlay && isKnownSlab(slabToPlay)) {

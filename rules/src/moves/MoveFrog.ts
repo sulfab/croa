@@ -78,7 +78,7 @@ export const moveFrog = (state: GameState | GameStateView, move: MoveFrog): void
     frog.position = move.slabPosition;
     frog.status = FrogStatus.Moved;
 
-    player.lastPlayedFrogId = frog.id;
+    player.lastFrogId = frog.id;
     player!.femaleFrogs
         .filter(f => FrogStatus.Fed === f.status)
         .forEach(f => f.status = FrogStatus.Ready);
