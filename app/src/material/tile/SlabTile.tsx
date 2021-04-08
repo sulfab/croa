@@ -2,7 +2,6 @@ import { Slab } from '@gamepark/croa/pond';
 import { isRevealSlab, moveFrogMove, RevealSlabView } from '@gamepark/croa/moves';
 import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from '@gamepark/react-client';
 import { FunctionComponent, useRef } from 'react';
-import './SlabTile.css';
 import { DragObjectType, FrogFromBoard } from '../../drag-objects';
 import { FemaleFrog, FrogStatus } from '@gamepark/croa/frog';
 import { PlayerColor } from '@gamepark/croa/player';
@@ -120,16 +119,28 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     })
     
     return (
-        <div ref={ ref } onMouseEnter={ highlightSlab } className="slab" css={[animation && css`z-index: 2` ]} { ...longPress }>
-            <div className={`slab-inner`} css={[!animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
+        <div ref={ ref } onMouseEnter={ highlightSlab } css={[slabStyle, animation && css`z-index: 2` ]} { ...longPress }>
+            <div css={[slabStyle, !animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
                 <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}/>
-                { (slab.displayed || animation?.move.front !== undefined) && <div css={[backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }} className={`slab-front`}>
+                { (slab.displayed || animation?.move.front !== undefined) && <div css={[slabFront, backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }}>
                     
                 </div> }
             </div>
         </div>
     )
 }
+
+const slabStyle = css`
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+`;
+
+const slabFront = css`
+    transform: rotateY(180deg);
+`;
 
 const scale = (translate?: string) => keyframes`
   30% {
@@ -148,7 +159,7 @@ const slabAnimation = (duration: number, translate: string) => css`
 `
 
 const overSlab = css`
-    box-shadow: 0 0.5em 0.7em black, 0 0 0.3em 0.6em green inset
+    box-shadow: 0 0.5em 0.7em black, 0 0 0.3em 0.6em green inset;
 `
 
 const backAndFrontSlab = css`
@@ -163,7 +174,12 @@ const backAndFrontSlab = css`
 `
 
 const selectableSlab = css`
+    cursor: pointer;
     box-shadow: 0 0.5em 0.7em black, 0 0 0.3em 0.4em gold inset;
+    &:hover {
+        box-shadow: 0 0.5em 0.7em black, 0 0 0.3em 0.6em green inset;
+    }
+    
 `
 
 const unselectableSlab = css`
