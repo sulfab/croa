@@ -83,8 +83,8 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     });
 
     const onTileClick = () => {
-        if (croaState?.selectedFrog && canBeDropped(croaState?.selectedFrog, frogs)) {
-            return play(moveFrogMove(croaState?.selectedFrog, playerId!, position));
+        if (!animating && croaState?.selectedFrog && canBeDropped(croaState.selectedFrog, frogs)) {
+            return play(moveFrogMove(croaState.selectedFrog, playerId!, position));
         }
     }
 
