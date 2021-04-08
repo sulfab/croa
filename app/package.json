@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/croa-app",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "description": "Croa",
   "author": "Patrick Beaumé <pbeaume@gmail.com>",
