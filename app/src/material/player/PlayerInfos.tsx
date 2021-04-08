@@ -6,13 +6,11 @@ import gamePointIcon from './visuals/game-point.svg';
 import { getPlayerName } from '@gamepark/croa/CroaOptions';
 import { useTranslation } from 'react-i18next';
 import { CroaAvatar } from './Avatar';
-import { GameSpeed } from '@gamepark/rules-api';
-import { Timer } from './Timer';
-import { useOptions } from '@gamepark/react-client';
+import { Player as PlayerInfo, PlayerTimer } from '@gamepark/react-client';
 
 type PlayerInfosProps = {
     player: Player
-    playerInfo: any
+    playerInfo: PlayerInfo
     color?: PlayerColor
 }
 
@@ -20,7 +18,6 @@ const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color }) 
     const {t} = useTranslation();
     const [gamePoints,] = useState(playerInfo?.gamePointsDelta);
     const realColor = color || player.color;
-    const options = useOptions()
     
     return (
         <>
@@ -28,14 +25,14 @@ const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color }) 
             <CroaAvatar player={ player } playerInfo={ playerInfo } customStyle={ avatarStyle } css={ avatarCss } color={ realColor } />
         </div>
         <div css={titleStyle(realColor)}>
-            <span css={[nameStyle]}>{ playerInfo?.name || getPlayerName(player.color, t) }</span>
+            <span css={[nameStyle, playerInfo.quit && quit ]}>{ playerInfo?.name || getPlayerName(player.color, t) }</span>
             { typeof gamePoints === 'number' &&
                 <span css={css`flex-shrink: 0`}>
                     <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
                     {gamePoints > 0 && '+'}{playerInfo?.gamePointsDelta}
                 </span>
             }
-            { options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && <Timer css={ gamePointsStyle } time={ playerInfo.time } /> }
+            { playerInfo?.time?.playing && <PlayerTimer css={ gamePointsStyle } playerId={ player.color } /> }
         </div>
         </>
     )
@@ -47,6 +44,10 @@ const gamePointsStyle = css`
     right: 2%;
     display: flex;
     align-items: center;
+`;
+
+const quit = css`
+    text-decoration: line-through;
 `;
 
 const avatarContainer = (playerColor: PlayerColor) => css`
