@@ -91,8 +91,8 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
 
     const frogVerticalOrientation = (frog: FemaleFrog) => {
         if (animation && isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
-            const visualPosition = getVisualPosition(frog.position!);
-            const newVisualPosition = getVisualPosition(animation.move.slabPosition!);
+            const visualPosition = getVisualPosition(animation.action.cancelled? animation.move.slabPosition!: frog.position!);
+            const newVisualPosition = getVisualPosition(animation.action.cancelled? frog.position!: animation.move.slabPosition!);
             const actualY = visualPosition?.y!;
             const newY = newVisualPosition?.y!;
             return newY < actualY ? 'top': 'bottom';
@@ -103,8 +103,9 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
 
     const frogHorizontalOrientation = (frog: FemaleFrog) => {
         if (animation && isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
-            const visualPosition = getVisualPosition(frog.position!);
-            const newVisualPosition = getVisualPosition(animation.move.slabPosition!);
+            console.log(animation.action.cancelled)
+            const visualPosition = getVisualPosition(animation.action.cancelled? animation.move.slabPosition!: frog.position!);
+            const newVisualPosition = getVisualPosition(animation.action.cancelled? frog.position!: animation.move.slabPosition!);
             const actualX = visualPosition?.x!;
             const newX = newVisualPosition?.x!;
             return newX < actualX ? 'left': 'right';
@@ -117,7 +118,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
     const isFrogAnimation = (frog: FemaleFrog) => animation && isMoveFrog(animation.move) && animation.move.playerId === frog.color && animation.move.frogId === frog.id;
     const getFrogTranslation = (frog: FemaleFrog) => {
         if (isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
-            return translateFrog(frog, animation!.move.slabPosition!);
+            return translateFrog(frog, animation!.action.cancelled? frog.position!: animation!.move.slabPosition!);
         }
 
         return translateFrog(frog, frog.position!)
