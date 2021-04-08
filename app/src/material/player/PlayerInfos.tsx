@@ -29,7 +29,7 @@ const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color }) 
             { typeof gamePoints === 'number' &&
                 <span css={css`flex-shrink: 0`}>
                     <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
-                    {gamePoints > 0 && '+'}{playerInfo?.gamePointsDelta}
+                    {gamePoints > 0 && '+'}{ playerInfo?.gamePointsDelta }
                 </span>
             }
             { playerInfo?.time?.playing && <PlayerTimer css={ gamePointsStyle } playerId={ player.color } /> }
