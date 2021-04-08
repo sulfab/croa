@@ -103,7 +103,6 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
 
     const frogHorizontalOrientation = (frog: FemaleFrog) => {
         if (animation && isFrogAnimation(frog) && isMoveFrog(animation!.move)) {
-            console.log(animation.action.cancelled)
             const visualPosition = getVisualPosition(animation.action.cancelled? animation.move.slabPosition!: frog.position!);
             const newVisualPosition = getVisualPosition(animation.action.cancelled? frog.position!: animation.move.slabPosition!);
             const actualX = visualPosition?.x!;
