@@ -459,7 +459,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Finish it !'),
+      title: (t: TFunction) => t('Finish it!'),
       text: (t: TFunction) => t('tutorial.elimination'),
       boxTop: 46,
       boxLeft: 22,

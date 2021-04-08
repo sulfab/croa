@@ -25,7 +25,7 @@ const WelcomePopup: FunctionComponent<{ player: Player, close: () => void }> = (
             <div css={[popupStyle, popupPosition, css`width: 60%`, popupLightStyle]}
                  onClick={event => event.stopPropagation()}>
                 <div css={closePopupStyle} onClick={close}><FontAwesomeIcon icon={faTimes}/></div>
-                <h2>{t('Welcome {playerName}', { playerName: playerInfo?.name })}</h2>
+                <h2>{t('Welcome {playerName}', { playerName: (playerInfo?.name || getPlayerName(player.color, t)) })}</h2>
                 <FrogAnimation css={ frogImage } visible={ true } frog={ player.femaleFrogs.find(f => f.isQueen)! } color={ player.color } animation="blinking" />
                 <FrogAnimation css={ frogImageRight } visible={ true } frog={ player.femaleFrogs.find(f => !f.isQueen)! } color={ player.color } animation="blinking" />
                 <p>{t('You play {color} frogs. Have fun!', {color: getPlayerName(player.color, t) })}</p>

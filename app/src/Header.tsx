@@ -95,7 +95,7 @@ const getText = (t: TFunction, state: { state: HeaderState, playerId?: PlayerCol
       case HeaderState.START:
         return isActivePlayer ? t('You must move a frog') : t('{player} must move a frog', {player: getName(activePlayer!.color)});
       case HeaderState.ACQUIRING_SERVANT:
-        return isActivePlayer ? t('You acquire a new servant !') : t('{player} acquire a new servant !', {player: getName(state.playerId!)});
+        return isActivePlayer ? t('You acquire a new servant!') : t('{player} acquire a new servant!', {player: getName(state.playerId!)});
       case HeaderState.BOUNCING_FROG:
         return isActivePlayer ? t('Your frog is bouncing on a water lily, she must jump on another tile') : t('{player}’s frog is bouncing on a water lily. Waiting for the frog jump...', {player: getName(state.playerId!)});
       case HeaderState.FED_FROG:
