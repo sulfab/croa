@@ -1,5 +1,5 @@
 import { GameState } from '@gamepark/croa/GameState'
-import { FailuresDialog, Menu, useGame } from '@gamepark/react-client';
+import { FailuresDialog, FullscreenDialog, Menu, useGame } from '@gamepark/react-client';
 import { LoadingScreen } from '@gamepark/react-components'
 import { useEffect, useState } from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
@@ -31,7 +31,8 @@ export default function App() {
       <Header loading={loading} game={game!}/>
       <FailuresDialog css={ [popupStyle, popupLightStyle, failuresStyle] }/>
       <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)}/>
-      <Menu />
+      <Menu/>
+      <FullscreenDialog/>
     </DndProvider>
   )
 }
