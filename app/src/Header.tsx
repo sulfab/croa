@@ -36,7 +36,7 @@ export default function Header({loading, game}: Props) {
   const playersInfos = usePlayers<PlayerColor>();
   const animation = useAnimation<MoveFrog | RevealSlab | AcquireServant>(animation => isMoveFrog(animation.move) || isRevealSlab(animation.move) || isAcquireServant(animation.move))
   const activePlayer = (game?.players || []).find(player => game.activePlayer === player.color)!;
-  const text = loading ? t('Game loading…') : getText(t, lastState, game, playersInfos, playerId, activePlayer);
+  const text = loading ? t('Game loading...') : getText(t, lastState, game, playersInfos, playerId, activePlayer);
 
   useEffect(() => {
     if (!game) {
