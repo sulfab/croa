@@ -1,7 +1,18 @@
 import { css, keyframes } from '@emotion/react';
-import { Slab, SlabBackType, SlabFrontType, WaterLilies, Mosquitos, Mud, Pikes, Reeds, Males, Logs } from '@gamepark/croa/pond';
+import {
+  Logs,
+  Males,
+  Mosquitos,
+  Mud,
+  Pikes,
+  Reeds,
+  Slab,
+  SlabBackType,
+  SlabFrontType,
+  WaterLilies
+} from '@gamepark/croa/pond';
 import { useDisplayState } from '@gamepark/react-client';
-import { FC, HTMLAttributes, useEffect, useState } from 'react'
+import { FC, HTMLAttributes, useEffect, useState } from 'react';
 import { CroaState } from 'src/state/CroaState';
 import { slabBackImages, slabFrontImages } from '../../../utils/SlabImages';
 
@@ -20,10 +31,17 @@ const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, ...props 
     // eslint-disable-next-line
     }, [croaState?.highlightedSlab])
 
-    const isMale = (slab: SlabFrontType) => [SlabFrontType.BlueMale, SlabFrontType.GreenMale, SlabFrontType.PinkMale, SlabFrontType.PurpleMale, SlabFrontType.YellowMale].includes(slab);
+    const isMale = (slab: SlabFrontType) => [
+      SlabFrontType.RedMale,
+      SlabFrontType.BlueMale,
+      SlabFrontType.GreenMale,
+      SlabFrontType.PinkMale,
+      SlabFrontType.PurpleMale,
+      SlabFrontType.YellowMale
+    ].includes(slab);
 
     return (
-        <div { ...props } css={ [slabDescriptionVisual, croaState?.highlightedSlab? fadeAnimation: fadeOutAnimation] }>
+        <div { ...props } css={ [slabDescriptionVisualStyle, croaState?.highlightedSlab? fadeAnimation: fadeOutAnimation] }>
             <div css={ backSlabs }>
                 <div css={ backSlab }>
                     { currentSlab && <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Shallow)} alt={"Shallow tile"} />}
@@ -69,7 +87,7 @@ const fadeOutAnimation = css`
     animation: ${fadeOut} 0.3s;
 `
 
-const slabDescriptionVisual = css`
+const slabDescriptionVisualStyle = css`
   width: 100%;
 `;
 
