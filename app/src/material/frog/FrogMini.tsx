@@ -121,11 +121,12 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
                 onClick={ onSelectFrog }     
                 type={ frogFromBoard(frog).type }     
                 draggable={ playerId === frog.color } 
-                canDrag={ () => activePlayer !== undefined && canBeMoved } 
+                canDrag={ () => activePlayer !== undefined && canBeMoved }
                 item={ onDrag } 
                 end={ onSelectFrog }
                 drop={ onDropFrog } 
-                preTransform={ `${preTransform} ${boggedTransformation}` }
+                preTransform={ preTransform }
+                postTransform={ boggedTransformation }
                 css={[
                     frogMiniContainer(frog, frogZIndex),
                     isSelectable && selectableFrog,
