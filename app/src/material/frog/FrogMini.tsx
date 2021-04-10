@@ -113,7 +113,8 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
 
         return 'blinking';
     }
-    
+
+    const boggedTransformation = FrogStatus.Bogged === frog.status? `translate(1em, 1em) rotateZ(${horizontalOrientation === 'left'? 140: -140}deg);`: '';
     
     return (
         <Draggable { ...props } 
@@ -124,12 +125,11 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
                 item={ onDrag } 
                 end={ onSelectFrog }
                 drop={ onDropFrog } 
-                preTransform={ `${preTransform}` } 
+                preTransform={ `${preTransform} ${boggedTransformation}` }
                 css={[
                     frogMiniContainer(frog, frogZIndex),
                     isSelectable && selectableFrog,
                     frog.color !== playerId && !targeted && pointEvents,
-                    FrogStatus.Bogged === frog.status && boggedFrog(horizontalOrientation, preTransform),
                     animatingElimination && frogDisappearance(animatingElimination.duration),
                     targeted && targetedFrog
                 ]}>
@@ -142,10 +142,6 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
 
 const pointEvents = css`
     pointer-events: none;
-`;
-
-const boggedFrog = (horizontalOrientation: 'left'|'right', preTransform?: string) => css`
-    transform: ${preTransform} translate(1em, 1em) rotateZ(${horizontalOrientation === 'left'? 140: -140}deg);
 `;
 
 const selectableFrogAnimation = keyframes`
