@@ -94,7 +94,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
                     ...croaState,
                     highlightedSlab: slab.front
                 });
-            }, 100);
+            }, 200);
         }
     }
 
