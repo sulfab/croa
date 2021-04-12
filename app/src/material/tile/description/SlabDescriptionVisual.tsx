@@ -1,5 +1,6 @@
 import { css, keyframes } from '@emotion/react';
 import {
+  isMale,
   Logs,
   Males,
   Mosquitos,
@@ -29,16 +30,7 @@ const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, ...props 
             setCurrentSlab(croaState?.highlightedSlab)
         }
     // eslint-disable-next-line
-    }, [croaState?.highlightedSlab])
-
-    const isMale = (slab: SlabFrontType) => [
-      SlabFrontType.RedMale,
-      SlabFrontType.BlueMale,
-      SlabFrontType.GreenMale,
-      SlabFrontType.PinkMale,
-      SlabFrontType.PurpleMale,
-      SlabFrontType.YellowMale
-    ].includes(slab);
+    }, [croaState?.highlightedSlab]);
 
     return (
         <div { ...props } css={ [slabDescriptionVisualStyle, croaState?.highlightedSlab? fadeAnimation: fadeOutAnimation] }>

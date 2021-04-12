@@ -1,3 +1,4 @@
+
 enum SlabFrontType {
     WaterLily = 1,
     Mosquito,
@@ -13,6 +14,11 @@ enum SlabFrontType {
     GreenMale
 }
 
+const isMale = (tileFront?: SlabFrontType) => {
+    return !!tileFront && [SlabFrontType.BlueMale, SlabFrontType.RedMale, SlabFrontType.YellowMale, SlabFrontType.PinkMale, SlabFrontType.PurpleMale, SlabFrontType.GreenMale].includes(tileFront)
+};
+
 export {
-    SlabFrontType
+    SlabFrontType,
+    isMale
 }

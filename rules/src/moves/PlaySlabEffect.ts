@@ -5,10 +5,15 @@ import { FemaleFrog, FrogStatus, MaleFrog } from '../frog';
 import { GameState, GameStateView } from '../GameState';
 import { isKnownSlab, SlabFrontType } from '../pond';
 import { isGameOver } from '../utils';
+import Move from './Move';
 
 export type PlaySlabEffect = {
     type: MoveType.PlaySlabEffect,
     slabPosition: Position
+}
+
+export const isPlaySlabEffect = (move: Move): move is PlaySlabEffect => {
+    return MoveType.PlaySlabEffect === move.type;
 }
 
 /**

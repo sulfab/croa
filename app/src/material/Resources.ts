@@ -87,6 +87,7 @@ import GreenServantJumpingBack from './frog/animations/jumping/green-servant-bac
 import PinkServantJumpingBack from './frog/animations/jumping/pink-servant-back.png';
 
 import jumpSound from '../sounds/jump.mp3';
+import croaSound from '../sounds/croa.mp3';
 
 const Images = {
     BlueMale, GreenMale, PinkMale, YellowMale, PurpleMale, RedMale,
@@ -108,7 +109,8 @@ const Images = {
 
 
 const Sounds = {
-    jumpSound
+    jumpSound,
+    croaSound
 }
 
 export { 

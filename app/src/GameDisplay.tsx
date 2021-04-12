@@ -12,6 +12,7 @@ import {SlabDescription} from './material/tile/description/SlabDescription';
 import {SlabDescriptionVisual} from './material/tile/description/SlabDescriptionVisual';
 import TutorialPopup from './tutorial/TutorialPopup';
 import WelcomePopup from './popup/WelcomePopup';
+import { CroaSounds } from './sounds/CroaSounds';
 
 type Props = {
   game: GameState
@@ -45,6 +46,7 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
         </div>
         {game.tutorial && <TutorialPopup game={game}/>}
         { displayWelcome && player && <WelcomePopup player={player} close={() => setWelcomePopupClosed(true)}/>}
+        <CroaSounds pond={ game.pond } />
       </Letterbox>
     </>
   )

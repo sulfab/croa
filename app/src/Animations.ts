@@ -17,7 +17,7 @@ const CroaAnimation: Animations<GameState, MoveView, PlayerColor, PlayerColor> =
             case MoveType.SkipTurn:
                 return 0;
             default:
-                return 0;
+                return 0.1;
         }
     },
 
