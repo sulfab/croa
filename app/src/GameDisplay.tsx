@@ -10,9 +10,9 @@ import {playerBoardHeight, playerWidth} from './utils/Styles';
 import React, {useState} from 'react';
 import {SlabDescription} from './material/tile/description/SlabDescription';
 import {SlabDescriptionVisual} from './material/tile/description/SlabDescriptionVisual';
-import TutorialPopup from './tutorial/TutorialPopup';
 import WelcomePopup from './popup/WelcomePopup';
 import { CroaSounds } from './sounds/CroaSounds';
+import TutorialPopup from './tutorial/TutorialPopup';
 
 type Props = {
   game: GameState

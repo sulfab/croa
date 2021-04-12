@@ -144,6 +144,7 @@ export const popupStyle = css`
   & > h2 {
     font-size: 5em;
     margin: 0;
+    letter-spacing: 0.04em;
   }
 
   & > p {

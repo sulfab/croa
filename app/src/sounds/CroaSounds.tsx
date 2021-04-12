@@ -35,6 +35,7 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
   const eliminateAnimation = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move));
 
   useEffect(() => {
+    ambiance.loop = true;
     ambiance
       .play()
       .catch(() => setAmbianceFail(true))
