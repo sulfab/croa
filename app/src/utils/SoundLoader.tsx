@@ -10,7 +10,6 @@ const SoundLoader: React.FunctionComponent<SoundLoaderProps> = ({sounds, onSound
   const totalLoadCount = sounds.length;
 
   useEffect(() => {
-    console.log("Load");
     sounds.forEach(sound => {
       let audio = new Audio();
       audio.addEventListener('canplaythrough', onLoad, false);
