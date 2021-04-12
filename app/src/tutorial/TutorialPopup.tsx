@@ -1,24 +1,27 @@
 import { css } from '@emotion/react'
-import {faMinusSquare, faPlusSquare, faTimes} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faMinusSquare, faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameStateView } from '@gamepark/croa/GameState'
 import { isMoveFrog, isRevealSlab, Move } from '@gamepark/croa/moves'
 import { PlayerColor } from '@gamepark/croa/player'
 import { isGameOver } from '@gamepark/croa/utils'
-import {useActions, useAnimation, useDisplayState, useFailures, usePlayerId} from '@gamepark/react-client'
-import {TFunction} from 'i18next'
-import React, { useEffect, useRef, useState} from 'react'
-import {Trans, useTranslation} from 'react-i18next'
+import { Tutorial, useActions, useAnimation, useDisplayState, useFailures, usePlayerId } from '@gamepark/react-client'
+import { TFunction } from 'i18next'
+import React, { useEffect, useRef, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { isTouchDevice } from '../utils/IsTouchDevice'
 import { Button } from '../utils/Button'
-import {
-  closePopupStyle, discordUri, hidePopupOverlayStyle, platformUri, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle
-} from '../utils/Styles';
+import { closePopupStyle, discordUri, hidePopupOverlayStyle, platformUri, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle } from '../utils/Styles';
 import tutorialArrowLight from '../utils/tutorial-arrow-light.png'
 import { CroaState } from 'src/state/CroaState'
 import { SlabFrontType } from '@gamepark/croa/pond'
 
-const TutorialPopup: React.FC<{ game: GameStateView }> = ({game}) => {
+type Props = {
+    game: GameStateView
+    tutorial: Tutorial
+}
+
+const TutorialPopup: React.FC<Props> = ({game, tutorial}) => {
   const [croaState, setCroaState] = useDisplayState<CroaState | undefined>(undefined);
   const {t} = useTranslation()
   const [failures] = useFailures()
@@ -92,6 +95,13 @@ const TutorialPopup: React.FC<{ game: GameStateView }> = ({game}) => {
 
   const currentMessage = tutorialMessage(tutorialIndex)
   const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length
+
+  useEffect(() => {
+    if (game.activePlayer === PlayerColor.Pink) {
+      tutorial.playNextMove()
+    }
+  }, [displayPopup])
+
   return (
     <>
       <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]} onClick={() => setTutorialDisplay(false)}>
@@ -117,7 +127,7 @@ const TutorialPopup: React.FC<{ game: GameStateView }> = ({game}) => {
         <img alt='Arrow pointing toward current tutorial interest' src={tutorialArrowLight} draggable="false"
              css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
       }
-      { 
+      {
         isGameOver(game.players) &&
         <div css={[popupStyle, popupPosition(tutorialEndGame), tutorialEnd && buttonsPosition, popupLightStyle]}>
           <div css={closePopupStyle} onClick={() => toggleTutorialEnd()}><FontAwesomeIcon icon={tutorialEnd ? faPlusSquare : faMinusSquare}/></div>
@@ -303,7 +313,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Game help'),
-      text: (t: TFunction) => isTouchDevice()?  
+      text: (t: TFunction) => isTouchDevice()?
           t('tutorial.help.description.b'):
           t('tutorial.help.description.a'),
       boxTop: 42,
@@ -386,7 +396,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
       boxLeft: 47,
       boxWidth: 50,
       arrow: {
-        angle: 180, 
+        angle: 180,
         top: 52,
         left: 29.5
       }
@@ -470,7 +480,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
         left: 37.5
       }
     }
-  
+
   ]
 ]
 

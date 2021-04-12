@@ -1,6 +1,6 @@
 import {css, keyframes} from '@emotion/react';
 import {GameState} from '@gamepark/croa/GameState';
-import {usePlayerId} from '@gamepark/react-client';
+import { usePlayerId, useTutorial } from '@gamepark/react-client';
 import {Letterbox} from '@gamepark/react-components';
 import {Board} from './material/board/Board';
 import {PlayerBoard} from './material/player/PlayerBoard';
@@ -24,7 +24,8 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
   const getPlayer = (index: number) => game.players.find((_, i) => PlayerBoardPlacement[game.players.length].getPlayerBoard(i, playerIndex) === index);
   const player = game.players.find(p => p.color === playerId);
   const [welcomePopupClosed, setWelcomePopupClosed] = useState(game.pond.some(s => s.some(s2 => s2.displayed)))
-  const displayWelcome = !game.tutorial && !welcomePopupClosed
+  const tutorial = useTutorial()
+  const displayWelcome = !tutorial && !welcomePopupClosed
 
   return (
     <>
@@ -44,7 +45,7 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
             { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0`} player={ getPlayer(3)! } activePlayer={ game.activePlayer } /> }
           </div>
         </div>
-        {game.tutorial && <TutorialPopup game={game}/>}
+        {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
         { displayWelcome && player && <WelcomePopup player={player} close={() => setWelcomePopupClosed(true)}/>}
         <CroaSounds pond={ game.pond } />
       </Letterbox>

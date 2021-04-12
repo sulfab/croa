@@ -41,7 +41,7 @@ export default function App() {
 }
 
 const failuresStyle = css`
-  font-size: 1em;
+  font-size: 1em !important;
   width: 70%;
   h2 {
     font-family: "Ranchers", cursive;

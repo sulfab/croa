@@ -6,7 +6,6 @@ export interface GameState {
   activePlayer?: PlayerColor;
   pond: Slab[][];
   lastSlab?: SlabFrontType;
-  tutorial?: boolean;
 }
 
 export type GameStateView = Omit<GameState, 'pond'> & {

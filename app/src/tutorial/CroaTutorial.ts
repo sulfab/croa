@@ -3,7 +3,7 @@ import { Move, moveFrogMove } from '@gamepark/croa/moves';
 import { initializePlayerBoard, PlayerColor } from '@gamepark/croa/player';
 import { pond, SlabBackType, SlabFrontType } from '@gamepark/croa/pond';
 import { shuffleSlabs } from '@gamepark/croa/utils';
-import { Tutorial } from '@gamepark/react-client';
+import { TutorialDescription } from '@gamepark/react-client';
 
 const tilesToPlace: Array<{ front: SlabFrontType, back: SlabBackType, x: number, y: number }> = [
     { front: SlabFrontType.WaterLily, back: SlabBackType.Deep, x: 1, y: 1 },
@@ -29,13 +29,12 @@ const shuffledPond = shuffleSlabs(pond, 8).map((row, x) => row.map((tile, y) => 
     return tile;
 }));
 
-const CroaTutorial: Tutorial<GameState, Move, PlayerColor> = {
+const CroaTutorial: TutorialDescription<GameState, Move, PlayerColor> = {
 
     setupTutorial: () => [
         {
             players: [PlayerColor.Blue, PlayerColor.Pink].map((p, index) => initializePlayerBoard(2, index, p)), 
             pond: shuffledPond, 
-            tutorial: true,
             activePlayer: PlayerColor.Blue
         }, [PlayerColor.Blue, PlayerColor.Pink]],
     expectedMoves: () => [
