@@ -1,7 +1,7 @@
 import { css, keyframes } from '@emotion/react';
 import { FemaleFrog, FrogStatus } from '@gamepark/croa/frog';
 import { PlayerColor } from '@gamepark/croa/player';
-import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from '@gamepark/react-client';
+import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId, useSound } from '@gamepark/react-client';
 import { Draggable } from '@gamepark/react-components';
 import { FunctionComponent, useEffect } from 'react';
 import { frogMiniContainer } from '../../utils/Styles';
@@ -10,7 +10,9 @@ import { Position } from '@gamepark/croa/common/Position';
 import { DraggableProps } from '@gamepark/react-components/dist/Draggable/Draggable';
 import { EliminateFrog, eliminateFrogMove, isEliminateFrog, isMoveFrog, Move, MoveFrog } from '@gamepark/croa/moves';
 import { FrogAnimation } from './FrogAnimation';
-import { CroaState } from 'src/state/CroaState';
+// @ts-ignore
+import { CroaState } from '../../state/CroaState';
+import { Sounds } from '../Resources';
 
 
 type FrogMiniProps = {
@@ -28,6 +30,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
     const [croaState, setCroaState] = useDisplayState<CroaState | undefined>(undefined);
     const playerId = usePlayerId();
     const play = usePlay();
+    const [jump] = useSound(Sounds.jumpSound)
     const animatingMove = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color)
     const animatingElimination = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color)
     const animating = useAnimations().length > 0;
@@ -40,6 +43,14 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
                 && (frog.position!.x !== first.position!.x || frog.position!.y !== first.position!.y))       
         && ![FrogStatus.Bogged, FrogStatus.Fed, FrogStatus.Moved].includes(frog.status) 
         && !otherFrogs.some(f => [FrogStatus.Bouncing, FrogStatus.Moved, FrogStatus.Eliminated].includes(f.status));
+
+    useEffect(() => {
+        if (animatingMove && animatingMove.move) {
+            console.log("Play");
+            jump.play();
+        }
+    // eslint-disable-next-line
+    }, [animatingMove && animatingMove.move])
 
     // Detect change of frog between state and current frog
     // Unset the frog if it can't be moved
@@ -63,6 +74,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({ frog, targeted, horizontal
 
     const onDropFrog = (move: Move) => {
         if (move) {
+            jump.play();
             play(move);
         }
     }

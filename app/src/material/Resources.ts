@@ -86,6 +86,8 @@ import RedServantJumpingBack from './frog/animations/jumping/red-servant-back.pn
 import GreenServantJumpingBack from './frog/animations/jumping/green-servant-back.png';
 import PinkServantJumpingBack from './frog/animations/jumping/pink-servant-back.png';
 
+import jumpSound from '../sounds/jump.mp3';
+
 const Images = {
     BlueMale, GreenMale, PinkMale, YellowMale, PurpleMale, RedMale,
     WaterLily, Mosquito, Mud, Reed, Pike, Log, Shallow, Deep,
@@ -104,6 +106,12 @@ const Images = {
     BoardBackground
 }
 
+
+const Sounds = {
+    jumpSound
+}
+
 export { 
-    Images
+    Images,
+    Sounds
 }

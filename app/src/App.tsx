@@ -6,23 +6,25 @@ import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import { GameDisplay } from './GameDisplay'
 import CroaBox from './material/visuals/croa-box.png';
-import { Images} from './material/Resources'
+import { Images, Sounds } from './material/Resources';
 import ImagesLoader from './utils/ImagesLoader'
 import Header from './Header'
 import { css } from '@emotion/react';
 import { popupLightStyle, popupStyle } from './utils/Styles';
+import { SoundLoader } from './utils/SoundLoader';
 
 export default function App() {
   const game = useGame<GameState>()
 
   const [isJustDisplayed, setJustDisplayed] = useState(true);
   const [isImagesLoading, setImagesLoading] = useState(true);
+  const [isSoundsLoading, setSoundLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => setJustDisplayed(false), 2000)
   }, [])
 
-  const loading = !game || isImagesLoading || isJustDisplayed;
+  const loading = !game || isImagesLoading || isSoundsLoading || isJustDisplayed;
 
   return (
     <DndProvider options={HTML5ToTouch}>
@@ -31,6 +33,7 @@ export default function App() {
       <Header loading={loading} game={game!}/>
       <FailuresDialog css={ [popupStyle, popupLightStyle, failuresStyle] }/>
       <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)}/>
+      <SoundLoader sounds={Object.values(Sounds)} onSoundLoad={() => setSoundLoading(false) } />
       <Menu/>
       <FullscreenDialog/>
     </DndProvider>
