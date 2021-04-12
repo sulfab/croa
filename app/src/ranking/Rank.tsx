@@ -104,7 +104,7 @@ const getFrog = (rank: number) => css`
     z-index: ${5 - rank};
     position: absolute;
     height: 26%;
-    width: 65%;
+    width: 64%;
     bottom: ${(30 + (5 * (4 - rank)) - 5) + (rank === 1? 41: 0)}%;
 `
 
