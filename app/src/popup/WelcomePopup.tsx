@@ -13,9 +13,10 @@ import {
     showPopupOverlayStyle
 } from '../utils/Styles';
 import {FrogAnimation} from '../material/frog/FrogAnimation';
-import {Player} from '@gamepark/croa/player';
+import { Player, PlayerColor } from '@gamepark/croa/player';
 import {Button} from '../utils/Button';
 import {getPlayerName} from '@gamepark/croa/CroaOptions';
+import { TFunction } from 'i18next';
 
 const WelcomePopup: FunctionComponent<{ player: Player, close: () => void }> = ({ player, close }) => {
     const {t} = useTranslation()
@@ -28,18 +29,31 @@ const WelcomePopup: FunctionComponent<{ player: Player, close: () => void }> = (
                 <h2>{t('Welcome {playerName}', { playerName: (playerInfo?.name || getPlayerName(player.color, t)) })}</h2>
                 <FrogAnimation css={ frogImage } visible={ true } frog={ player.femaleFrogs.find(f => f.isQueen)! } color={ player.color } animation="blinking" />
                 <FrogAnimation css={ frogImageRight } visible={ true } frog={ player.femaleFrogs.find(f => !f.isQueen)! } color={ player.color } animation="blinking" />
-                <p>{t('You play {color} frogs. Have fun!', {color: getPlayerName(player.color, t) })}</p>
+                <p>{t('You play {color}. Have fun!', {color: getFrogsColor(player.color, t) })}</p>
                 <Button css={ welcomeButton } color={ player.color } onClick={close}>{t('OK')}</Button>
             </div>
         </div>
     )
 }
 
+export function getFrogsColor(playerId: PlayerColor, t: TFunction) {
+    switch (playerId) {
+        case PlayerColor.Blue:
+            return t('Blue frogs')
+        case PlayerColor.Green:
+            return t('Green frogs')
+        case PlayerColor.Red:
+            return t('Red frogs')
+        case PlayerColor.Pink:
+            return t('Pink frogs')
+    }
+}
+
 const frogImage = css`
   position: absolute;
   bottom: 25%;
   margin: 0;
-  left: 10%;
+  left: 7%;
   width: 10%;
   height: 50%;
 `
@@ -47,7 +61,7 @@ const frogImage = css`
 const frogImageRight = css`
   position: absolute;
   bottom: 25%;
-  right: 13%;
+  right: 11%;
   margin: 0;
   left: unset;
   width: 6%;
