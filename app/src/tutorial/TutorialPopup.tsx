@@ -82,16 +82,21 @@ const TutorialPopup: React.FC<Props> = ({game, tutorial}) => {
   }, [actionsNumber]);
 
   useEffect(() => {
-    if (failures.length && tutorialDescription[actionsNumber]) {
+    if (failures.length) {
       setTutorialIndex(tutorialDescription[actionsNumber].length - 1);
       setTutorialDisplay(true);
     }
-  }, [actionsNumber, failures]);
+  // eslint-disable-next-line
+  }, [failures]);
 
   const currentMessage = tutorialMessage(tutorialIndex);
   const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length;
   const tutorialPopupRef = useRef(null);
   const onOutsideClick = () => {
+    if (!displayPopup) {
+      return;
+    }
+
     let currentStep = actionsNumber;
     if (tutorialDescription[currentStep] && tutorialDescription[currentStep][tutorialIndex]?.opponentAction) {
       tutorial.playNextMoves(tutorialDescription[currentStep][tutorialIndex].opponentAction)
