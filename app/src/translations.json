@@ -123,7 +123,9 @@
       "Eject {player}": "Eject {player}",
       "Flip your screen": "Flip your screen",
       "fs.dialog.p1": "This game is designed for landscape mode, we recommend to flip your screen.",
-      "fs.dialog.p2": "You can also enable fullscreen."
+      "fs.dialog.p2": "You can also enable fullscreen.",
+      "Enable sound": "Enable sound",
+      "Mute sound": "Mute sound"
     }
   },
   "fr": {
@@ -249,7 +251,9 @@
       "Eject {player}": "Expulser {player}",
       "Flip your screen": "Tournez votre écran",
       "fs.dialog.p1": "Ce jeu est conçu pour le mode paysage, nous vous conseillons de tourner votre écran.",
-      "fs.dialog.p2": "Vous pouvez aussi passer en plein écran."
+      "fs.dialog.p2": "Vous pouvez aussi passer en plein écran.",
+      "Enable sound": "Activer le son",
+      "Mute sound": "Couper le son"
     }
   },
   "de": {
@@ -290,7 +294,9 @@
       "eject.dialog.p1": "{player} hat die Bedenkzeit überschritten",
       "eject.dialog.p2": "Nach {duration} dürft ihr diesen Spieler aus der Partie entfernen und weiterspielen.",
       "eject.dialog.p3": "Falls ihr denkt, dass der Spieler nicht zurückkehrt, dürft ihr ihn aus der Partie entfernen.",
-      "Eject {player}": "{player} entfernen"
+      "Eject {player}": "{player} entfernen",
+      "Enable sound": "Ton einschalten",
+      "Mute sound": "Stummschalten"
     }
   }
 }
