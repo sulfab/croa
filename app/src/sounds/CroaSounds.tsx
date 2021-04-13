@@ -31,7 +31,7 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
   const [ambianceEnabled, setAmbianceEnabled] = useState(false);
   const [ambianceFail, setAmbianceFail] = useState(false);
   const moveAnimation = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move));
-  const acquireAnimation = useAnimation<AcquireServant | RevealSlab>(animation => isAcquireServant(animation.move));
+  const acquireAnimation = useAnimation<AcquireServant>(animation => isAcquireServant(animation.move));
   const revealAnimation = useAnimation<RevealSlab>(animation => isRevealSlab(animation.move));
   const playSlabAnimation = useAnimation<PlaySlabEffect>(animation => isPlaySlabEffect(animation.move));
   const eliminateAnimation = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move));
@@ -61,29 +61,38 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
   }, [ambianceFail, ambianceEnabled])
 
   useEffect(() => {
-    if (!revealAnimation && !moveAnimation && !acquireAnimation && !playSlabAnimation && !eliminateAnimation) {
-      return;
-    }
-
     if (revealAnimation) {
       reveal.volume = 0.1;
       reveal.play();
     }
+  // eslint-disable-next-line
+  }, [revealAnimation]);
 
+  useEffect(() => {
     if (moveAnimation) {
       jump.volume = 0.1;
       jump.play();
     }
+  // eslint-disable-next-line
+  }, [moveAnimation]);
 
-    if (acquireAnimation) {
-      croa.volume = 0.1;
-      croa.play();
-    }
-
+  useEffect(() => {
     if (eliminateAnimation) {
       elimination.volume = 0.1;
       elimination.play();
     }
+  // eslint-disable-next-line
+  }, [eliminateAnimation]);
+
+  useEffect(() => {
+    if (acquireAnimation) {
+      croa.volume = 0.1;
+      croa.play();
+    }
+  // eslint-disable-next-line
+  }, [acquireAnimation]);
+
+  useEffect(() => {
 
     if (playSlabAnimation && isPlaySlabEffect(playSlabAnimation.move)) {
       const slab = pond[playSlabAnimation.move.slabPosition.x][playSlabAnimation.move.slabPosition.y];
@@ -105,7 +114,7 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
       }
     }
     // eslint-disable-next-line
-  }, [revealAnimation, moveAnimation, acquireAnimation, playSlabAnimation, eliminateAnimation])
+  }, [playSlabAnimation])
 
   return null;
 }
