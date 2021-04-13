@@ -178,7 +178,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
 }
 
 const translateFrogAnimation = (animation: any) => css`
-    transition-duration: ${animation!.duration}s;
+    transition-duration: ${animation!.duration}s !important;
 `;
 
 const boardStyle = (columns: number) => css`
