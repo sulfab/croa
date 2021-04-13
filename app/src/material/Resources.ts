@@ -92,6 +92,7 @@ import mudSound from '../sounds/mud.mp3';
 import mosquitoSound from '../sounds/mosquito.mp3';
 import eliminationSound from '../sounds/elimination.mp3';
 import ambianceSound from '../sounds/ambiance.mp3';
+import pikeSound from '../sounds/pike.mp3';
 
 const Images = {
     BlueMale, GreenMale, PinkMale, YellowMale, PurpleMale, RedMale,
@@ -118,7 +119,8 @@ const Sounds = {
     mudSound,
     mosquitoSound,
     eliminationSound,
-    ambianceSound
+    ambianceSound,
+    pikeSound
 }
 
 export { 

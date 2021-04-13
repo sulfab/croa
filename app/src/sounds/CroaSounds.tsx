@@ -26,6 +26,7 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
   const [mosquito] = useSound(Sounds.mosquitoSound);
   const [elimination] = useSound(Sounds.eliminationSound);
   const [ambiance] = useSound(Sounds.ambianceSound);
+  const [pike] = useSound(Sounds.pikeSound);
   const [ambianceEnabled, setAmbianceEnabled] = useState(false);
   const [ambianceFail, setAmbianceFail] = useState(false);
   const moveAnimation = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move));
@@ -88,6 +89,10 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
           case SlabFrontType.Mosquito:
             mosquito.volume = 0.1;
             mosquito.play();
+            break;
+          case SlabFrontType.Pike:
+            pike.volume = 0.1;
+            pike.play();
             break;
         }
       }
