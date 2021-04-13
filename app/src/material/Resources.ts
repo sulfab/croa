@@ -93,6 +93,7 @@ import mosquitoSound from '../sounds/mosquito.mp3';
 import eliminationSound from '../sounds/elimination.mp3';
 import ambianceSound from '../sounds/ambiance.mp3';
 import pikeSound from '../sounds/pike.mp3';
+import revealSound from '../sounds/reveal.mp3';
 
 const Images = {
     BlueMale, GreenMale, PinkMale, YellowMale, PurpleMale, RedMale,
@@ -120,8 +121,9 @@ const Sounds = {
     mosquitoSound,
     eliminationSound,
     ambianceSound,
-    pikeSound
-}
+    pikeSound,
+    revealSound
+};
 
 export { 
     Images,

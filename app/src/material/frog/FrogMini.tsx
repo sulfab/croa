@@ -12,7 +12,6 @@ import { EliminateFrog, eliminateFrogMove, isEliminateFrog, isMoveFrog, Move, Mo
 import { FrogAnimation } from './FrogAnimation';
 import { CroaState } from '../../state/CroaState';
 
-
 type FrogMiniProps = {
   frog: FemaleFrog;
   otherFrogs: Array<FemaleFrog>;

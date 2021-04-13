@@ -27,6 +27,7 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
   const [elimination] = useSound(Sounds.eliminationSound);
   const [ambiance] = useSound(Sounds.ambianceSound);
   const [pike] = useSound(Sounds.pikeSound);
+  const [reveal] = useSound(Sounds.revealSound);
   const [ambianceEnabled, setAmbianceEnabled] = useState(false);
   const [ambianceFail, setAmbianceFail] = useState(false);
   const moveAnimation = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move));
@@ -63,6 +64,12 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
     if (!revealAnimation && !moveAnimation && !acquireAnimation && !playSlabAnimation && !eliminateAnimation) {
       return;
     }
+
+    if (revealAnimation) {
+      reveal.volume = 0.1;
+      reveal.play();
+    }
+
     if (moveAnimation) {
       jump.volume = 0.1;
       jump.play();
