@@ -20,6 +20,7 @@ import { Position } from '@gamepark/croa/common/Position';
 import { AcquireServant, isAcquireServant, isMoveFrog, isRevealSlab, MoveFrog, RevealSlab } from '@gamepark/croa/moves';
 import { useAnimation } from '@gamepark/react-client';
 import { PlayerBoardPlacement } from '../player/PlayerBoardPlacement';
+import { isMovableFrog } from '../../../../rules/src/utils';
 
 type BoardProps = {
     pond: Slab[][];
@@ -142,7 +143,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
         }
 
         return undefined;
-    } 
+    }
 
     const renderFrog = (frog: FemaleFrog) => {
         const visualPosition = getVisualPosition(frog.position!);
@@ -155,7 +156,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
                          activePlayer={ activePlayer?.color }
                          frog={ frog }
                          targeted={ !!activePlayer && activePlayer.eliminationChoice.some(f => f.id === frog.id && f.color === frog.color) }
-                         otherFrogs={ frogs.filter(f => f.color === activePlayer?.color && f.id !== frog.id && !!f.position) }
+                         movable={ !!activePlayer && isMovableFrog(frog, activePlayer?.femaleFrogs.filter(f => !!f.position), pond)}
                          visualPosition={ visualPosition }
                          horizontalOrientation={ frogHorizontalOrientation(frog) }
                          verticalOrientation={ frogVerticalOrientation(frog) }

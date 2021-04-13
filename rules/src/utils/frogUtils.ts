@@ -26,7 +26,41 @@ export const getAllowedPositions = (allFrogs: Array<FemaleFrog>, frog: FemaleFro
 
   return positions;
 }
-    
+
+export const getQueenAndServantsOnSameTile = (frogs: Array<FemaleFrog>) => {
+  const queenFrog = frogs.find(frog => frog.isQueen && !!frog.position);
+  if (queenFrog) {
+    const frogsOnSameTile = frogs.filter(frog => frog.id !== queenFrog.id && !!frog.position).filter(frog => frog.position!.x === queenFrog.position!.x && frog.position!.y === queenFrog.position!.y);
+    if (frogsOnSameTile.length) {
+      return [queenFrog, ...frogsOnSameTile];
+    }
+  }
+
+  return [];
+}
+
+export const getMovableFrogs = (frogs: Array<FemaleFrog>, allFrogs: Array<FemaleFrog>,  pond: (Slab | Pick<Slab, 'back'>)[][]) => frogs.filter(f => {
+  return getAllowedPositions(allFrogs, f, pond).length > 0
+});
+
+/**
+ * CHeck if the given frog is movable. Frogs passed to the function must be the same player as the frog itself
+ * @param frog The frog to check
+ * @param frogs All player frogs
+ * @param pond The pond
+ */
+export const isMovableFrog = (frog: FemaleFrog, frogs: Array<FemaleFrog>, pond: (Slab | Pick<Slab, 'back'>)[][]) => {
+  const queenAndServantOnSameTile = getQueenAndServantsOnSameTile(frogs);
+  const movableFrogs = getMovableFrogs(queenAndServantOnSameTile, frogs, pond);
+  if (queenAndServantOnSameTile.length) {
+    return !!((movableFrogs.length && movableFrogs.find(f => f.id === frog.id)) || (!movableFrogs.length && !queenAndServantOnSameTile.some(f => f.id === frog.id)));
+  } else {
+    return getAllowedPositions(frogs, frog, pond).length > 0
+      && ![FrogStatus.Bogged, FrogStatus.Fed, FrogStatus.Moved].includes(frog.status)
+      && !frogs.filter(f => f.id !== frog.id).some(f => [FrogStatus.Bouncing, FrogStatus.Moved, FrogStatus.Eliminated].includes(f.status))
+  }
+
+}
 export const isAllowedMove = (allFrogs: Array<FemaleFrog>, frog: FemaleFrog, delta: Position, slab: (Slab | Pick<Slab, 'back'>), boardSize: number): boolean => {
     const frogX = frog.position!.x + delta.x;
     const frogY = frog.position!.y + delta.y;

@@ -14,7 +14,7 @@ import { CroaState } from '../../state/CroaState';
 
 type FrogMiniProps = {
   frog: FemaleFrog;
-  otherFrogs: Array<FemaleFrog>;
+  movable: boolean;
   targeted: boolean,
   activePlayer?: PlayerColor;
   visualPosition?: Position;
@@ -26,9 +26,9 @@ type FrogMiniProps = {
 const FrogMini: FunctionComponent<FrogMiniProps> = ({
                                                       frog,
                                                       targeted,
+                                                      movable,
                                                       horizontalOrientation,
                                                       verticalOrientation,
-                                                      otherFrogs,
                                                       activePlayer,
                                                       visualPosition,
                                                       preTransform,
@@ -42,13 +42,8 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
   const animating = useAnimations().length > 0;
   const isCurrentPlayerFrog = playerId !== undefined && playerId === frog.color && playerId === activePlayer;
   const isSelected = croaState?.selectedFrog && croaState.selectedFrog === frog.id && playerId === frog.color;
-  const canBeMoved = isCurrentPlayerFrog
-    // If there is a queen and a servant on the same tile, only allow moving both
-    && !otherFrogs.some(first => first.isQueen
-      && otherFrogs.some(second => first.id !== second.id && first.position!.x === second.position!.x && first.position!.y === second.position!.y)
-      && (frog.position!.x !== first.position!.x || frog.position!.y !== first.position!.y))
-    && ![FrogStatus.Bogged, FrogStatus.Fed, FrogStatus.Moved].includes(frog.status)
-    && !otherFrogs.some(f => [FrogStatus.Bouncing, FrogStatus.Moved, FrogStatus.Eliminated].includes(f.status));
+  const canBeMoved = isCurrentPlayerFrog && movable && !animating;
+
 
   // Detect change of frog between state and current frog
   // Unset the frog if it can't be moved
@@ -130,7 +125,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
                onClick={onSelectFrog}
                type={frogFromBoard(frog).type}
                draggable={playerId === frog.color}
-               canDrag={activePlayer !== undefined && canBeMoved}
+               canDrag={ activePlayer !== undefined && canBeMoved }
                item={onDrag}
                end={onSelectFrog}
                drop={onDropFrog}
@@ -189,7 +184,7 @@ const frogDisappearanceAnimation = keyframes`
 `;
 
 const frogDisappearance = (duration: number) => css`
-  animation: ${frogDisappearanceAnimation} ${duration}s ease-in-out;
+  animation: ${frogDisappearanceAnimation} ${duration}s ease-in-out forwards;
 `;
 
 

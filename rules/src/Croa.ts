@@ -1,12 +1,27 @@
-import { IncompleteInformation, SequentialGame, Competitive, TimeLimit, Undo, Action, Eliminations } from '@gamepark/rules-api'
-import { CroaOptions, isGameOptions } from './CroaOptions'
-import { FemaleFrog, FrogStatus } from './frog'
-import { GameState, GameStateView } from './GameState'
-import { acquireServant, eliminateFrog, eliminateFrogMove, Move, moveFrog, moveFrogMove, MoveType, MoveView, playSlabEffect, playSlabEffectMove, revealSlab, revealSlabMove, skipTurn, skipTurnMove } from './moves'
-import { initializePlayerBoard, Player, PlayerColor } from './player'
-import { isKnownSlab, pond, Slab } from './pond'
-import { getAllowedPositions, shuffleSlabs } from './utils'
-import { acquireServantMove } from './moves';
+import { Action, Competitive, Eliminations, IncompleteInformation, SequentialGame, TimeLimit, Undo } from '@gamepark/rules-api';
+import { CroaOptions, isGameOptions } from './CroaOptions';
+import { FemaleFrog, FrogStatus } from './frog';
+import { GameState, GameStateView } from './GameState';
+import {
+  acquireServant,
+  acquireServantMove,
+  eliminateFrog,
+  eliminateFrogMove,
+  Move,
+  moveFrog,
+  moveFrogMove,
+  MoveType,
+  MoveView,
+  playSlabEffect,
+  playSlabEffectMove,
+  revealSlab,
+  revealSlabMove,
+  skipTurn,
+  skipTurnMove
+} from './moves';
+import { initializePlayerBoard, Player, PlayerColor } from './player';
+import { isKnownSlab, pond, Slab } from './pond';
+import { getAllowedPositions, getMovableFrogs, getQueenAndServantsOnSameTile, shuffleSlabs } from './utils';
 
 const defaultBoardSize = 8;
 
@@ -63,6 +78,8 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
       return [];
     }
 
+    const inGamePlayerFrogs: Array<FemaleFrog> = player.femaleFrogs.filter(f => !!f.position);
+
     const moves: Array<Move> = [];
 
     // Player elimination choice
@@ -71,27 +88,22 @@ export default class Croa extends SequentialGame<GameState, Move, PlayerColor>
     }
 
     // By default, bogged or fed frogs can't be moved
-    let movableFrogs = player.femaleFrogs.filter(frog => !!frog.position && ![FrogStatus.Bogged, FrogStatus.Fed].includes(frog.status));
+    let movableFrogs = inGamePlayerFrogs.filter(frog => ![FrogStatus.Bogged, FrogStatus.Fed].includes(frog.status));
 
     // In case the player has a fed frog, allow skip turn
-    if (player.femaleFrogs.some(frog => FrogStatus.Fed === frog.status)) {
+    if (inGamePlayerFrogs.some(frog => FrogStatus.Fed === frog.status)) {
       moves.push(skipTurnMove);
     }
 
     // If there is a bouncing frog, only this can be moved
-    const bouncingFrog: FemaleFrog | undefined = player.femaleFrogs.find(frog => FrogStatus.Bouncing === frog.status);
+    const bouncingFrog: FemaleFrog | undefined = inGamePlayerFrogs.find(frog => FrogStatus.Bouncing === frog.status);
     if (bouncingFrog) {
       movableFrogs = [bouncingFrog];
     } else {
-      const queenFrog = movableFrogs.find(frog => frog.isQueen)
-      if (queenFrog) {
-        const servantFrogsOnSlab = movableFrogs
-          .filter(frog => frog.id !== queenFrog.id && frog.position!.x === queenFrog.position!.x && frog.position!.y === queenFrog.position!.y)
-
-        // If there is a queen frog and servants on the same slab, only one of them must be moved
-        if (servantFrogsOnSlab && servantFrogsOnSlab.length) {
-          movableFrogs = [queenFrog, ...servantFrogsOnSlab];
-        }
+      const multipleFrogsOnSameTile = getQueenAndServantsOnSameTile(movableFrogs);
+      const nonBlockedFrogs = getMovableFrogs(multipleFrogsOnSameTile, inGamePlayerFrogs, this.state.pond);
+      if (nonBlockedFrogs.length > 0) {
+        movableFrogs = nonBlockedFrogs;
       }
     }
 
