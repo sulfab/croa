@@ -5,12 +5,13 @@ import { useSelector } from 'react-redux';
 import { CroaAvatar } from '../material/player/Avatar';
 import { FrogAnimation } from '../material/frog/FrogAnimation';
 import gamePointIcon from '../material/player/visuals/game-point.svg';
+import { queenMiniRatio, rankingRatio } from '../utils/Styles';
 
 type RankProps = {
     rank: number;
     player?: Player;
     reduced?: boolean;
-} & HTMLAttributes<HTMLDivElement> 
+} & HTMLAttributes<HTMLDivElement>
 
 const Rank: React.FC<RankProps> = ({ rank, player, reduced, ...props }) => {
     const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player?.color));
@@ -100,12 +101,15 @@ const rankDisabled = css`
     height: 1em;
 `
 
+const frogWidth = 65
+const frogHeight = frogWidth / queenMiniRatio * rankingRatio;
+
 const getFrog = (rank: number) => css`
     z-index: ${5 - rank};
     position: absolute;
-    height: 26%;
-    width: 64%;
-    bottom: ${(30 + (5 * (4 - rank)) - 5) + (rank === 1? 41: 0)}%;
+    height: ${ frogHeight }%;
+    width: ${ frogWidth }%;
+    bottom: ${(30 + (5 * (4 - rank)) - 5) + (rank === 1? 38: 0)}%;
 `
 
 const hideFrog = css`

@@ -47,6 +47,11 @@ export const playerBoardServantsAreaWidth = 60;
 
 export const rankingAreaHeight = 35;
 export const rankingAreaWidth = 35;
+
+export const podiumRatio = screenRatio * rankingAreaWidth / rankingAreaHeight;
+export const rankingRatio = podiumRatio * 22 / 125;
+
+
 export const frogOffset = (frogIndex: number, frog: FemaleFrog) => {
     
     switch(frogIndex) {
