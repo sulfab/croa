@@ -605,12 +605,14 @@ const tipsContainerStyle = css`
   padding: 0.4em 0.2em;
   border-top: 0.05em solid gray;
   margin-top: 0.5em;
+  text-align: left;
 `;
 
 const tipsStyle = css`
   font-family: "Ranchers", cursive;
   font-weight: bold;
   letter-spacing: 0.04em;
+  margin-right: 0.5em;
 `;
 
 export default TutorialPopup;
