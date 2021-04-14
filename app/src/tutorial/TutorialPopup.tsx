@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import { faMinusSquare, faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GameStateView } from '@gamepark/croa/GameState';
-import { isMoveFrog, isRevealSlab, Move } from '@gamepark/croa/moves';
+import { Move } from '@gamepark/croa/moves';
 import { PlayerColor } from '@gamepark/croa/player';
 import { isGameOver } from '@gamepark/croa/utils';
-import { Tutorial, useActions, useAnimation, useFailures, usePlayerId } from '@gamepark/react-client';
+import { Tutorial, useActions, useAnimations, useFailures, usePlayerId } from '@gamepark/react-client';
 import { TFunction } from 'i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -24,9 +24,9 @@ const TutorialPopup: React.FC<Props> = ({game, tutorial}) => {
   const {t} = useTranslation()
   const [failures] = useFailures()
   const playerId = usePlayerId<PlayerColor>()
-  const actions = useActions<Move, PlayerColor>()
-  const animation = useAnimation<Move>(animation => isMoveFrog(animation.move) || isRevealSlab(animation.move))
-  const actionsNumber = (actions || []).length;
+  const actions = useActions<Move, PlayerColor>();
+  const animations = useAnimations()
+  const actionsNumber = (actions || []).filter(action => !action.delayed).length;
   const previousActionNumber = useRef(actionsNumber);
   const [tutorialIndex, setTutorialIndex] = useState(0);
   const [tutorialEnd, setTutorialEnd] = useState(false);
@@ -90,7 +90,7 @@ const TutorialPopup: React.FC<Props> = ({game, tutorial}) => {
   }, [failures]);
 
   const currentMessage = tutorialMessage(tutorialIndex);
-  const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length;
+  const displayPopup = tutorialDisplay && !animations.length && currentMessage && !failures.length;
   const tutorialPopupRef = useRef(null);
   const onOutsideClick = () => {
     if (!displayPopup) {
