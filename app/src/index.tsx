@@ -11,6 +11,7 @@ import App from './App';
 import { Images } from './material/Resources';
 import translations from './translations.json';
 import { CroaTutorial } from './tutorial/CroaTutorial';
+import { ai } from './tutorial/ai/TutorialAI.worker';
 
 setupTranslation(translations);
 
@@ -69,7 +70,8 @@ ReactDOM.render(
         RulesView={ CroaView }
         tutorial={ CroaTutorial }
         animations={ CroaAnimation } 
-        optionsDescription={ CroaOptionsDescription }>
+        optionsDescription={ CroaOptionsDescription }
+        ai={ ai }>
       <App/>
     </GameProvider>
     <Global styles={[normalize, style]}/>
