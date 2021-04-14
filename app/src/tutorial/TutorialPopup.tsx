@@ -322,8 +322,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
           <span>{ t('tutorial.intro.tile')}</span>
           <span css={ tilesStyle }>
             { t('Water type') }
-            <span  css={ tileContainerStyle }>{ t('Deep:') } <img css={ tileStyle } alt={"Deep water"} src={ Images.Deep } /></span>
-            <span css={ tileContainerStyle }>{ t('Shallow:') } <img css={ tileStyle } alt={"Shallow water"} src={ Images.Shallow } /></span>
+            <span  css={ tileContainerStyle }>{ t('Dangerous:') } <img css={ tileStyle } alt={"Dangerous water"} src={ Images.Deep } /></span>
+            <span css={ tileContainerStyle }>{ t('Calm:') } <img css={ tileStyle } alt={"Calm water"} src={ Images.Shallow } /></span>
           </span>
         </>,
       boxTop: 64,
