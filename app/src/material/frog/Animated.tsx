@@ -1,6 +1,7 @@
 import { css, keyframes } from '@emotion/react';
 import { PlayerColor } from '@gamepark/croa/player';
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useCallback, useEffect, useState } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
 
 type AnimatedProps = {
     animation: string;
@@ -15,10 +16,27 @@ type AnimatedProps = {
 
 
 const Animated: FC<AnimatedProps> = ({ animation, image, frame, visible, duration, delay, loop, color, ...props }) => {
+    const [innerWidth, setWidth] = useState<number>()
+    const onResize = useCallback((width) => {
+        if (width !== innerWidth) {
+            setWidth(Math.round(width))
+        }
+    }, [innerWidth])
+
+    const { ref, width } = useResizeDetector({ onResize })
+
+    useEffect(() => {
+        if (width && (!innerWidth || innerWidth !== width)) {
+            setWidth(Math.round(width))
+        }
+    // eslint-disable-next-line
+    }, [width])
 
     const delayPercentage = (!delay || !duration)? 0: delay / (delay + duration) * 100;
     return (
-        <div { ...props } css={ [container(frame, visible), duration && getAnimation(frame, duration, delay, delayPercentage, loop) ]} style={{ backgroundImage: `url(${image})` }} />
+      <div ref={ ref } {...props } css={!visible && invisible}>
+          <div css={ [container(frame), css`height: 100%; width: ${innerWidth? innerWidth + 'px': '100%'}`, duration && getAnimation(frame, duration, delay, delayPercentage, loop), ] } style={{ backgroundImage: `url(${image})` }} />
+      </div>
     );
 };
 
@@ -31,12 +49,15 @@ const animationKeyFrame = (frame: number, delayPercentage?: number) => keyframes
     }
 `
 
-const container = (frame: number, visible?: boolean) => css`
+const container = (frame: number) => css`
     position: absolute;
     bottom:  0;
     background-size: ${frame * 100}% 100%;
-    ${ !visible? `height: 0% !important;`: '' };
-    ${ !visible? `width: 0% !important;`: '' };
+`
+
+const invisible = css`
+  pointer-events: none;
+  visibility: hidden; 
 `
 
 const getAnimation = (frames: number, duration?: number, delay?: number, delayPercentage?: number, loop?: boolean) => css`
