@@ -34,7 +34,7 @@ const Animated: FC<AnimatedProps> = ({ animation, image, frame, visible, duratio
 
     const delayPercentage = (!delay || !duration)? 0: delay / (delay + duration) * 100;
     return (
-      <div ref={ ref } {...props } css={!visible && invisible}>
+      <div ref={ ref } {...props } css={ [!visible && invisible] }>
           <div css={ [container(frame), css`height: 100%; width: ${innerWidth? innerWidth + 'px': '100%'}`, duration && getAnimation(frame, duration, delay, delayPercentage, loop), ] } style={{ backgroundImage: `url(${image})` }} />
       </div>
     );
@@ -56,8 +56,8 @@ const container = (frame: number) => css`
 `
 
 const invisible = css`
-  pointer-events: none;
-  visibility: hidden; 
+    pointer-events: none;
+    opacity: 0.001;
 `
 
 const getAnimation = (frames: number, duration?: number, delay?: number, delayPercentage?: number, loop?: boolean) => css`
