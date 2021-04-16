@@ -395,12 +395,12 @@ const tutorialDescription: TutorialStepDescription[][] = [
       title: (t: TFunction) => t('Mud'),
       text: (t: TFunction) => t('tutorial.move.mud'),
       opponentAction: 1,
-      boxTop: 35,
+      boxTop: 37,
       boxLeft: 52,
-      boxWidth: 52,
+      boxWidth: 60,
       arrow: {
         angle: 180,
-        top: 35,
+        top: 37,
         left: 43.5
       }
     },
