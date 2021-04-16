@@ -7,7 +7,7 @@
   "files": [
     "dist"
   ],
-  "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
+  "author": "Patrick Beaumé <pbeaume@gmail.com>",
   "license": "ISC",
   "publishConfig": {
     "access": "public"

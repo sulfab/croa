@@ -4,7 +4,7 @@
     "rules",
     "app"
   ],
-  "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
+  "author": "Patrick Beaumé <pbeaume@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "lerna": "^4.0.0",
