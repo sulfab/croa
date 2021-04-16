@@ -31,6 +31,7 @@ const bordered = css`
 const button = (playerColor: PlayerColor) => css`
     width: 100%;
     height: 100%;
+    cursor: pointer;
     color: white;
     background: rgb(${playerColors.get(playerColor)!.rgb.r}, ${playerColors.get(playerColor)!.rgb.g}, ${playerColors.get(playerColor)!.rgb.b});
     border: 0.05em solid rgb(${playerColorsDark.get(playerColor)!.rgb.r},${playerColorsDark.get(playerColor)!.rgb.g},${playerColorsDark.get(playerColor)!.rgb.b});
