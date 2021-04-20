@@ -1,6 +1,6 @@
-import { Slab } from '@gamepark/croa/pond';
+import { isKnownSlab, Slab } from '@gamepark/croa/pond';
 import { isRevealSlab, moveFrogMove, RevealSlabView } from '@gamepark/croa/moves';
-import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from '@gamepark/react-client';
+import { useAnimation, useAnimations, usePlay, usePlayerId } from '@gamepark/react-client';
 import { FunctionComponent, useRef } from 'react';
 import { DragObjectType, FrogFromBoard } from '../../drag-objects';
 import { FemaleFrog, FrogStatus } from '@gamepark/croa/frog';
@@ -11,26 +11,27 @@ import { css, keyframes } from '@emotion/react';
 import { isAllowedMove } from '@gamepark/croa/utils';
 import { slabBackImages, slabFrontImages } from '../../utils/SlabImages';
 import { useLongPress } from '../../utils/useLongPress';
-import { CroaState } from '../../state/CroaState';
+import { highlightTileMove } from '@gamepark/croa/moves/HighlighTile';
 
 type SlabTileProps = {
-    slab: Slab;
+    slab: Slab | Pick<Slab, 'back'>;
     position: Position;
     visualPosition: Position;
     frogs: Array<FemaleFrog>;
     boardSize: number;
     activePlayer?: PlayerColor;
+    selectedFrogId?: number;
+    highlightedTile?: number;
 }
 
-const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosition, frogs, boardSize, activePlayer }) => {
-    const [croaState, setCroaState] = useDisplayState<CroaState | undefined>(undefined);
+const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosition, frogs, boardSize, activePlayer, selectedFrogId, highlightedTile }) => {
     const play = usePlay();
     const playerId = usePlayerId<PlayerColor>();
     const animation = useAnimation<RevealSlabView>(animation => isRevealSlab(animation.move) && animation.move.slabPosition.x === position.x && animation.move.slabPosition.y === position.y)
     const animating = useAnimations().length > 0;
     const hoverEvent = useRef<NodeJS.Timeout>();
 
-    const selectedFrog = croaState?.selectedFrog && frogs.find(frog => frog.id === croaState.selectedFrog && frog.color === playerId);
+    const selectedFrog = selectedFrogId && frogs.find(frog => frog.id === selectedFrogId && frog.color === playerId);
 
     const isValidSlab = () => !animating && selectedFrog && canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Fed !== selectedFrog.status
     const isInvalidSlab = () => !animating && selectedFrog && isAdjacentSlab(selectedFrog) && !canBeDropped(selectedFrog.id, frogs) && playerId === activePlayer && FrogStatus.Fed !== selectedFrog.status;
@@ -74,7 +75,7 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
 
     const [{ isOver }, ref] = useDrop({
         accept: DragObjectType.FrogFromBoard,
-        canDrop: (item: FrogFromBoard) => canBeDropped(croaState?.selectedFrog || item.frog.id, frogs),
+        canDrop: (item: FrogFromBoard) => canBeDropped(selectedFrogId || item.frog.id, frogs),
         drop: (item: FrogFromBoard) => moveFrogMove(item.frog.id, item.frog.color, position),
         collect: (monitor) => ({
             isOver: monitor.isOver()
@@ -82,18 +83,15 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     });
 
     const onTileClick = () => {
-        if (!animating && croaState?.selectedFrog && canBeDropped(croaState.selectedFrog, frogs)) {
-            return play(moveFrogMove(croaState.selectedFrog, playerId!, position));
+        if (!animating && selectedFrogId && canBeDropped(selectedFrogId, frogs)) {
+            return play(moveFrogMove(selectedFrogId, playerId!, position));
         }
     }
 
-    const highlightSlab= () => {
-        if (slab.front && croaState?.highlightedSlab !== slab.front) {
+    const highlightSlab = () => {
+        if (isKnownSlab(slab) && slab.front && highlightedTile !== slab.front) {
             hoverEvent.current = setTimeout(() => {
-                setCroaState({
-                    ...croaState,
-                    highlightedSlab: slab.front
-                });
+                play(highlightTileMove(slab.front), { local: true });
             }, 200);
         }
     }
@@ -106,13 +104,12 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     const longPress = useLongPress({
         onClick: onTileClick,
         onLongPress: () => {
-            setCroaState({
-                ...croaState,
-                highlightedSlab: slab.front
-            });
+            if (isKnownSlab(slab)) {
+                play(highlightTileMove(slab.front), { local: true });
 
-            if (window.navigator.vibrate) {
-                window.navigator.vibrate(200)
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(200)
+                }
             }
         },
         onMouseLeave: onLeaveTile
@@ -120,9 +117,9 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
     
     return (
         <div ref={ ref } onMouseEnter={ highlightSlab } css={[slabStyle, animation && css`z-index: 2` ]} { ...longPress }>
-            <div css={[slabStyle, !animation && slab.displayed && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
-                <div css={[backAndFrontSlab, !slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}/>
-                { (slab.displayed || animation?.move.front !== undefined) && <div css={[slabFront, backAndFrontSlab, slab.displayed && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(slab.front !== undefined? slab.front : animation?.move.front!)})` }}>
+            <div css={[slabStyle, !animation && isKnownSlab(slab) && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
+                <div css={[backAndFrontSlab, !isKnownSlab(slab) && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}/>
+                { (isKnownSlab(slab) || animation?.move.front !== undefined) && <div css={[slabFront, backAndFrontSlab, isKnownSlab(slab) && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(isKnownSlab(slab)? slab.front : animation?.move.front!)})` }}>
                     
                 </div> }
             </div>

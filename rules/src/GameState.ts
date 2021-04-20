@@ -10,4 +10,6 @@ export interface GameState {
 
 export type GameStateView = Omit<GameState, 'pond'> & {
   pond: (Slab | Pick<Slab, 'back'>)[][];
+  selectedFrogId?: number;
+  highlightedTile?: number;
 }

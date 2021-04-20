@@ -1,11 +1,25 @@
 import { Action, Game, Undo } from '@gamepark/rules-api';
 import { getPredictableAutomaticMoves } from './Croa';
 import { GameStateView } from './GameState';
-import { eliminateFrog, acquireServant, moveFrog, MoveType, MoveView, playSlabEffect, revealSlabInView, skipTurn } from './moves';
+import {
+    acquireServant,
+    eliminateFrog,
+    highlightTile,
+    HighlightTile,
+    moveFrog,
+    MoveType,
+    MoveView,
+    playSlabEffect,
+    revealSlabInView,
+    selectFrog,
+    SelectFrog,
+    skipTurn
+} from './moves';
 import { PlayerColor } from './player';
 
-export default class CroaView implements 
-    Game<GameStateView, MoveView>,
+type LocalMove = MoveView | SelectFrog | HighlightTile
+export default class CroaView implements
+    Game<GameStateView, LocalMove>,
     Undo<GameStateView, MoveView, PlayerColor> {
 
     state: GameStateView;
@@ -16,22 +30,22 @@ export default class CroaView implements
 
     canUndo(action: Action<MoveView, PlayerColor>, consecutiveActions: Action<MoveView, PlayerColor>[]): boolean {
       return !action.consequences.some(move => [MoveType.SkipTurn, MoveType.RevealSlab].includes(move.type))
-        && action.consequences.some(move => move.type === MoveType.PlaySlabEffect)        
+        && action.consequences.some(move => move.type === MoveType.PlaySlabEffect)
         && consecutiveActions.length === 0;
-    }  
+    }
 
     getAutomaticMove() {
         // If the tile is not known, reveal the tile, instead play the tile
         const activePlayer = this.state.players.find(player => player.color === this.state.activePlayer);
-    
+
         if (!activePlayer) {
           return;
         }
-        
+
         return getPredictableAutomaticMoves(this.state, activePlayer)
     }
 
-    play(move: MoveView): void {
+    play(move: LocalMove): void {
         switch(move.type) {
             case MoveType.MoveFrog:
                 moveFrog(this.state, move);
@@ -51,7 +65,14 @@ export default class CroaView implements
             case MoveType.SkipTurn:
                 skipTurn(this.state);
                 break;
+            case 'SelectFrog':
+                console.log("Select frog")
+                selectFrog(this.state, move);
+                break;
+            case 'HighlightTile':
+                highlightTile(this.state, move);
+                break;
         }
     }
-    
+
 }

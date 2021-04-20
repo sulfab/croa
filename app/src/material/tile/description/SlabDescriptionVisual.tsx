@@ -1,39 +1,25 @@
 import { css, keyframes } from '@emotion/react';
-import {
-  isMale,
-  Logs,
-  Males,
-  Mosquitos,
-  Mud,
-  Pikes,
-  Reeds,
-  Slab,
-  SlabBackType,
-  SlabFrontType,
-  WaterLilies
-} from '@gamepark/croa/pond';
-import { useDisplayState } from '@gamepark/react-client';
+import { isMale, Logs, Males, Mosquitos, Mud, Pikes, Reeds, Slab, SlabBackType, SlabFrontType, WaterLilies } from '@gamepark/croa/pond';
 import { FC, HTMLAttributes, useEffect, useState } from 'react';
-import { CroaState } from 'src/state/CroaState';
 import { slabBackImages, slabFrontImages } from '../../../utils/SlabImages';
 
 type SlabDescriptionVisualProps = {
-    slab?: SlabFrontType
+    slab?: SlabFrontType,
+    highlightedTile?: number
 } & HTMLAttributes<HTMLImageElement>;
 
-const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, ...props }) => {
-    const [croaState,] = useDisplayState<CroaState | undefined>(undefined);
-    const [currentSlab, setCurrentSlab] = useState<SlabFrontType | undefined>(croaState?.highlightedSlab)
+const SlabDescriptionVisual: FC<SlabDescriptionVisualProps> = ({ slab, highlightedTile, ...props }) => {
+    const [currentSlab, setCurrentSlab] = useState<SlabFrontType | undefined>(highlightedTile)
 
     useEffect(() => {
-        if (croaState?.highlightedSlab && currentSlab !== croaState?.highlightedSlab) {
-            setCurrentSlab(croaState?.highlightedSlab)
+        if (highlightedTile && currentSlab !== highlightedTile) {
+            setCurrentSlab(highlightedTile)
         }
     // eslint-disable-next-line
-    }, [croaState?.highlightedSlab]);
+    }, [highlightedTile]);
 
     return (
-        <div { ...props } css={ [slabDescriptionVisualStyle, croaState?.highlightedSlab? fadeAnimation: fadeOutAnimation] }>
+        <div { ...props } css={ [slabDescriptionVisualStyle, highlightedTile? fadeAnimation: fadeOutAnimation] }>
             <div css={ backSlabs }>
                 <div css={ backSlab }>
                     { currentSlab && <img css={ backSlabImage } src={ slabBackImages.get(SlabBackType.Shallow)} alt={"Shallow tile"} />}

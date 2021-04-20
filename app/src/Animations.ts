@@ -3,7 +3,7 @@ import { Move, MoveType, MoveView } from '@gamepark/croa/moves';
 import { PlayerColor } from '@gamepark/croa/player';
 import { Animations } from '@gamepark/react-client';
 
-const CroaAnimation: Animations<GameState, MoveView, PlayerColor, PlayerColor> = {
+const CroaAnimation: Animations<GameState, MoveView, PlayerColor> = {
     getAnimationDuration(move: MoveView) {
         switch(move.type) {
             case MoveType.MoveFrog:

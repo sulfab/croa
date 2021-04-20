@@ -1,22 +1,22 @@
 import { css, keyframes } from '@emotion/react';
 import { FemaleFrog, FrogStatus } from '@gamepark/croa/frog';
 import { PlayerColor } from '@gamepark/croa/player';
-import { useAnimation, useAnimations, useDisplayState, usePlay, usePlayerId } from '@gamepark/react-client';
+import { useAnimation, useAnimations, usePlay, usePlayerId } from '@gamepark/react-client';
 import { Draggable } from '@gamepark/react-components';
 import { FunctionComponent, useEffect } from 'react';
 import { frogMiniContainer } from '../../utils/Styles';
 import { frogFromBoard } from '../../drag-objects';
 import { Position } from '@gamepark/croa/common/Position';
 import { DraggableProps } from '@gamepark/react-components/dist/Draggable/Draggable';
-import { EliminateFrog, eliminateFrogMove, isEliminateFrog, isMoveFrog, Move, MoveFrog } from '@gamepark/croa/moves';
+import { EliminateFrog, eliminateFrogMove, isEliminateFrog, isMoveFrog, Move, MoveFrog, selectFrogMove } from '@gamepark/croa/moves';
 import { FrogAnimation } from './FrogAnimation';
-import { CroaState } from '../../state/CroaState';
 
 type FrogMiniProps = {
   frog: FemaleFrog;
   movable: boolean;
   targeted: boolean,
   activePlayer?: PlayerColor;
+  selectedFrogId?: number;
   visualPosition?: Position;
   preTransform?: string;
   horizontalOrientation: 'left' | 'right';
@@ -27,6 +27,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
                                                       frog,
                                                       targeted,
                                                       movable,
+                                                      selectedFrogId,
                                                       horizontalOrientation,
                                                       verticalOrientation,
                                                       activePlayer,
@@ -34,14 +35,13 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
                                                       preTransform,
                                                       ...props
                                                     }) => {
-  const [croaState, setCroaState] = useDisplayState<CroaState | undefined>(undefined);
   const playerId = usePlayerId();
   const play = usePlay();
   const animatingMove = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color);
   const animatingElimination = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move) && animation.move.frogId === frog.id && animation.move.playerId === frog.color);
   const animating = useAnimations().length > 0;
   const isCurrentPlayerFrog = playerId !== undefined && playerId === frog.color && playerId === activePlayer;
-  const isSelected = croaState?.selectedFrog && croaState.selectedFrog === frog.id && playerId === frog.color;
+  const isSelected = selectedFrogId && selectedFrogId === frog.id && playerId === frog.color;
   const canBeMoved = isCurrentPlayerFrog && movable && !animating;
 
 
@@ -49,17 +49,11 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
   // Unset the frog if it can't be moved
   useEffect(() => {
     if (isSelected && !canBeMoved) {
-      setCroaState({
-        ...croaState,
-        selectedFrog: undefined
-      });
+      play(selectFrogMove(), { local: true })
     }
 
     if (!isSelected && canBeMoved && frog.status === FrogStatus.Bouncing) {
-      setCroaState({
-        ...croaState,
-        selectedFrog: frog.id
-      });
+      play(selectFrogMove(frog.id), { local: true })
     }
 
     // eslint-disable-next-line
@@ -72,11 +66,7 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
   };
 
   const onDrag = () => {
-    setCroaState({
-      ...croaState,
-      selectedFrog: frog.id
-    });
-
+    play(selectFrogMove(frog.id), { local: true })
     return frogFromBoard(frog);
   };
 
@@ -91,19 +81,13 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
       return;
     }
 
-    const selectedFrog = croaState?.selectedFrog;
+    const selectedFrog = selectedFrogId;
     if (!selectedFrog || frog.id !== selectedFrog) {
-      return setCroaState({
-        ...croaState,
-        selectedFrog: frog.id
-      });
+      return play(selectFrogMove(frog.id), { local: true });
     }
 
     if (FrogStatus.Bouncing !== frog.status) {
-      return setCroaState({
-        ...croaState,
-        selectedFrog: undefined
-      });
+      return play(selectFrogMove(), { local: true });
     }
   };
 

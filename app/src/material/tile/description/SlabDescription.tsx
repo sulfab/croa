@@ -1,29 +1,27 @@
 import { css, keyframes } from '@emotion/react';
 import { SlabFrontType } from '@gamepark/croa/pond';
-import { useDisplayState } from '@gamepark/react-client';
 import { TFunction } from 'i18next';
 import { FC, HTMLAttributes, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CroaState } from 'src/state/CroaState';
 
 type SlabDescriptionProps = {
     slab?: SlabFrontType,
+    highlightedTile?: number
 } & HTMLAttributes<HTMLDivElement>
 
-const SlabDescription: FC<SlabDescriptionProps> = ({ ...props }) => {
+const SlabDescription: FC<SlabDescriptionProps> = ({ highlightedTile, ...props  }) => {
     const { t } = useTranslation();
-    const [croaState] = useDisplayState<CroaState | undefined>(undefined);
-    const [currentSlab, setCurrentSlab] = useState<SlabFrontType | undefined>(croaState?.highlightedSlab)
+    const [currentSlab, setCurrentSlab] = useState<SlabFrontType | undefined>(highlightedTile)
 
     useEffect(() => {
-        if (croaState?.highlightedSlab && currentSlab !== croaState?.highlightedSlab) {
-            setCurrentSlab(croaState?.highlightedSlab)
+        if (highlightedTile && currentSlab !== highlightedTile) {
+            setCurrentSlab(highlightedTile)
         }
     // eslint-disable-next-line
-    }, [croaState?.highlightedSlab])
+    }, [highlightedTile])
 
     return (
-        <div { ...props } css={ [slabDescriptionContainer, croaState?.highlightedSlab? fadeAnimation: fadeOutAnimation] }>
+        <div { ...props } css={ [slabDescriptionContainer, highlightedTile? fadeAnimation: fadeOutAnimation] }>
             <div css={ slabTitleContainer }>
                 <span css={ slabTitleBar} />    
                 <span css={ slabTitle }>{ currentSlab && slabDescriptions.get(currentSlab)?.title(t) }</span>

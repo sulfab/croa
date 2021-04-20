@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/react';
-import {GameState} from '@gamepark/croa/GameState';
+import { GameStateView } from '@gamepark/croa/GameState';
 import { usePlayerId, useTutorial } from '@gamepark/react-client';
 import {Letterbox} from '@gamepark/react-components';
 import {Board} from './material/board/Board';
@@ -13,9 +13,10 @@ import {SlabDescriptionVisual} from './material/tile/description/SlabDescription
 import WelcomePopup from './popup/WelcomePopup';
 import { CroaSounds } from './sounds/CroaSounds';
 import TutorialPopup from './tutorial/TutorialPopup';
+import { isKnownSlab } from '@gamepark/croa/pond';
 
 type Props = {
-  game: GameState
+  game: GameStateView
 }
 
 const GameDisplay: React.FC<Props> = ({game}: Props) => {
@@ -23,25 +24,30 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
   const playerIndex = game.players.findIndex(player => player.color === playerId) === -1? 0: game.players.findIndex(player => player.color === playerId);
   const getPlayer = (index: number) => game.players.find((_, i) => PlayerBoardPlacement[game.players.length].getPlayerBoard(i, playerIndex) === index);
   const player = game.players.find(p => p.color === playerId);
-  const [welcomePopupClosed, setWelcomePopupClosed] = useState(game.pond.some(s => s.some(s2 => s2.displayed)))
+  const [welcomePopupClosed, setWelcomePopupClosed] = useState(game.pond.some(s => s.some(s2 => isKnownSlab(s2))))
   const tutorial = useTutorial()
   const displayWelcome = !tutorial && !welcomePopupClosed
-
   return (
     <>
       <Letterbox css={letterBoxStyle}>
         { !game.activePlayer && <Ranking players={ game.players } css={ rankingBoard } /> }
         <div css={ gameBoard }>
-          <Board pond={ game.pond } playerColors={ game.players.map(p => p.color )} frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) } activePlayer={ game.players.find(player => player.color === game.activePlayer) } playerIndex={ playerIndex } playerCount={ game.players.length }/>
+          <Board pond={ game.pond }
+                 playerColors={ game.players.map(p => p.color )}
+                 frogs={ game.players.flatMap(p => p.femaleFrogs.filter(frog => !!frog.position)) }
+                 activePlayer={ game.players.find(player => player.color === game.activePlayer) }
+                 playerIndex={ playerIndex } playerCount={ game.players.length }
+                 selectedFrogId={ game.selectedFrogId }
+          />
           <div css={[ playerBoards, leftPlayerBoards ]}>
             { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
-            <SlabDescriptionVisual css={ lastSlabImage } />
+            <SlabDescriptionVisual css={ lastSlabImage } highlightedTile={ game.highlightedTile } />
             { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0`} player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }
           
           </div>
           <div css={[ playerBoards, rightPlayerBoards ]}>
             { getPlayer(2) && <PlayerBoard index={2} css={ css`top: 0`} player={ getPlayer(2)! } activePlayer={ game.activePlayer }  /> }
-            <SlabDescription css={ lastFrontSlabDescription } />
+            <SlabDescription css={ lastFrontSlabDescription } highlightedTile={ game.highlightedTile } />
             { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0`} player={ getPlayer(3)! } activePlayer={ game.activePlayer } /> }
           </div>
         </div>

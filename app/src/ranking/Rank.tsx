@@ -103,6 +103,7 @@ const rankDisabled = css`
 
 const frogWidth = 65
 const frogHeight = frogWidth / queenMiniRatio * rankingRatio;
+// height * ratio / ranking
 
 const getFrog = (rank: number) => css`
     z-index: ${5 - rank};

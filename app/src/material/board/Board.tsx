@@ -23,15 +23,16 @@ import { PlayerBoardPlacement } from '../player/PlayerBoardPlacement';
 import { isMovableFrog } from '../../../../rules/src/utils';
 
 type BoardProps = {
-    pond: Slab[][];
+    pond: (Slab | Pick<Slab, 'back'>)[][];
     frogs: Array<FemaleFrog>;
     activePlayer?: Player;
     playerIndex: number;
     playerCount: number;
     playerColors: Array<PlayerColor>;
+    selectedFrogId?: number;
 }
 
-const toPositions = (pond: Slab[][]): Position[][] => pond.map((row, x) => row.map((_, y) => ({ x, y })));
+const toPositions = (pond: (Slab | Pick<Slab, 'back'>)[][]): Position[][] => pond.map((row, x) => row.map((_, y) => ({ x, y })));
 const rotate = (matrix: Position[][], times: number): Position[][]   => { 
     for(let count = 0; count < times; count++) {
         const n = matrix.length;
@@ -50,7 +51,7 @@ const rotate = (matrix: Position[][], times: number): Position[][]   => {
     return matrix;
   }
 
-const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, frogs, activePlayer, playerColors }) => { 
+const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, frogs, activePlayer, selectedFrogId, playerColors }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const orientedSlabPositions = useMemo(() => rotate(toPositions(pond), FrogPlacement[playerCount][playerIndex].currentPlayerRotation), [playerCount, playerIndex]); 
     const animation = useAnimation<MoveFrog | AcquireServant | RevealSlab>(animation => isMoveFrog(animation.move) || isAcquireServant(animation.move) || isRevealSlab(animation.move));
@@ -154,6 +155,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
 
         return <FrogMini key={ 'frog-' + frog.color + '-' + frog.id }
                          activePlayer={ activePlayer?.color }
+                         selectedFrogId={ selectedFrogId }
                          frog={ frog }
                          targeted={ !!activePlayer && activePlayer.eliminationChoice.some(f => f.id === frog.id && f.color === frog.color) }
                          movable={ !!activePlayer && isMovableFrog(frog, activePlayer?.femaleFrogs.filter(f => !!f.position), pond)}
@@ -173,6 +175,7 @@ const Board: FunctionComponent<BoardProps> = ({ playerIndex, playerCount, pond, 
                             frogs={ frogs } position={{x: slab.x, y: slab.y}} 
                             visualPosition={{x, y}} 
                             boardSize={ pond.length }
+                            selectedFrogId={ selectedFrogId }
                             activePlayer={ activePlayer?.color } /> ))}
         </div>
     );
