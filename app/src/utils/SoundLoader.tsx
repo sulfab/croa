@@ -14,6 +14,7 @@ const SoundLoader: React.FunctionComponent<SoundLoaderProps> = ({sounds, onSound
       let audio = new Audio();
       audio.addEventListener('canplaythrough', onLoad, false);
       audio.src = sound;
+      audio.load();
     })
   // eslint-disable-next-line
   }, []);
