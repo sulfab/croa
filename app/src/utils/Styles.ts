@@ -4,7 +4,7 @@ import { PlayerColor } from '@gamepark/croa/player';
 
 export const screenRatio = 16 / 9;
 
-export const platformUri = process.env.REACT_APP_PLATFORM_URI || 'http://localhost:3000'
+export const platformUri = process.env.REACT_APP_PLATFORM_URI ?? 'https://game-park.com'
 export const discordUri = 'https://discord.gg/nMSDRag'
 
 export const boardGap = 1;
