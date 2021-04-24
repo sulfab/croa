@@ -1,6 +1,6 @@
 import { isKnownSlab, Slab, SlabFrontType } from '@gamepark/croa/pond';
 import { FC, useEffect, useState } from 'react';
-import { useAnimation, useSound } from '@gamepark/react-client';
+import { useAnimation } from '@gamepark/react-client';
 import { Sounds } from '../material/Resources';
 import {
   AcquireServant,
@@ -14,20 +14,23 @@ import {
   PlaySlabEffect,
   RevealSlab
 } from '@gamepark/croa/moves';
+import { AudioLoader } from '../utils/AudioLoader';
+import { css } from '@emotion/react';
 
 type CroaSoundsProps = {
-  pond: (Slab | Pick<Slab, 'back'>)[][]
+  pond: (Slab | Pick<Slab, 'back'>)[][],
+  audioLoader: AudioLoader
 }
 
-const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
-  const jump = useSound(Sounds.jumpSound);
-  const croa = useSound(Sounds.croaSound);
-  const mud = useSound(Sounds.mudSound);
-  const mosquito = useSound(Sounds.mosquitoSound);
-  const elimination = useSound(Sounds.eliminationSound);
-  const ambiance = useSound(Sounds.ambianceSound);
-  const pike = useSound(Sounds.pikeSound);
-  const reveal = useSound(Sounds.revealSound);
+const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
+  const jump = Sounds.jumpSound;
+  const croa = Sounds.croaSound;
+  const mud = Sounds.mudSound;
+  const mosquito = Sounds.mosquitoSound;
+  const elimination = Sounds.eliminationSound;
+  const ambiance = Sounds.ambianceSound;
+  const pike = Sounds.pikeSound;
+  const reveal = Sounds.revealSound;
   const [ambianceEnabled, setAmbianceEnabled] = useState(false);
   const [ambianceFail, setAmbianceFail] = useState(false);
   const moveAnimation = useAnimation<MoveFrog>(animation => isMoveFrog(animation.move));
@@ -37,16 +40,19 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
   const eliminateAnimation = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move));
 
   useEffect(() => {
-    ambiance.loop = true;
-    ambiance
-      .play()
-      .catch(() => setAmbianceFail(true))
+    // If the user hasn't click on the page before the audio context is loaded, the ambiance sound won't be run.
+    // Then we add an event on the document to enable the ambiance only if it has failed.
+    if (audioLoader.status() === 'suspended') {
+      setAmbianceFail(true)
+    } else {
+      audioLoader.loop(ambiance);
+    }
+  // eslint-disable-next-line
   }, [ambiance])
 
   useEffect(() => {
     const enableAmbiance = () => {
-      ambiance.loop = true;
-      ambiance.play();
+      audioLoader.loop(ambiance);
       setAmbianceEnabled(true);
     }
 
@@ -61,62 +67,61 @@ const CroaSounds: FC<CroaSoundsProps> = ({ pond }) => {
   }, [ambianceFail, ambianceEnabled])
 
   useEffect(() => {
-    if (revealAnimation) {
-      reveal.volume = 0.1;
-      reveal.play();
+    if (revealAnimation && !revealAnimation.action.pending) {
+      audioLoader.play(reveal);
     }
   // eslint-disable-next-line
-  }, [revealAnimation]);
+  }, [revealAnimation && revealAnimation.move]);
 
   useEffect(() => {
-    if (moveAnimation) {
-      jump.volume = 0.1;
-      jump.play();
+    if (moveAnimation && !moveAnimation.action.pending) {
+      console.log(JSON.parse(JSON.stringify(moveAnimation)))
+      audioLoader.play(jump);
     }
   // eslint-disable-next-line
-  }, [moveAnimation]);
+  }, [moveAnimation && moveAnimation.move]);
 
   useEffect(() => {
-    if (eliminateAnimation) {
-      elimination.volume = 0.1;
-      elimination.play();
+    if (eliminateAnimation && !eliminateAnimation.action.pending) {
+      audioLoader.play(elimination);
     }
   // eslint-disable-next-line
-  }, [eliminateAnimation]);
+  }, [eliminateAnimation && eliminateAnimation.move]);
 
   useEffect(() => {
-    if (acquireAnimation) {
-      croa.volume = 0.1;
-      croa.play();
+    if (acquireAnimation && !acquireAnimation.action.pending) {
+      audioLoader.play(croa);
     }
   // eslint-disable-next-line
-  }, [acquireAnimation]);
+  }, [acquireAnimation && acquireAnimation.move]);
 
   useEffect(() => {
 
-    if (playSlabAnimation && isPlaySlabEffect(playSlabAnimation.move)) {
+    if (playSlabAnimation && isPlaySlabEffect(playSlabAnimation.move) && !playSlabAnimation.action.pending) {
       const slab = pond[playSlabAnimation.move.slabPosition.x][playSlabAnimation.move.slabPosition.y];
       if (isKnownSlab(slab)) {
         switch(slab.front) {
           case SlabFrontType.Mud:
-            mud.volume = 0.1;
-            mud.play();
+            audioLoader.play(mud);
             break;
           case SlabFrontType.Mosquito:
-            mosquito.volume = 0.1;
-            mosquito.play();
+            audioLoader.play(mosquito);
             break;
           case SlabFrontType.Pike:
-            pike.volume = 0.1;
-            pike.play();
+            audioLoader.play(pike);
             break;
         }
       }
     }
     // eslint-disable-next-line
-  }, [playSlabAnimation])
+  }, [playSlabAnimation && playSlabAnimation.move])
 
-  return null;
+  return (
+    <div css={ css`height: 50px; width: 50px;` }>
+      <button onClick={ () => audioLoader.mute() }>Mute</button>
+      <button onClick={ () => audioLoader.unmute() }>Unmute</button>
+    </div>
+  );
 }
 
 export {

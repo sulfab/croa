@@ -1,25 +1,27 @@
-import {css, keyframes} from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import { GameStateView } from '@gamepark/croa/GameState';
 import { usePlayerId, useTutorial } from '@gamepark/react-client';
-import {Letterbox} from '@gamepark/react-components';
-import {Board} from './material/board/Board';
-import {PlayerBoard} from './material/player/PlayerBoard';
-import {PlayerBoardPlacement} from './material/player/PlayerBoardPlacement';
-import {Ranking} from './ranking/Ranking';
-import {playerBoardHeight, playerWidth} from './utils/Styles';
-import React, {useState} from 'react';
-import {SlabDescription} from './material/tile/description/SlabDescription';
-import {SlabDescriptionVisual} from './material/tile/description/SlabDescriptionVisual';
+import { Letterbox } from '@gamepark/react-components';
+import { Board } from './material/board/Board';
+import { PlayerBoard } from './material/player/PlayerBoard';
+import { PlayerBoardPlacement } from './material/player/PlayerBoardPlacement';
+import { Ranking } from './ranking/Ranking';
+import { playerBoardHeight, playerWidth } from './utils/Styles';
+import React, { useState } from 'react';
+import { SlabDescription } from './material/tile/description/SlabDescription';
+import { SlabDescriptionVisual } from './material/tile/description/SlabDescriptionVisual';
 import WelcomePopup from './popup/WelcomePopup';
 import { CroaSounds } from './sounds/CroaSounds';
 import TutorialPopup from './tutorial/TutorialPopup';
 import { isKnownSlab } from '@gamepark/croa/pond';
+import { AudioLoader } from './utils/AudioLoader';
 
 type Props = {
-  game: GameStateView
+  game: GameStateView,
+  audioLoader: AudioLoader
 }
 
-const GameDisplay: React.FC<Props> = ({game}: Props) => {
+const GameDisplay: React.FC<Props> = ({ game, audioLoader }: Props) => {
   const playerId = usePlayerId();
   const playerIndex = game.players.findIndex(player => player.color === playerId) === -1? 0: game.players.findIndex(player => player.color === playerId);
   const getPlayer = (index: number) => game.players.find((_, i) => PlayerBoardPlacement[game.players.length].getPlayerBoard(i, playerIndex) === index);
@@ -53,7 +55,7 @@ const GameDisplay: React.FC<Props> = ({game}: Props) => {
         </div>
         {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
         { displayWelcome && player && <WelcomePopup player={player} close={() => setWelcomePopupClosed(true)}/>}
-        <CroaSounds pond={ game.pond } />
+        <CroaSounds pond={ game.pond } audioLoader={ audioLoader } />
       </Letterbox>
     </>
   )

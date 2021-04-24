@@ -1,30 +1,27 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
+import { AudioLoader } from './AudioLoader';
 
 type SoundLoaderProps = {
   sounds: string[]
-  onSoundLoad?: () => void
+  onSoundsLoad?: () => void
+  onSoundsPrepared?: (audioLoader: AudioLoader) => void
 }
 
-const SoundLoader: React.FunctionComponent<SoundLoaderProps> = ({sounds, onSoundLoad}) => {
-  const loadCount = useRef(0);
-  const totalLoadCount = sounds.length;
-
+const SoundLoader: React.FunctionComponent<SoundLoaderProps> = ({sounds, onSoundsLoad, onSoundsPrepared}) => {
   useEffect(() => {
-    sounds.forEach(sound => {
-      let audio = new Audio();
-      audio.addEventListener('canplaythrough', onLoad, false);
-      audio.src = sound;
-      audio.load();
+    const audioLoader = new AudioLoader(sounds.map(sound => ({ id: sound, url: sound })));
+    audioLoader.load(() => {
+
+      if (onSoundsPrepared) {
+        onSoundsPrepared(audioLoader);
+      }
+
+      if (onSoundsLoad) {
+        onSoundsLoad();
+      }
     })
   // eslint-disable-next-line
   }, []);
-
-  const onLoad = () => {
-    loadCount.current++;
-    if (onSoundLoad && loadCount.current === totalLoadCount) {
-      onSoundLoad();
-    }
-  }
 
   return null;
 }

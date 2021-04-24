@@ -17,7 +17,7 @@ import {
 } from './moves';
 import { PlayerColor } from './player';
 
-type LocalMove = MoveView | SelectFrog | HighlightTile
+type LocalMove = MoveView | SelectFrog | HighlightTile;
 export default class CroaView implements
     Game<GameStateView, LocalMove>,
     Undo<GameStateView, MoveView, PlayerColor> {
@@ -66,7 +66,6 @@ export default class CroaView implements
                 skipTurn(this.state);
                 break;
             case 'SelectFrog':
-                console.log("Select frog")
                 selectFrog(this.state, move);
                 break;
             case 'HighlightTile':
