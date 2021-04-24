@@ -15,7 +15,6 @@ import {
   RevealSlab
 } from '@gamepark/croa/moves';
 import { AudioLoader } from '../utils/AudioLoader';
-import { css } from '@emotion/react';
 
 type CroaSoundsProps = {
   pond: (Slab | Pick<Slab, 'back'>)[][],
@@ -116,12 +115,7 @@ const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
     // eslint-disable-next-line
   }, [playSlabAnimation && playSlabAnimation.move])
 
-  return (
-    <div css={ css`height: 50px; width: 50px;` }>
-      <button onClick={ () => audioLoader.mute() }>Mute</button>
-      <button onClick={ () => audioLoader.unmute() }>Unmute</button>
-    </div>
-  );
+  return null;
 }
 
 export {
