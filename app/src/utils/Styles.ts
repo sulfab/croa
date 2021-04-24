@@ -70,7 +70,8 @@ export const frogMiniContainer = (frog: FemaleFrog, zIndex: number) => css`
     height: ${(frog.isQueen? queenHeight : servantHeight)}%;
     width: ${frog.isQueen? queenWidth: servantWidth}%;
     position: absolute;
-    z-index: ${zIndex}; 
+    z-index: ${zIndex};
+    -webkit-tap-highlight-color: transparent;
 `
 
 export const playerColors = new Map([

@@ -114,52 +114,92 @@ const SlabTile: FunctionComponent<SlabTileProps> = ({ slab, position, visualPosi
         },
         onMouseLeave: onLeaveTile
     })
-    
+
     return (
-        <div ref={ ref } onMouseEnter={ highlightSlab } css={[slabStyle, animation && css`z-index: 2` ]} { ...longPress }>
-            <div css={[slabStyle, !animation && isKnownSlab(slab) && css`transform: rotateY(180deg);`, animation && slabAnimation(animation.duration, additionalTranslate)]} >
-                <div css={[backAndFrontSlab, !isKnownSlab(slab) && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{backgroundImage: `url(${slabBackImages.get(slab.back)})`}}/>
-                { (isKnownSlab(slab) || animation?.move.front !== undefined) && <div css={[slabFront, backAndFrontSlab, isKnownSlab(slab) && ((isValidSlab() && selectableSlab) || (isInvalidSlab() && unselectableSlab)), isOver && isValidSlab() && overSlab]} style={{ backgroundImage: `url(${slabFrontImages.get(isKnownSlab(slab)? slab.front : animation?.move.front!)})` }}>
-                    
-                </div> }
-            </div>
+      <div ref={ ref } onMouseEnter={ highlightSlab } css={ [ tileContainer, animation && tileOnTop] }>
+        <div css={[
+            slabStyle,
+            (!isKnownSlab(slab) || animation) && hidden,
+            animation && slabAnimation(animation.duration, additionalTranslate)
+        ]} { ...longPress }>
+            <div
+              /* Image must be loaded as background image because it flick when set in css */
+              style={{ backgroundImage: `url(${slabFrontImages.get(isKnownSlab(slab)? slab.front : animation?.move.front!)})` }}
+              css={ [
+                backAndFrontSlab,
+                isKnownSlab(slab) && isValidSlab() && selectableSlab,
+                isKnownSlab(slab) && isInvalidSlab() && unselectableSlab,
+                isKnownSlab(slab) && isOver && isValidSlab() && over
+
+              ] }
+            />
+            <div
+              /* Image must be loaded as background image because it flick when set in css */
+              style={{ backgroundImage: `url(${slabBackImages.get(slab.back)})` }}
+              css={ [
+                backAndFrontSlab,
+                backSlab,
+                !isKnownSlab(slab) && isValidSlab() && selectableSlab,
+                !isKnownSlab(slab) && isInvalidSlab() && unselectableSlab,
+                !isKnownSlab(slab) && isOver && isValidSlab() && over
+              ] }
+            />
+
         </div>
+      </div>
     )
 }
 
+const tileContainer = css`
+    width: 100%;
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+`;
+
+const tileOnTop = css`
+  z-index: 2;
+`;
+
 const slabStyle = css`
+    border-radius: 15%;
     position: relative;
     width: 100%;
     height: 100%;
-    transition: transform 0.8s;
+    box-shadow: 0 0.5em 0.7em black;
+    -webkit-tap-highlight-color: transparent;
     transform-style: preserve-3d;
 `;
 
-const slabFront = css`
+const backSlab = css`
     transform: rotateY(180deg);
-`;
+`
 
 const scale = (translate?: string) => keyframes`
   30% {
-    transform: ${translate} scale(2.0);
-  }
-  65% {         
     transform: ${translate} rotateY(180deg) scale(2.0);
   }
-  100% {          
-    transform: rotateY(180deg) scale(1.0);
+  65% {
+    transform: ${translate} rotateY(0deg) scale(2.0);
   }
+  100% {
+    transform: rotateY(0deg) scale(1.0);
+  }
+`
+
+const hidden = css`
+  transform: rotateY(180deg);
 `
 
 const slabAnimation = (duration: number, translate: string) => css`
     animation: ${scale(translate)} ${duration}s ease-in-out forwards;
 `
 
-const overSlab = css`
+const over = css`
     box-shadow: 0 0.5em 0.7em black, 0 0 0.3em 0.6em green inset;
 `
 
 const backAndFrontSlab = css`
+    -webkit-tap-highlight-color: transparent;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -167,7 +207,6 @@ const backAndFrontSlab = css`
     background-size: 100% 100%;
     border-radius: 15%;
     image-rendering: -webkit-optimize-contrast;
-    box-shadow: 0 0.5em 0.7em black;
 `
 
 const selectableSlab = css`
@@ -176,7 +215,6 @@ const selectableSlab = css`
     &:hover {
         box-shadow: 0 0.5em 0.7em black, 0 0 0.3em 0.6em green inset;
     }
-    
 `
 
 const unselectableSlab = css`

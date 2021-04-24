@@ -117,20 +117,18 @@ const FrogMini: FunctionComponent<FrogMiniProps> = ({
                postTransform={boggedTransformation}
                css={[
                  frogMiniContainer(frog, frogZIndex),
-                 isSelectable && selectableFrog,
                  frog.color !== playerId && !targeted && pointEvents,
-                 animatingElimination && frogDisappearance(animatingElimination.duration),
-                 targeted && targetedFrog
+                 animatingElimination && frogDisappearance(animatingElimination.duration)
                ]}>
       <FrogAnimation frog={frog} animation="blinking" visible={getAnimation() === 'blinking'} duration={1}
                      delay={Math.min(Math.abs(Math.tan(frog.color + frog.id * 2)), 3)}
-                     css={css`transform: rotateY(${horizontalOrientation === 'left' ? 180 : 0}deg)`}/>
+                     innerCss={ [isSelectable && selectableFrog, targeted && targetedFrog, css`transform: translateZ(0) rotateY(${horizontalOrientation === 'left' ? 180 : 0}deg )`] }/>
       <FrogAnimation frog={frog} animation="jumping_front" visible={getAnimation() === 'jumping_front'}
                      duration={animatingMove && animatingMove.duration}
-                     css={[css`transform: rotateY(${horizontalOrientation === 'left' ? 180 : 0}deg)`]}/>
+                     innerCss={ [isSelectable && selectableFrog, targeted && targetedFrog, css`transform: translateZ(0) rotateY(${horizontalOrientation === 'left' ? 180 : 0}deg )`]} />
       <FrogAnimation frog={frog} animation="jumping_back" visible={getAnimation() === 'jumping_back'}
                      duration={animatingMove && animatingMove.duration}
-                     css={[css`transform: rotateY(${horizontalOrientation === 'left' ? 180 : 0}deg)`]}/>
+                     innerCss={ [isSelectable && selectableFrog, targeted && targetedFrog, css`transform: translateZ(0) rotateY(${horizontalOrientation === 'left' ? 180 : 0}deg )`]} />
     </Draggable>
   );
 };
@@ -139,22 +137,27 @@ const pointEvents = css`
   pointer-events: none;
 `;
 
-const selectableFrogAnimation = keyframes`
-  from {
-    filter: drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold)
-  }
-  to {
-    filter: drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold)
-  }
-`;
-
 const selectableFrog = css`
-  animation: ${selectableFrogAnimation} 1s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0.2em 0.2em black) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold) drop-shadow(0 0 0.1em gold);
+  @media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 812px)
+  and (orientation: landscape)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    filter: drop-shadow(0 0.4em 0.4em black) drop-shadow(0 0 0.4em gold) drop-shadow(0 0 0.4em gold) drop-shadow(0 0 0.4em gold) drop-shadow(0 0 0.4em gold) drop-shadow(0 0 0.4em gold) drop-shadow(0 0 0.4em gold)
+  }
 `;
 
 const targetedFrog = css`
   z-index: 3;
-  filter: drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red) drop-shadow(0 0 0.2em red)
+  filter: drop-shadow(0 0.2em 0.2em black) drop-shadow(0 0 0.1em red) drop-shadow(0 0 0.1em red) drop-shadow(0 0 0.1em red) drop-shadow(0 0 0.1em red) drop-shadow(0 0 0.1em red) drop-shadow(0 0 0.1em red);
+  @media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 812px)
+  and (orientation: landscape)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    filter: drop-shadow(0 0.4em 0.4em black) drop-shadow(0 0 0.4em red) drop-shadow(0 0 0.4em red) drop-shadow(0 0 0.4em red) drop-shadow(0 0 0.4em red) drop-shadow(0 0 0.4em red) drop-shadow(0 0 0.4em red);
+  }
 `;
 
 

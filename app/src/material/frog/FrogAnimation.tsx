@@ -14,22 +14,23 @@ type AnimatedFrogProps = {
     visible?: boolean;
     color?: PlayerColor;
     loop?: boolean;
+    innerCss?: any
 }  & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
 
-const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, animation, visible, duration, delay, loop, color, ...props }) => {
+const FrogAnimation: FC<AnimatedFrogProps> = ({ frog, innerCss, animation, visible, duration, delay, loop, color, ...props }) => {
 
     return (
         <Animated { ...props }  
             animation={ animation } 
             frame={ animation !== 'blinking'? 24: 16 } 
             css={ frogMiniImage(frog, animation) }
+            innerCss={ innerCss }
             visible={ visible } 
             image={ getAnimationBackground(frog.isQueen, color || frog.color, animation)! } 
             loop={ loop || animation  === 'blinking' } 
             duration={ duration } 
             delay={ delay || 0 } />
-        /*{ /* <div { ...props } key={ frog.id } css={ [frogMiniImage(frog, animation, !!visible), duration && frogMiniAnimation(animation, duration, delay, loop) ]} style={{ backgroundImage: `url(${})`}} /> }*/
     );
 };
 
@@ -66,7 +67,7 @@ export const frogMiniImage = (frog: FemaleFrog, animationId: string = "blinking"
     transition-property: transform;
     margin: 0 auto;    
     image-rendering: -webkit-optimize-contrast;
-    filter: drop-shadow(0em 0.2em 0.2em black);
+    -webkit-tap-highlight-color: transparent;
 `;
 
 export const getAnimationBackground = (isQueen: boolean, color: PlayerColor, animationId: string) => (isQueen? queenFrogAnimations: servantFrogAnimations).get(color)!.get(animationId);

@@ -14,7 +14,7 @@ type ServantFrogsProps = {
 const ServantFrogs: FC<ServantFrogsProps> = ({ frogs, color, horizontalOrientation, ...props }) => {
     return (
         <div { ...props }>
-            { frogs.map((frog, index) => <FrogAnimation key={ index } visible={ true } frog={ frog } color={ color || frog.color } animation="blinking" css={ [frogPosition(index + 2), horizontalOrientation === 'left' && leftOrientation ] }  />) }
+            { frogs.map((frog, index) => <FrogAnimation key={ index } visible={ true } frog={ frog } color={ color || frog.color } animation="blinking" css={ [frogPosition(index + 2) ] } innerCss={[horizontalOrientation === 'left' && leftOrientation]}  />) }
         </div>
     )
 }

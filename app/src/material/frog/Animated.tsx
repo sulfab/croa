@@ -12,18 +12,29 @@ type AnimatedProps = {
     color?: PlayerColor;
     frame: number;
     loop?: boolean;
+    innerCss?: any
 }  & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
 
-const Animated: FC<AnimatedProps> = ({ animation, image, frame, visible, duration, delay, loop, color, ...props }) => {
+const Animated: FC<AnimatedProps> = ({ animation,innerCss, image, frame, visible, duration, delay, loop, color, ...props }) => {
     const [innerWidth, setWidth] = useState<number>()
-    const onResize = useCallback((width) => {
-        if (width !== innerWidth) {
-            setWidth(Math.round(width))
-        }
-    }, [innerWidth])
 
-    const { ref, width } = useResizeDetector({ onResize })
+    let width: number | undefined = undefined;
+    let ref = undefined;
+    if (window.ResizeObserver) {
+        //eslint-disable-next-line
+        const onResize = useCallback((width) => {
+            if (width !== innerWidth) {
+                setWidth(Math.round(width))
+            }
+        }, [innerWidth])
+
+        //eslint-disable-next-line
+        const detector = useResizeDetector({ onResize })
+        width = detector.width;
+        ref = detector.ref;
+    } else {
+    }
 
     useEffect(() => {
         if (width && (!innerWidth || innerWidth !== width)) {
@@ -34,8 +45,8 @@ const Animated: FC<AnimatedProps> = ({ animation, image, frame, visible, duratio
 
     const delayPercentage = (!delay || !duration)? 0: delay / (delay + duration) * 100;
     return (
-      <div ref={ ref } {...props } css={ [!visible && invisible] }>
-          <div css={ [container(frame), css`height: 100%; width: ${innerWidth? innerWidth + 'px': '100%'}`, duration && getAnimation(frame, duration, delay, delayPercentage, loop), ] } style={{ backgroundImage: `url(${image})` }} />
+      <div ref={ window.ResizeObserver && ref } {...props } css={ [!visible && invisible] }>
+          <div css={ [innerCss, container(frame), css`height: 100%; width: ${innerWidth? innerWidth + 'px': '100%'}`, duration && getAnimation(frame, duration, delay, delayPercentage, loop) ] } style={{ backgroundImage: `url(${image})` }} />
       </div>
     );
 };
@@ -53,6 +64,7 @@ const container = (frame: number) => css`
     position: absolute;
     bottom:  0;
     background-size: ${frame * 100}% 100%;
+    image-rendering: -webkit-optimize-contrast;
 `
 
 const invisible = css`
