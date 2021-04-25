@@ -87,14 +87,12 @@ const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
   // eslint-disable-next-line
   }, [revealAnimation?.move]);
 
-  let a = moveAnimation?.move;
   useEffect(() => {
-    console.log(JSON.stringify(a));
-    if (a) {
+    if (moveAnimation?.move) {
       audioLoader.play(jump, false, 0.1);
     }
   // eslint-disable-next-line
-  }, [a]);
+  }, [moveAnimation?.move]);
 
   useEffect(() => {
     if (eliminateAnimation) {
