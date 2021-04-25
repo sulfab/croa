@@ -1,6 +1,6 @@
 import { isKnownSlab, Slab, SlabFrontType } from '@gamepark/croa/pond';
 import { FC, useEffect, useState } from 'react';
-import { useAnimation } from '@gamepark/react-client';
+import { useAnimation, useSound } from '@gamepark/react-client';
 import { Sounds } from '../material/Resources';
 import {
   AcquireServant,
@@ -15,6 +15,8 @@ import {
   RevealSlab
 } from '@gamepark/croa/moves';
 import { AudioLoader } from '../utils/AudioLoader';
+import { useSelector } from 'react-redux';
+import GamePageState from '@gamepark/react-client/dist/Types/GamePageState';
 
 type CroaSoundsProps = {
   pond: (Slab | Pick<Slab, 'back'>)[][],
@@ -22,6 +24,9 @@ type CroaSoundsProps = {
 }
 
 const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
+  // Creating this sound only to show the button in the menu
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  useSound(Sounds.ambianceSound);
   const jump = Sounds.jumpSound;
   const croa = Sounds.croaSound;
   const mud = Sounds.mudSound;
@@ -37,6 +42,16 @@ const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
   const revealAnimation = useAnimation<RevealSlab>(animation => isRevealSlab(animation.move));
   const playSlabAnimation = useAnimation<PlaySlabEffect>(animation => isPlaySlabEffect(animation.move));
   const eliminateAnimation = useAnimation<EliminateFrog>(animation => isEliminateFrog(animation.move));
+  const muted = useSelector((state: GamePageState) => state.soundsMuted)
+
+  useEffect(() => {
+    if (!muted) {
+      audioLoader.unmute()
+    } else {
+      audioLoader.mute();
+    }
+  // eslint-disable-next-line
+  }, [muted])
 
   useEffect(() => {
     // If the user hasn't click on the page before the audio context is loaded, the ambiance sound won't be run.
@@ -70,28 +85,30 @@ const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
       audioLoader.play(reveal, false, 0.1);
     }
   // eslint-disable-next-line
-  }, [revealAnimation && revealAnimation.move]);
+  }, [revealAnimation?.move]);
 
+  let a = moveAnimation?.move;
   useEffect(() => {
-    if (moveAnimation) {
+    console.log(JSON.stringify(a));
+    if (a) {
       audioLoader.play(jump, false, 0.1);
     }
   // eslint-disable-next-line
-  }, [moveAnimation && moveAnimation.move]);
+  }, [a]);
 
   useEffect(() => {
     if (eliminateAnimation) {
       audioLoader.play(elimination, false, 0.1);
     }
   // eslint-disable-next-line
-  }, [eliminateAnimation && eliminateAnimation.move]);
+  }, [eliminateAnimation?.move]);
 
   useEffect(() => {
     if (acquireAnimation) {
       audioLoader.play(croa, false, 0.1);
     }
   // eslint-disable-next-line
-  }, [acquireAnimation]);
+  }, [acquireAnimation?.move]);
 
   useEffect(() => {
 
@@ -112,7 +129,8 @@ const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
       }
     }
     // eslint-disable-next-line
-  }, [playSlabAnimation && playSlabAnimation.move])
+  }, [playSlabAnimation?.move])
+
 
   return null;
 }

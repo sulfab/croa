@@ -7,7 +7,6 @@ class AudioLoader {
 
   constructor(sources: { url: string, id: string }[]) {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    console.log(this.audioContext);
     this.sources = sources;
     this.buffers = {}
     this.sounds = {}
@@ -64,6 +63,9 @@ class AudioLoader {
     this.audioContext.resume();
   }
 
+  /**
+   * Mute is a simple volume = 0 because suspending the audio context only create a "pause" on sound
+   */
   public mute() {
     this.muted = true;
     Object.values(this.sounds).forEach(sound => {
