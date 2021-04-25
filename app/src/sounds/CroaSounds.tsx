@@ -66,48 +66,47 @@ const CroaSounds: FC<CroaSoundsProps> = ({  audioLoader, pond }) => {
   }, [ambianceFail, ambianceEnabled])
 
   useEffect(() => {
-    if (revealAnimation && !revealAnimation.action.pending) {
-      audioLoader.play(reveal);
+    if (revealAnimation) {
+      audioLoader.play(reveal, false, 0.1);
     }
   // eslint-disable-next-line
   }, [revealAnimation && revealAnimation.move]);
 
   useEffect(() => {
-    if (moveAnimation && !moveAnimation.action.pending) {
-      console.log(JSON.parse(JSON.stringify(moveAnimation)))
-      audioLoader.play(jump);
+    if (moveAnimation) {
+      audioLoader.play(jump, false, 0.1);
     }
   // eslint-disable-next-line
   }, [moveAnimation && moveAnimation.move]);
 
   useEffect(() => {
-    if (eliminateAnimation && !eliminateAnimation.action.pending) {
-      audioLoader.play(elimination);
+    if (eliminateAnimation) {
+      audioLoader.play(elimination, false, 0.1);
     }
   // eslint-disable-next-line
   }, [eliminateAnimation && eliminateAnimation.move]);
 
   useEffect(() => {
-    if (acquireAnimation && !acquireAnimation.action.pending) {
-      audioLoader.play(croa);
+    if (acquireAnimation) {
+      audioLoader.play(croa, false, 0.1);
     }
   // eslint-disable-next-line
-  }, [acquireAnimation && acquireAnimation.move]);
+  }, [acquireAnimation]);
 
   useEffect(() => {
 
-    if (playSlabAnimation && isPlaySlabEffect(playSlabAnimation.move) && !playSlabAnimation.action.pending) {
+    if (playSlabAnimation && isPlaySlabEffect(playSlabAnimation.move)) {
       const slab = pond[playSlabAnimation.move.slabPosition.x][playSlabAnimation.move.slabPosition.y];
       if (isKnownSlab(slab)) {
         switch(slab.front) {
           case SlabFrontType.Mud:
-            audioLoader.play(mud);
+            audioLoader.play(mud, false, 0.1);
             break;
           case SlabFrontType.Mosquito:
-            audioLoader.play(mosquito);
+            audioLoader.play(mosquito, false, 0.1);
             break;
           case SlabFrontType.Pike:
-            audioLoader.play(pike);
+            audioLoader.play(pike, false, 0.1);
             break;
         }
       }

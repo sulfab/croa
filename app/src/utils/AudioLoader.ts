@@ -2,7 +2,7 @@ class AudioLoader {
   private readonly audioContext: AudioContext;
   private sources: { url: string, id: string }[];
   private readonly buffers: { [id: string]: AudioBuffer };
-  private readonly sounds: { [id: string]: { sourceNode: AudioBufferSourceNode, gainNode: GainNode } };
+  private readonly sounds: { [id: string]: { sourceNode: AudioBufferSourceNode, gainNode: GainNode, volume: number } };
   private muted: boolean = false;
 
   constructor(sources: { url: string, id: string }[]) {
@@ -25,7 +25,7 @@ class AudioLoader {
     ).then(callback);
   }
 
-  public play (id: string, loop: boolean = false) {
+  public play (id: string, loop: boolean = false, volume: number = 1) {
     this.sounds[id] = this.sounds[id] || {};
 
     const sound = this.sounds[id];
@@ -39,10 +39,12 @@ class AudioLoader {
     }
 
     sound.sourceNode.connect(sound.gainNode);
+    sound.volume = volume;
     if (this.muted) {
       this.volume(id, 0);
+    } else {
+      sound.gainNode.gain.value = sound.volume;
     }
-    sound.gainNode.gain.value = 1;
     sound.sourceNode.start();
   }
 
@@ -72,7 +74,7 @@ class AudioLoader {
   public unmute() {
     this.muted = false;
     Object.values(this.sounds).forEach(sound => {
-      sound.gainNode.gain.value = 1
+      sound.gainNode.gain.value = (sound.volume || 1);
     })
   }
 }
