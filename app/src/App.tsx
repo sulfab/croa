@@ -32,7 +32,8 @@ export default function App() {
   return (
     <DndProvider options={HTML5ToTouch}>
       <Global styles={[normalize, style]}/>
-      <LoadingScreen display={loading} gameBox={ CroaBox } author="Igor Polouchine" artist={["Claire Wendling", "David Cochard"]} publisher="Origames" css={ css`font-weight:normal; letter-spacing: 0.15em;` }  />
+      <LoadingScreen author="Igor Polouchine" artist={["Claire Wendling", "David Cochard"]} publisher="Origames" developer="Patrick Beaumé"
+                     display={loading} gameBox={CroaBox} css={ css`font-weight:normal; letter-spacing: 0.15em;` }  />
       {!loading && audioLoader && <GameDisplay game={game!} audioLoader={ audioLoader }/>}
       <Header loading={loading} game={game!}/>
       <FailuresDialog css={ [popupStyle, popupLightStyle, failuresStyle] }/>
