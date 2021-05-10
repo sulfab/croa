@@ -27,7 +27,7 @@ const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color }) 
         <div css={titleStyle(realColor)}>
             <span css={[nameStyle, playerInfo.quit && quit ]}>{ playerInfo?.name || getPlayerName(player.color, t) }</span>
             { typeof gamePoints === 'number' &&
-                <span css={css`flex-shrink: 0`}>
+                <span css={ gamePointsStyle }>
                     <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
                     {gamePoints > 0 && '+'}{ playerInfo?.gamePointsDelta }
                 </span>
