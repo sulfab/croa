@@ -304,7 +304,10 @@
       "artists.2": "Illustriert von <0>{artist1}</0> und <0>{artist2}</0>",
       "publishers.1": "Herausgegeben von <0>{publisher}</0>",
       "publishers.2": "Herausgegeben von <0>{publisher1}</0> und <0>{publisher2}</0>",
+      "developers.1": "Adoptiert von <0>{developer}</0>",
+      "developers.2": "Adoptiert von <0>{developer1}</0> und <0>{developer2}</0>",
       "See overall ranking": "Zur allgemeinen Rangliste",
+      "Player {number}": "Spieler {number}",
       "Game loading...": "Spiel lädt ...",
       "Whoops...": "Ups ...",
       "failure.dialog.network": "Eine Aktion konnte nicht abgeschlossen werden und wurde abgebrochen. Bitte überprüfe dein Internetverbindung.",
@@ -319,16 +322,26 @@
       "Undo my last move": "Meinen letzten Zug rückgängig machen",
       "Go to full screen": "In den Vollbildmodus wechseln",
       "Leave full screen": "Vollbildmodus verlassen",
+      "Give up": "Aufgeben",
+      "Give up the game": "Spiel aufgeben",
+      "give-up.dialog.p1": "Du wirst aus dem Spiel ausscheiden und durch einen Computergegner ersetzt.",
+      "give-up.dialog.p2": "Das Spiel wird als Niederlage gewertet.",
+      "give-up.dialog.p3": "Deine Freunde haben die Möglichkeit das Spiel ohne dich zu beenden.",
       "Restart the tutorial": "Tutorial neustarten",
       "Eject player": "Spieler entfernen",
       "eject.dialog.p1": "{player} hat die Bedenkzeit überschritten",
       "eject.dialog.p2": "Nach {duration} dürft ihr diesen Spieler aus der Partie entfernen und weiterspielen.",
       "eject.dialog.p3": "Falls ihr denkt, dass der Spieler nicht zurückkehrt, dürft ihr ihn aus der Partie entfernen.",
       "Eject {player}": "{player} entfernen",
+      "Flip your screen": "Drehe deinen Bildschirm",
+      "fs.dialog.p1": "Das Spiel wurde für Querformat (Landscape Mode) entwickelt. Wir empfehlen dir deinen Bildschirm zu drehen.",
+      "fs.dialog.p2": "Du kannst auch in den Vollbildmodus wechseln.",
       "Enable sound": "Ton einschalten",
       "Mute sound": "Stummschalten",
       "Light mode": "Tagmodus",
-      "Dark mode": "Nachtmodus"
+      "Dark mode": "Nachtmodus",
+      "Back to Game Park": "Zurück zu Game Park",
+      "Play again": "Nochmal spielen"
     }
   }
 }
