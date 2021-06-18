@@ -19,14 +19,16 @@ import { PlayerInfos } from './PlayerInfos';
 import { FrogStatus } from '@gamepark/croa/frog';
 import { usePlayerId } from '@gamepark/react-client';
 import { SkipButton } from './SkipButton';
+import { SpeechBubbleDirection } from '@gamepark/react-client/dist/Avatar';
 
 type PlayerBoardProps = {
     player: Player
     index: number
     activePlayer?: PlayerColor
+    speechBubbleDirection?: SpeechBubbleDirection
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...props }) => {
+const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, speechBubbleDirection, ...props }) => {
     const playerId = usePlayerId<PlayerColor>();
     const playerInfo = useSelector((state: any) => state.players.find((p: any) => p.id === player.color));
     const displayedColor = player.eliminated? PlayerColor.Green: player.color;
@@ -37,7 +39,7 @@ const PlayerBoard: FC<PlayerBoardProps> = ({ player, index, activePlayer, ...pro
             { activePlayer && player.color === playerId && fedFrog && <SkipButton color={ playerId } css={ skipButton }  />  }
             <div css={[playerBoardContent, player.eliminated && eliminatedPlayer]}>
                 <div css={activePlayer === player.color && playerBoardActive} />
-                <PlayerInfos player={ player } playerInfo={ playerInfo } color={ displayedColor }/>
+                <PlayerInfos player={ player } playerInfo={ playerInfo } color={ displayedColor } speechBubbleDirection={ speechBubbleDirection }/>
                 <div css={ queenFrogContainer }>
                     { player.femaleFrogs.filter(frog => frog.isQueen && !frog.position).map(frog => <FrogAnimation key={ frog.id } visible={ true } frog={ frog } color={ displayedColor } animation="blinking" css={ [css`position: relative;`,  index > 1 && leftOrientation] }  />) }
                 </div>

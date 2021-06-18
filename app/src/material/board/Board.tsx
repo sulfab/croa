@@ -186,7 +186,6 @@ const translateFrogAnimation = (animation: any) => css`
 `;
 
 const boardStyle = (columns: number) => css`
-    z-index: 1;
     transform: rotateX(10deg);
     position: relative;
     display: grid;

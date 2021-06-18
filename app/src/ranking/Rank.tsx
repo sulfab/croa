@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Player } from '@gamepark/croa/player';
-import React, { CSSProperties, HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CroaAvatar } from '../material/player/Avatar';
 import { FrogAnimation } from '../material/frog/FrogAnimation';
@@ -23,7 +23,7 @@ const Rank: React.FC<RankProps> = ({ rank, player, reduced, ...props }) => {
                 { player && <FrogAnimation visible={ true } duration={ rank === 1? 0.6: 1 } delay={ rank * 0.7 } frog={ player.femaleFrogs.find(frog => frog.isQueen)! } loop={ true } animation={ rank === 1? 'jumping_front': 'blinking' } css={ css`position: relative;` }  /> }
             </div>
             <div css={ [getRank(rank), reduced && rankDisabled] }>
-                { player && <CroaAvatar customStyle={ avatarStyle(hasGamePoints && !reduced) } css={ avatarCss(hasGamePoints && !reduced) } player={ player} playerInfo={ playerInfo } /> }
+                { player && <CroaAvatar css={ avatarCss(hasGamePoints && !reduced) } player={ player} playerInfo={ playerInfo } /> }
                 { hasGamePoints &&
                     <span css={ [gamePointsStyle, reduced && hideGamePoints] }>
                         <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
@@ -53,23 +53,13 @@ const hideGamePoints = css`
 
 const avatarCss = (gamePoints?: boolean) => css`
     position: absolute;
-    height: 7em;
+    height: 6em;
     width: 6em;
     filter: drop-shadow(0 0.2em 0.2em black);
     top: unset;
     left: unset;
     margin-bottom: ${gamePoints? 4.1: 0.4}em;
 `;
-
-const avatarStyle = (gamePoints?: boolean): CSSProperties => ({
-    position: 'absolute',
-    height: '7em',
-    width: '6em',
-    filter: 'drop-shadow(0 0.2em 0.2em black)',
-    top: 'unset',
-    left: 'unset',
-    marginBottom: gamePoints? '4.1em': '0.4em'
-});
 
 const rankContainer = css`
     display: flex;

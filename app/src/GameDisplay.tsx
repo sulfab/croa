@@ -15,6 +15,7 @@ import { CroaSounds } from './sounds/CroaSounds';
 import TutorialPopup from './tutorial/TutorialPopup';
 import { isKnownSlab } from '@gamepark/croa/pond';
 import { AudioLoader } from './utils/AudioLoader';
+import { SpeechBubbleDirection } from '@gamepark/react-client/dist/Avatar';
 
 type Props = {
   game: GameStateView,
@@ -42,15 +43,19 @@ const GameDisplay: React.FC<Props> = ({ game, audioLoader }: Props) => {
                  selectedFrogId={ game.selectedFrogId }
           />
           <div css={[ playerBoards, leftPlayerBoards ]}>
-            { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0`} player={ getPlayer(0)! } activePlayer={ game.activePlayer } /> }
+            { getPlayer(0) && <PlayerBoard index={0} css={ css`bottom: 0`} player={ getPlayer(0)! } activePlayer={ game.activePlayer }
+                                           speechBubbleDirection={ SpeechBubbleDirection.TOP_RIGHT } /> }
             <SlabDescriptionVisual css={ lastSlabImage } highlightedTile={ game.highlightedTile } />
-            { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0`} player={ getPlayer(1)! } activePlayer={ game.activePlayer } /> }
+            { getPlayer(1) && <PlayerBoard index={1} css={ css`top: 0`} player={ getPlayer(1)! } activePlayer={ game.activePlayer }
+                                           speechBubbleDirection={ SpeechBubbleDirection.BOTTOM_RIGHT } /> }
           
           </div>
           <div css={[ playerBoards, rightPlayerBoards ]}>
-            { getPlayer(2) && <PlayerBoard index={2} css={ css`top: 0`} player={ getPlayer(2)! } activePlayer={ game.activePlayer }  /> }
+            { getPlayer(2) && <PlayerBoard index={2} css={ css`top: 0`} player={ getPlayer(2)! } activePlayer={ game.activePlayer }
+                                           speechBubbleDirection={ SpeechBubbleDirection.TOP_LEFT } /> }
             <SlabDescription css={ lastFrontSlabDescription } highlightedTile={ game.highlightedTile } />
-            { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0`} player={ getPlayer(3)! } activePlayer={ game.activePlayer } /> }
+            { getPlayer(3) && <PlayerBoard index={3} css={ css`bottom: 0`} player={ getPlayer(3)! } activePlayer={ game.activePlayer }
+                                           speechBubbleDirection={ SpeechBubbleDirection.BOTTOM_LEFT } /> }
           </div>
         </div>
         {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}

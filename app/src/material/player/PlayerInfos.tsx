@@ -1,20 +1,22 @@
 import { css } from '@emotion/react';
 import { Player, PlayerColor } from '@gamepark/croa/player';
-import React, { CSSProperties, useState } from 'react';
+import React, { useState } from 'react';
 import { playerBoardMaleTokensHeight, playerColors, playerColorsDark } from '../../utils/Styles';
 import gamePointIcon from './visuals/game-point.svg';
 import { getPlayerName } from '@gamepark/croa/CroaOptions';
 import { useTranslation } from 'react-i18next';
 import { CroaAvatar } from './Avatar';
 import { Player as PlayerInfo, PlayerTimer } from '@gamepark/react-client';
+import { SpeechBubbleDirection } from '@gamepark/react-client/dist/Avatar';
 
 type PlayerInfosProps = {
     player: Player
     playerInfo: PlayerInfo
     color?: PlayerColor
+    speechBubbleDirection?: SpeechBubbleDirection
 }
 
-const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color }) => {
+const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color, speechBubbleDirection }) => {
     const {t} = useTranslation();
     const [gamePoints,] = useState(playerInfo?.gamePointsDelta);
     const realColor = color || player.color;
@@ -22,7 +24,7 @@ const PlayerInfos: React.FC<PlayerInfosProps> = ({ player, playerInfo, color }) 
     return (
         <>
         <div css={ avatarContainer(realColor) }>
-            <CroaAvatar player={ player } playerInfo={ playerInfo } customStyle={ avatarStyle } css={ avatarCss } color={ realColor } />
+            <CroaAvatar player={ player } playerInfo={ playerInfo } color={ realColor } speechBubbleDirection={ speechBubbleDirection } />
         </div>
         <div css={titleStyle(realColor)}>
             <span css={[nameStyle, playerInfo.quit && quit ]}>{ playerInfo?.name || getPlayerName(player.color, t) }</span>
@@ -59,6 +61,7 @@ const avatarContainer = (playerColor: PlayerColor) => css`
     border-radius: 4em;
     bottom: ${ 10 + playerBoardMaleTokensHeight }%;
     border: 0.4em solid rgb(${playerColorsDark.get(playerColor)!.rgb.r}, ${playerColorsDark.get(playerColor)!.rgb.g}, ${playerColorsDark.get(playerColor)!.rgb.b});
+    background-color: rgb(${playerColorsDark.get(playerColor)!.rgb.r}, ${playerColorsDark.get(playerColor)!.rgb.g}, ${playerColorsDark.get(playerColor)!.rgb.b});
 `;
 
 const titleStyle = (playerColor: PlayerColor) => css`
@@ -87,22 +90,6 @@ const nameStyle = css`
   position:absolute;
   letter-spacing: 0.03em;
   left: 10%;
-`;
-
-const avatarStyle: CSSProperties = {
-    position: 'absolute',
-    height: '118%',
-    top: '-16%',
-    left: '-12%',
-    width: '123%'
-};
-
-const avatarCss = css`
-    position: absolute;
-    height: 130%;
-    top: -26%;
-    left: -5%;
-    width: 108%;
 `;
 
 const gamePointIconStyle = css`
