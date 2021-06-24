@@ -1,23 +1,24 @@
-import { GameOptions, OptionsDescription, OptionType } from '@gamepark/rules-api'
+import { OptionsSpec } from '@gamepark/rules-api';
 import { TFunction } from 'i18next'
 import { GameState } from './GameState'
 import { PlayerColor, playerColors } from './player';
 
 export type CroaPlayerOptions = { id: PlayerColor }
 
-export type CroaOptions = GameOptions<{}, CroaPlayerOptions>
+export type CroaOptions = {
+    players: CroaPlayerOptions[]
+}
 
 export function isGameOptions(arg: GameState | CroaOptions): arg is CroaOptions {
     return (arg as GameState).pond === undefined;
 }
 
-export const CroaOptionsDescription: OptionsDescription<{}, CroaPlayerOptions> = {
+export const CroaOptionsSpec: OptionsSpec<CroaOptions> = {
     players: {
         id: {
-            type: OptionType.LIST,
-            getLabel: (t: TFunction) => t('Color'),
+            label: (t: TFunction) => t('Color'),
             values: playerColors,
-            getValueLabel: getPlayerName
+            valueLabel: getPlayerName
         }
     }
 }

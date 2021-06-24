@@ -1,5 +1,4 @@
 import Croa from '@gamepark/croa/Croa';
-import { CroaOptionsDescription } from '@gamepark/croa/CroaOptions';
 import { CroaAnimation } from './Animations';
 import CroaView from '@gamepark/croa/CroaView';
 import { GameProvider, setupTranslation } from '@gamepark/react-client';
@@ -9,6 +8,7 @@ import App from './App';
 import translations from './translations.json';
 import { CroaTutorial } from './tutorial/CroaTutorial';
 import { ai } from './tutorial/ai/TutorialAI.worker';
+import { CroaOptionsSpec } from '@gamepark/croa';
 
 setupTranslation(translations);
 
@@ -20,7 +20,7 @@ ReactDOM.render(
         RulesView={ CroaView }
         tutorial={ CroaTutorial }
         animations={ CroaAnimation } 
-        optionsDescription={ CroaOptionsDescription }
+        optionsSpec={ CroaOptionsSpec }
         ai={ ai }>
       <App/>
     </GameProvider>
